@@ -7,6 +7,7 @@ import {
   cilCursor,
   cilDescription,
   cilDrop,
+  cilList,
   cilNotes,
   cilPencil,
   cilPuzzle,
@@ -21,6 +22,41 @@ const _nav = [
     name: 'Dashboard',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavGroup,
+    name: 'Category Management',
+    icon: <CIcon icon={cilList} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavGroup,
+        name: 'Doors',
+        items: [
+          { component: CNavItem, name: 'Fiber Glass Entry Doors', to: '/fiberglassentry' },
+          { component: CNavItem, name: 'Fiber Glass French Doors', to: '/fiberglassfrench' },
+          { component: CNavItem, name: 'French Wood Doors', to: '/frenchwooddoors' },
+          { component: CNavItem, name: 'Vinyl Swinging French Doors', to: '/vinylswingingfrenchdoors' },
+          { component: CNavItem, name: 'Vinyl Slide Patio Doors', to: '/vinylslidepatiodoors' },
+          { component: CNavItem, name: 'Wood Entry Doors', to: '/woodentrydoors' },
+          { component: CNavItem, name: 'Hardware', to: '/hardware' },
+          { component: CNavItem, name: 'Other Doors', to: '/otherdoors' },
+        ],
+      },
+      {
+        component: CNavGroup,
+        name: 'Windows',
+        items: [
+          { component: CNavItem, name: 'Subcategory 1', to: '/category/windows/subcategory-1' },
+          { component: CNavItem, name: 'Subcategory 2', to: '/category/windows/subcategory-2' },
+          { component: CNavItem, name: 'Subcategory 3', to: '/category/windows/subcategory-3' },
+          { component: CNavItem, name: 'Subcategory 4', to: '/category/windows/subcategory-4' },
+          { component: CNavItem, name: 'Subcategory 5', to: '/category/windows/subcategory-5' },
+          { component: CNavItem, name: 'Subcategory 6', to: '/category/windows/subcategory-6' },
+          { component: CNavItem, name: 'Subcategory 7', to: '/category/windows/subcategory-7' },
+          { component: CNavItem, name: 'Subcategory 8', to: '/category/windows/subcategory-8' },
+        ],
+      },
+    ],
   }
   // {
   //   component: CNavItem,

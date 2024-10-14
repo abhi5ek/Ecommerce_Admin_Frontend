@@ -12,7 +12,7 @@ import image2 from '../../../assets/brand/door-imagee.jpg';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const FiberGlassFrench = () => {
+const hardware = () => {
   const [visible, setVisible] = useState(false);
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -22,85 +22,43 @@ const FiberGlassFrench = () => {
       image: image1,
       width: '32"',
       height: '80"',
-      fraction: 'Full',
-      grid: 'Yes',
-      finType: 'Nail Fin',
-      glassType: 'Double Pane',
-      color: 'White',
-      temperingGlass: 'Yes',
-      slideWindowOption: 'Right Slide',
-      installationOption: 'Pre-Hung',
-      instructions: 'Included'
-    },
-    {
-      image: image2,
-      width: '36"',
-      height: '82"',
-      fraction: '3/4',
-      grid: 'No',
-      finType: 'Brick Mold',
-      glassType: 'Triple Pane',
-      color: 'Black',
-      temperingGlass: 'No',
-      slideWindowOption: 'Left Slide',
-      installationOption: 'Block Frame',
-      instructions: 'Not Included'
-    },
-    {
-      image: image1,
-      width: '34"',
-      height: '80"',
       fraction: '1/2',
       grid: 'Yes',
-      finType: 'Flat Jamb',
+      finType: 'Nail Fin',
       glassType: 'Double Pane',
-      color: 'Gray',
+      color: 'Olive Green',
       temperingGlass: 'Yes',
-      slideWindowOption: 'Right Slide',
+      slideWindowOption: 'Left Slide',
       installationOption: 'Pre-Hung',
       instructions: 'Included'
     },
     {
       image: image2,
-      width: '28"',
-      height: '76"',
-      fraction: '1/4',
-      grid: 'No',
-      finType: 'Flush Fin',
-      glassType: 'Single Pane',
-      color: 'Blue',
-      temperingGlass: 'No',
-      slideWindowOption: 'Fixed',
-      installationOption: 'Block Frame',
-      instructions: 'Not Included'
-    },
-    {
-      image: image1,
       width: '30"',
-      height: '80"',
-      fraction: 'Full',
-      grid: 'Yes',
-      finType: 'Nail Fin',
-      glassType: 'Triple Pane',
-      color: 'Red',
-      temperingGlass: 'Yes',
-      slideWindowOption: 'Left Slide',
-      installationOption: 'Retrofit',
-      instructions: 'Included'
-    },
-    {
-      image: image2,
-      width: '36"',
       height: '84"',
       fraction: '3/4',
       grid: 'No',
       finType: 'Brick Mold',
-      glassType: 'Double Pane',
-      color: 'Green',
+      glassType: 'Triple Pane',
+      color: 'Sandy Beige',
       temperingGlass: 'No',
       slideWindowOption: 'Right Slide',
       installationOption: 'Block Frame',
       instructions: 'Included'
+    },
+    {
+      image: image1,
+      width: '28"',
+      height: '76"',
+      fraction: '1/4',
+      grid: 'Yes',
+      finType: 'Flush Fin',
+      glassType: 'Double Pane',
+      color: 'Charcoal Gray',
+      temperingGlass: 'Yes',
+      slideWindowOption: 'Fixed',
+      installationOption: 'Retrofit',
+      instructions: 'Not Included'
     },
   ];
   
@@ -353,7 +311,9 @@ const FiberGlassFrench = () => {
   )
 }
 
-export default FiberGlassFrench;
+export default hardware;
+
+
 
 
 

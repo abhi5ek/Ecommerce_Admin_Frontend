@@ -12,7 +12,7 @@ import image2 from '../../../assets/brand/door-imagee.jpg';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const FiberGlassFrench = () => {
+const VinylSwingingFrench = () => {
   const [visible, setVisible] = useState(false);
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -20,9 +20,9 @@ const FiberGlassFrench = () => {
   const doorSubcategories = [
     {
       image: image1,
-      width: '32"',
+      width: '30"',
       height: '80"',
-      fraction: 'Full',
+      fraction: '1/2',
       grid: 'Yes',
       finType: 'Nail Fin',
       glassType: 'Double Pane',
@@ -34,8 +34,8 @@ const FiberGlassFrench = () => {
     },
     {
       image: image2,
-      width: '36"',
-      height: '82"',
+      width: '30',
+      height: '84"',
       fraction: '3/4',
       grid: 'No',
       finType: 'Brick Mold',
@@ -46,64 +46,7 @@ const FiberGlassFrench = () => {
       installationOption: 'Block Frame',
       instructions: 'Not Included'
     },
-    {
-      image: image1,
-      width: '34"',
-      height: '80"',
-      fraction: '1/2',
-      grid: 'Yes',
-      finType: 'Flat Jamb',
-      glassType: 'Double Pane',
-      color: 'Gray',
-      temperingGlass: 'Yes',
-      slideWindowOption: 'Right Slide',
-      installationOption: 'Pre-Hung',
-      instructions: 'Included'
-    },
-    {
-      image: image2,
-      width: '28"',
-      height: '76"',
-      fraction: '1/4',
-      grid: 'No',
-      finType: 'Flush Fin',
-      glassType: 'Single Pane',
-      color: 'Blue',
-      temperingGlass: 'No',
-      slideWindowOption: 'Fixed',
-      installationOption: 'Block Frame',
-      instructions: 'Not Included'
-    },
-    {
-      image: image1,
-      width: '30"',
-      height: '80"',
-      fraction: 'Full',
-      grid: 'Yes',
-      finType: 'Nail Fin',
-      glassType: 'Triple Pane',
-      color: 'Red',
-      temperingGlass: 'Yes',
-      slideWindowOption: 'Left Slide',
-      installationOption: 'Retrofit',
-      instructions: 'Included'
-    },
-    {
-      image: image2,
-      width: '36"',
-      height: '84"',
-      fraction: '3/4',
-      grid: 'No',
-      finType: 'Brick Mold',
-      glassType: 'Double Pane',
-      color: 'Green',
-      temperingGlass: 'No',
-      slideWindowOption: 'Right Slide',
-      installationOption: 'Block Frame',
-      instructions: 'Included'
-    },
-  ];
-  
+  ]
 
   const handleViewClick = (subcategory) => {
     setSelectedSubcategory(subcategory);
@@ -353,7 +296,5 @@ const FiberGlassFrench = () => {
   )
 }
 
-export default FiberGlassFrench;
-
-
+export default VinylSwingingFrench;
 
