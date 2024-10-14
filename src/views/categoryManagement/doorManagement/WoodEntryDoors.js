@@ -127,7 +127,7 @@ const WoodEntryDoors = () => {
       {/* Add Subcategory Modal */}
       <CModal size='lg' visible={visible} onClose={() => setVisible(false)}>
         <CModalHeader>
-          <CModalTitle>Add New Door Subcategory</CModalTitle>
+          <CModalTitle>Add New Product</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CForm>
@@ -253,19 +253,20 @@ const WoodEntryDoors = () => {
 
       <CModal size='lg' visible={viewModalVisible} onClose={() => setViewModalVisible(false)}>
         <CModalHeader>
-          <CModalTitle>View Subcategory</CModalTitle>
+          <CModalTitle>View Product</CModalTitle>
         </CModalHeader>
         <CModalBody>
           {selectedSubcategory && (
             <CRow>
-              <CCol xs={6}>
-                <img
-                  src={selectedSubcategory.image}
-                  alt="subcategory"
-                  width="100%"
-                  style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }}
-                />
-              </CCol>
+            <CCol xs={6} className="d-flex align-items-center">
+  <img
+    src={selectedSubcategory.image}
+    alt="subcategory"
+    width="100%"
+    style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }}
+  />
+</CCol>
+
               <CCol xs={6}>
                 <div style={{ marginLeft: '10px' }}>
                   <h5>Product Details</h5>
