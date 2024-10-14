@@ -1,6 +1,14 @@
 import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
+const FiberGlassEntry = React.lazy(() => import('./views/categoryManagement/doorManagement/FiberGlassEntry'))
+const FiberGlassFrench = React.lazy(() => import('./views/categoryManagement/doorManagement/FiberGlassFrench'))
+const FrenchWood = React.lazy(() => import('./views/categoryManagement/doorManagement/FrenchWood'))
+const VinylSwingingFrench = React.lazy(() => import('./views/categoryManagement/doorManagement/VinylSwingingFrench'))
+const VinySlidePatio = React.lazy(() => import('./views/categoryManagement/doorManagement/VinySlidePatio'))
+const WoodEntryDoors = React.lazy(() => import('./views/categoryManagement/doorManagement/WoodEntryDoors'))
+const Hardware = React.lazy(() => import('./views/categoryManagement/doorManagement/Hardware'))
+const OtherDoors = React.lazy(() => import('./views/categoryManagement/doorManagement/OtherDoors'))
 // const OutfitterManagement = React.lazy(() => import('./views/outfitterManagement/OutfitterManagement'))
 // const Oversight = React.lazy(() => import('./views/oversight/Oversight'))
 // const UserManagement = React.lazy(() => import('./views/userManagement/UserManagement'))
@@ -58,6 +66,14 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  { path: '/fiberglassentry', name: 'FiberGlassEntry', element: FiberGlassEntry },
+  { path: '/fiberglassfrench', name: 'FiberGlassEntry', element: FiberGlassFrench },
+  { path: '/frenchwooddoors', name: 'FrenchWood', element: FrenchWood },
+  { path: '/vinylswingingfrenchdoors', name: 'VinylSwingingFrench', element: VinylSwingingFrench },
+  { path: '/vinylslidepatiodoors', name: 'VinySlidePatio', element: VinySlidePatio },
+  { path: '/woodentrydoors', name: 'WoodEntryDoors', element: WoodEntryDoors },
+  { path: '/hardware', name: 'Hardware', element: Hardware },
+  { path: '/otherdoors', name: 'OtherDoors', element: OtherDoors },
   // { path: '/outfitterManagement', name: 'OutfitterManagement', element: OutfitterManagement },
   // { path: '/oversight', name: 'Oversight', element: Oversight },
   // { path: '/userManagement', name: 'UserManagement', element: UserManagement },
