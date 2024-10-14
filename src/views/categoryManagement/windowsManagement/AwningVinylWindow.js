@@ -7,12 +7,13 @@ import {
   CCol,
   CFormInput
 } from '@coreui/react'
-import image1 from '../../../assets/brand/door-imag.png';
-import image2 from '../../../assets/brand/door-imagee.jpg';
+import image1 from '../../../assets/brand/win1.jpg';
+import image2 from '../../../assets/brand/win2.jpg';
+import image3 from '../../../assets/brand/win3.jpg';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const VinylSwingingFrench = () => {
+const AwningVinylWindow = () => {
   const [visible, setVisible] = useState(false);
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -20,13 +21,13 @@ const VinylSwingingFrench = () => {
   const doorSubcategories = [
     {
       image: image1,
-      width: '30"',
-      height: '80"',
+      width: '32"',
+      height: '78"',
       fraction: '1/2',
-      grid: 'Yes',
+      grid: 'No',
       finType: 'Nail Fin',
       glassType: 'Double Pane',
-      color: 'White',
+      color: 'Tan',
       temperingGlass: 'Yes',
       slideWindowOption: 'Right Slide',
       installationOption: 'Pre-Hung',
@@ -34,19 +35,76 @@ const VinylSwingingFrench = () => {
     },
     {
       image: image2,
-      width: '30',
-      height: '84"',
+      width: '36"',
+      height: '80"',
       fraction: '3/4',
-      grid: 'No',
+      grid: 'Yes',
       finType: 'Brick Mold',
       glassType: 'Triple Pane',
-      color: 'Black',
+      color: 'Brown',
       temperingGlass: 'No',
       slideWindowOption: 'Left Slide',
       installationOption: 'Block Frame',
       instructions: 'Not Included'
     },
-  ]
+    {
+      image: image3,
+      width: '30"',
+      height: '82"',
+      fraction: 'Full',
+      grid: 'Yes',
+      finType: 'Flat Jamb',
+      glassType: 'Double Pane',
+      color: 'Cream',
+      temperingGlass: 'Yes',
+      slideWindowOption: 'Right Slide',
+      installationOption: 'Pre-Hung',
+      instructions: 'Included'
+    },
+    {
+      image: image2,
+      width: '28"',
+      height: '76"',
+      fraction: '1/4',
+      grid: 'No',
+      finType: 'Flush Fin',
+      glassType: 'Single Pane',
+      color: 'Charcoal',
+      temperingGlass: 'No',
+      slideWindowOption: 'Fixed',
+      installationOption: 'Retrofit',
+      instructions: 'Included'
+    },
+    {
+      image: image1,
+      width: '34"',
+      height: '84"',
+      fraction: '3/4',
+      grid: 'Yes',
+      finType: 'Nail Fin',
+      glassType: 'Double Pane',
+      color: 'Ivory',
+      temperingGlass: 'Yes',
+      slideWindowOption: 'Left Slide',
+      installationOption: 'Block Frame',
+      instructions: 'Included'
+    },
+    {
+      image: image2,
+      width: '36"',
+      height: '80"',
+      fraction: 'Full',
+      grid: 'No',
+      finType: 'Brick Mold',
+      glassType: 'Triple Pane',
+      color: 'Slate Gray',
+      temperingGlass: 'No',
+      slideWindowOption: 'Right Slide',
+      installationOption: 'Pre-Hung',
+      instructions: 'Not Included'
+    },
+  ];
+  
 
   const handleViewClick = (subcategory) => {
     setSelectedSubcategory(subcategory);
@@ -297,5 +355,5 @@ const VinylSwingingFrench = () => {
   )
 }
 
-export default VinylSwingingFrench;
+export default AwningVinylWindow;
 
