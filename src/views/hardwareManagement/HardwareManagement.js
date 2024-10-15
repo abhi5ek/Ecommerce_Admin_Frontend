@@ -25,42 +25,24 @@ const HardwareManagement = () => {
     const doorSubcategories = [
         {
             image: image1,
-            productName: "Hammer",
-            description: "A durable hammer with a comfortable grip.",
-            price: "$15.99"
+            productName: "Heavy-Duty Hammer",
+            description: "A durable hammer for heavy tasks.",
+            price: "$16.99"
         },
         {
             image: image2,
-            productName: "Screwdriver Set",
-            description: "A set of 5 screwdrivers with various head types.",
-            price: "$25.49"
+            productName: "Precision Screwdriver Set",
+            description: "A set of 3 precision screwdrivers for detailed work.",
+            price: "$22.49"
         },
         {
             image: image3,
-            productName: "Adjustable Wrench",
-            description: "An adjustable wrench suitable for various nut sizes.",
-            price: "$20.00"
-        },
-        {
-            image: image4,
-            productName: "Power Drill",
-            description: "A cordless power drill with rechargeable battery.",
-            price: "$79.99"
-        },
-        {
-            image: image2,
-            productName: "Pliers",
-            description: "A pair of pliers with a rubber grip handle.",
-            price: "$12.00"
-        },
-        {
-            image: image1,
-            productName: "Tape Measure",
-            description: "25-foot tape measure with easy-to-read markings.",
-            price: "$9.99"
+            productName: "Multi-Size Wrench",
+            description: "A versatile wrench for various nut sizes.",
+            price: "$25.00"
         }
     ];
-
+    
     const handleViewClick = (subcategory) => {
         setSelectedSubcategory(subcategory);
         setViewModalVisible(true);
