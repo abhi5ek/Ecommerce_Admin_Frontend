@@ -26,7 +26,7 @@ const Login = () => {
     e.preventDefault();
 
     // Simulate backend response
-    if (email === 'abc@gmail.com' && password === 'abc') {
+    if (email === 'admin@gmail.com' && password === 'admin') {
       console.log('Login successful');
       
       // Simulate token storage
