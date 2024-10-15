@@ -18,6 +18,10 @@ const DoubleHungWindows = React.lazy(() => import('./views/categoryManagement/wi
 const ChaulkAndTrim = React.lazy(() => import('./views/categoryManagement/windowsManagement/ChaulkAndTrim'))
 const GardenWindows = React.lazy(() => import('./views/categoryManagement/windowsManagement/GardenWindows'))
 const PictureWindows = React.lazy(() => import('./views/categoryManagement/windowsManagement/PictureWindows'))
+const HardwareManagement = React.lazy(() => import('./views/hardwareManagement/HardwareManagement'))
+const NewCollectionManagement = React.lazy(() => import('./views/newCollectionManagement/NewCollectionManagement'))
+const TrackingManagement = React.lazy(() => import('./views/trackingManagement/TrackingManagement'))
+
 
 
 const routes = [
@@ -39,6 +43,9 @@ const routes = [
   { path: '/gardenwindows', name: 'GardenWindows', element: GardenWindows },
   { path: '/caulkandtrim', name: 'ChaulkAndTrim', element: ChaulkAndTrim },
   { path: '/picturewindow', name: 'PictureWindows', element: PictureWindows },
+  { path: '/hardware-management', name: 'HardwareManagement', element: HardwareManagement },
+  { path: '/newcollection', name: 'NewCollectionManagement', element: NewCollectionManagement },
+  { path: '/tracking', name: 'TrackingManagement', element: TrackingManagement },
 ]
 
 export default routes

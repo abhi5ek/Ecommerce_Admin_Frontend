@@ -147,8 +147,8 @@ const GardenWindows = () => {
                         <CTableRow key={index}>
                             <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
                             <CTableDataCell style={{ textAlign: 'center' }}>
-                                <img src={subcategory.image} alt="subcategory" width="50" />
-                            </CTableDataCell>
+  <img src={subcategory.image} alt="subcategory" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+</CTableDataCell>
                             <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.width}</CTableDataCell>
                             <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.height}</CTableDataCell>
                             <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.fraction}</CTableDataCell>
