@@ -170,11 +170,11 @@ const DoorManagement = () => {
                 </CModalHeader>
                 <CModalBody>
                     {selectedSubcategory && (
-                        <CRow>
-                            <CCol xs={6} className="d-flex align-items-center">
+                        <CRow className="align-items-center">
+                            <CCol xs={12} md={6} className="mb-3 d-flex justify-content-center">
                                 <img src={selectedSubcategory.image} alt="subcategory" width="100%" style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }} />
                             </CCol>
-                            <CCol xs={6}>
+                            <CCol xs={12}  md={6} >
                                 <div style={{ marginLeft: '10px' }}>
                                     <h5>Product Details</h5>
                                     <p><strong>Product Name:</strong> {selectedSubcategory.productName}</p>
