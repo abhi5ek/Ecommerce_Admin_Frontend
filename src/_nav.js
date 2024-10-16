@@ -8,6 +8,7 @@ import {
   cilSettings,
   cilTruck,
   cilBuilding,
+  cilCheckCircle,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
 
@@ -47,6 +48,12 @@ const _nav = [
     name: 'Tracking Management',
     to: '/tracking',
     icon: <CIcon icon={cilTruck} customClassName="nav-icon" style={{ color: 'teal' }} />,
+  },
+  {
+    component: CNavItem,
+    name: 'Order Management',
+    to: '/orderManagement',
+    icon: <CIcon icon={cilCheckCircle} customClassName="nav-icon" style={{ color: 'darkviolet' }} />, // Example of a different icon
   },
 
   // {

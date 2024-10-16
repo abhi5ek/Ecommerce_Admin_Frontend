@@ -5,7 +5,10 @@ import {
     CForm, CFormLabel, CFormSelect,
     CRow,
     CCol,
-    CFormInput
+    CFormInput,
+    CCard,
+    CCardBody,
+    CCardHeader
 } from '@coreui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons'; // Import trash icon from FontAwesome
@@ -53,50 +56,51 @@ const CategoryManagement = () => {
 
     return (
         <>
-            <div className="d-flex justify-content-end" style={{ margin: '10px 0' }}>
-                <CButton
-                    color="primary"
-                    onClick={() => setVisible(true)}
-                >
-                    Add New
-                </CButton>
-            </div>
-
-            {/* Table */}
-            <CTable hover responsive>
-                <CTableHead>
-                    <CTableRow>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Index</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Category</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-Categories</CTableHeaderCell>
-                        {/* <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell> New Action column */}
-                    </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                    {Object.keys(groupedSubcategories).map((category, index) => (
-                        <CTableRow key={index}>
-                            <CTableDataCell style={{ textAlign: 'center' }}>
-                                {index + 1}
-                            </CTableDataCell>
-                            <CTableDataCell style={{ textAlign: 'center', fontWeight: 'bold' }}>
-                                {category}
-                            </CTableDataCell>
-                            <CTableDataCell style={{ textAlign: 'center' }}>
-                                {groupedSubcategories[category].map((subcategory, subIndex) => (
-                                    <div key={subIndex} style={{ marginBottom: '5px', textAlign: 'center' }}>
-                                        <span>{subcategory}</span>
-                                        <FontAwesomeIcon
-                                            icon={faTrash}
-                                            style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }} // Space between text and icon
-                                            onClick={() => handleDelete(category, subcategory)}
-                                        />
-                                    </div>
-                                ))}
-                            </CTableDataCell>
-                        </CTableRow>
-                    ))}
-                </CTableBody>
-            </CTable>
+            <CCard>
+                <CCardHeader>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h5>Door Management</h5>
+                        <CButton color="primary" onClick={() => setVisible(!visible)}>
+                            Add New
+                        </CButton>
+                    </div>
+                </CCardHeader>
+                <CCardBody>
+                    <CTable striped bordered hover responsive>
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Index</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Category</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-Categories</CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            {Object.keys(groupedSubcategories).map((category, index) => (
+                                <CTableRow key={index}>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        {index + 1}
+                                    </CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                                        {category}
+                                    </CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        {groupedSubcategories[category].map((subcategory, subIndex) => (
+                                            <div key={subIndex} style={{ marginBottom: '5px', textAlign: 'center' }}>
+                                                <span>{subcategory}</span>
+                                                <FontAwesomeIcon
+                                                    icon={faTrash}
+                                                    style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
+                                                    onClick={() => handleDelete(category, subcategory)}
+                                                />
+                                            </div>
+                                        ))}
+                                    </CTableDataCell>
+                                </CTableRow>
+                            ))}
+                        </CTableBody>
+                    </CTable>
+                </CCardBody>
+            </CCard>
 
             {/* Add Subcategory Modal */}
             <CModal size='md' visible={visible} onClose={() => setVisible(false)}>
