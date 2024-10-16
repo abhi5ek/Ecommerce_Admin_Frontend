@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
+    CCard, CCardHeader, CCardBody,
     CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell,
     CButton, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter,
     CForm, CFormLabel, CFormSelect,
     CRow,
     CCol,
     CFormInput
-} from '@coreui/react'
+} from '@coreui/react';
 import image1 from '../../assets/brand/hardware1.jpg';
 import image2 from '../../assets/brand/hardware2.jpg';
 import image3 from '../../assets/brand/hardware3.jpg';
@@ -19,8 +20,6 @@ const HardwareManagement = () => {
     const [visible, setVisible] = useState(false);
     const [viewModalVisible, setViewModalVisible] = useState(false);
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
-
-
 
     const doorSubcategories = [
         {
@@ -42,7 +41,7 @@ const HardwareManagement = () => {
             price: "$25.00"
         }
     ];
-    
+
     const handleViewClick = (subcategory) => {
         setSelectedSubcategory(subcategory);
         setViewModalVisible(true);
@@ -50,58 +49,57 @@ const HardwareManagement = () => {
 
     return (
         <>
-            <div className="d-flex justify-content-end" style={{ margin: '10px 0' }}>
-                <CButton
-                    color="primary"
-                    onClick={() => setVisible(!visible)}
-                >
-                    Add New
-                </CButton>
-            </div>
 
-            {/* Table */}
-            <CTable hover responsive>
-                <CTableHead>
-                    <CTableRow>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Index</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Image</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Name</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Discription</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Price</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
-                    </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                    {doorSubcategories.map((subcategory, index) => (
-                        <CTableRow key={index}>
-                            <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
-                            <CTableDataCell style={{ textAlign: 'center' }}>
-                                <img src={subcategory.image} alt="subcategory" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                            </CTableDataCell>
-                            <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.productName}</CTableDataCell>
-                            <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.description}</CTableDataCell>
-                            <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.price}</CTableDataCell>
-                            <CTableDataCell style={{ textAlign: 'center' }}>
-                                <CButton style={{ margin: '0 2px', padding: '4px' }}>
-                                    <FontAwesomeIcon style={{ color: 'blue' }}
-                                        onClick={() => handleViewClick(subcategory)}
-                                        icon={faEye} />
-                                </CButton>
-                                <CButton style={{ margin: '0 2px', padding: '4px' }}>
-                                    <FontAwesomeIcon style={{ color: 'green' }}
-                                        onClick={() => handleEditClick()}
-                                        icon={faEdit} />
-                                </CButton>
-                                <CButton style={{ margin: '0 2px', padding: '4px' }}>
-                                    <FontAwesomeIcon style={{ color: 'red' }}
-                                        onClick={() => handleDelete()}
-                                        icon={faTrash} />
-                                </CButton>
-                            </CTableDataCell>
-                        </CTableRow>
-                    ))}
-                </CTableBody>
-            </CTable>
+            {/* Card for Table */}
+            <CCard>
+            <CCardHeader>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h5>Door Management</h5>
+                        <CButton color="primary" onClick={() => setVisible(!visible)}>
+                            Add New
+                        </CButton>
+                    </div>
+                </CCardHeader>
+                <CCardBody>
+                    {/* Table */}
+                    <CTable striped bordered hover responsive>
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Index</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Image</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Name</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Description</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Price</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            {doorSubcategories.map((subcategory, index) => (
+                                <CTableRow key={index}>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        <img src={subcategory.image} alt="subcategory" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                                    </CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.productName}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.description}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.price}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(subcategory)}>
+                                            <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
+                                        </CButton>
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => console.log('Edit clicked')}>
+                                            <FontAwesomeIcon style={{ color: 'green' }} icon={faEdit} />
+                                        </CButton>
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => console.log('Delete clicked')}>
+                                            <FontAwesomeIcon style={{ color: 'red' }} icon={faTrash} />
+                                        </CButton>
+                                    </CTableDataCell>
+                                </CTableRow>
+                            ))}
+                        </CTableBody>
+                    </CTable>
+                </CCardBody>
+            </CCard>
 
             {/* Add Subcategory Modal */}
             <CModal size='md' visible={visible} onClose={() => setVisible(false)}>
@@ -146,7 +144,6 @@ const HardwareManagement = () => {
                                 />
                             </CCol>
                         </CRow>
-
                     </CForm>
                 </CModalBody>
                 <CModalFooter>
@@ -159,6 +156,7 @@ const HardwareManagement = () => {
                 </CModalFooter>
             </CModal>
 
+            {/* View Product Modal */}
             <CModal size='lg' visible={viewModalVisible} onClose={() => setViewModalVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>View Product</CModalTitle>
@@ -189,11 +187,8 @@ const HardwareManagement = () => {
                     <CButton color="secondary" onClick={() => setViewModalVisible(false)}>Close</CButton>
                 </CModalFooter>
             </CModal>
-
         </>
-    )
-}
+    );
+};
 
 export default HardwareManagement;
-
-

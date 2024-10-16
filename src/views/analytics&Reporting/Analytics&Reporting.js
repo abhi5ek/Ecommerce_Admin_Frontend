@@ -81,8 +81,8 @@ const AnalyticsReporting = () => {
 
     return (
         <>
-           <WidgetsDropdown className="mb-4" />
-            <CCard className="mb-4">
+           {/* <WidgetsDropdown className="mb-4" /> */}
+            {/* <CCard className="mb-4">
                 <CCardBody>
                     <CRow>
                         <CCol sm={5}>
@@ -205,7 +205,7 @@ const AnalyticsReporting = () => {
                 <CCol xs={12} md={6} xl={6}>
                   
 
-                  {/* <hr className="mt-0" />
+                  <hr className="mt-0" />
 
                   {progressGroupExample2.map((item, index) => (
                     <div className="progress-group mb-4" key={index}>
@@ -218,9 +218,9 @@ const AnalyticsReporting = () => {
                         <CProgress thin color="warning" value={item.value} />
                       </div>
                     </div>
-                  ))} */}
+                  ))}
 
-                  {/* {progressGroupExample3.map((item, index) => (
+                  {progressGroupExample3.map((item, index) => (
                     <div className="progress-group" key={index}>
                       <div className="progress-group-header">
                         <CIcon className="me-2" icon={item.icon} size="lg" />
@@ -234,14 +234,14 @@ const AnalyticsReporting = () => {
                         <CProgress thin color="success" value={item.percent} />
                       </div>
                     </div>
-                  ))} */}
+                  ))}
                 </CCol>
               </CRow>
 
               <br />
 
             </CCardBody>
-          </CCard>
+          </CCard> */}
         </>
     )
 }

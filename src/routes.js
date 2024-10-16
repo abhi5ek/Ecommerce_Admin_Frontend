@@ -6,6 +6,7 @@ const TrackingManagement = React.lazy(() => import('./views/trackingManagement/T
 const CategoryManagement = React.lazy(() => import('./views/categoryManagement/CategoryManagement'))
 const DoorManagement = React.lazy(() => import('./views/doorManagement/DoorManagement'))
 const WindowsManagement = React.lazy(() => import('./views/windowsManagement/WindowsManagement'))
+const OrderManagement = React.lazy(() => import('./views/orderManagement/OrderManagement'))
 // const FiberGlassEntry = React.lazy(() => import('./views/categoryManagement/doorManagement/FiberGlassEntry'))
 // const FiberGlassFrench = React.lazy(() => import('./views/categoryManagement/doorManagement/FiberGlassFrench'))
 // const FrenchWood = React.lazy(() => import('./views/categoryManagement/doorManagement/FrenchWood'))
@@ -52,6 +53,7 @@ const routes = [
   { path: '/tracking', name: 'TrackingManagement', element: TrackingManagement },
   { path: '/doormanagement', name: 'DoorManagement', element: DoorManagement },
   { path: '/windowsmanagement', name: 'WindowsManagement', element: WindowsManagement },
+  { path: '/orderManagement', name: 'OrderManagement', element: OrderManagement },
 ]
 
 export default routes
