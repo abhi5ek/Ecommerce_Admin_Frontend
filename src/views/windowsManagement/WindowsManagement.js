@@ -134,8 +134,13 @@ const WindowsManagement = () => {
                             <CFormLabel className="mx-2">Price</CFormLabel>
                             <CFormInput className="mx-2" placeholder="Enter price" type="number" style={{ flex: 1 }} />
 
-                            <CFormLabel className="mx-2">Upload Image</CFormLabel>
-                            <CFormInput className="mx-2" type="file" style={{ flex: 2 }} />
+                            <CFormLabel className="mx-2">Upload Images</CFormLabel>
+                            <CFormInput
+                                className="mx-2"
+                                type="file"
+                                style={{ flex: 2 }}
+                                multiple
+                            />
                         </CRow>
 
                     </CForm>

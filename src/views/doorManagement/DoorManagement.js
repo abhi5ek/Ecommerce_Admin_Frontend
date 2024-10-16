@@ -13,7 +13,7 @@ import image3 from '../../assets/brand/door-imag.png';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const CategoryManagement = () => {
+const DoorManagement = () => {
     const [visible, setVisible] = useState(false);
     const [viewModalVisible, setViewModalVisible] = useState(false);
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -134,8 +134,14 @@ const CategoryManagement = () => {
                             <CFormLabel className="mx-2">Price</CFormLabel>
                             <CFormInput className="mx-2" placeholder="Enter price" type="number" style={{ flex: 1 }} />
 
-                            <CFormLabel className="mx-2">Upload Image</CFormLabel>
-                            <CFormInput className="mx-2" type="file" style={{ flex: 2 }} />
+                            <CFormLabel className="mx-2">Upload Images</CFormLabel>
+                            <CFormInput
+                                className="mx-2"
+                                type="file"
+                                style={{ flex: 2 }}
+                                multiple
+                            />
+
                         </CRow>
 
                     </CForm>
@@ -177,4 +183,4 @@ const CategoryManagement = () => {
     )
 }
 
-export default CategoryManagement;
+export default DoorManagement;
