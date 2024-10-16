@@ -7,42 +7,41 @@ import {
     CCol,
     CFormInput
 } from '@coreui/react'
-import image1 from '../../assets/brand/hardware1.jpg';
-import image2 from '../../assets/brand/hardware2.jpg';
-import image3 from '../../assets/brand/hardware3.jpg';
-import image4 from '../../assets/brand/hardware4.jpg';
-import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import image1 from '../../assets/brand/win1.jpg';
+import image2 from '../../assets/brand/win2.jpg';
+import image3 from '../../assets/brand/win3.jpg';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const HardwareManagement = () => {
+const WindowsManagement = () => {
     const [visible, setVisible] = useState(false);
     const [viewModalVisible, setViewModalVisible] = useState(false);
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
 
-
-
     const doorSubcategories = [
         {
+            category: 'Doors',
+            subcategory: 'Front Door',
             image: image1,
-            productName: "Heavy-Duty Hammer",
-            description: "A durable hammer for heavy tasks.",
-            price: "$16.99"
+            description: 'A high-quality front door with excellent insulation.',
+            price: '$500'
         },
         {
+            category: 'Windows',
+            subcategory: 'Sliding Window',
             image: image2,
-            productName: "Precision Screwdriver Set",
-            description: "A set of 3 precision screwdrivers for detailed work.",
-            price: "$22.49"
+            description: 'Energy-efficient sliding window with double glazing.',
+            price: '$300'
         },
         {
+            category: 'Doors',
+            subcategory: 'Back Door',
             image: image3,
-            productName: "Multi-Size Wrench",
-            description: "A versatile wrench for various nut sizes.",
-            price: "$25.00"
+            description: 'Durable back door with a modern design.',
+            price: '$400'
         }
     ];
-    
+
     const handleViewClick = (subcategory) => {
         setSelectedSubcategory(subcategory);
         setViewModalVisible(true);
@@ -65,8 +64,9 @@ const HardwareManagement = () => {
                     <CTableRow>
                         <CTableHeaderCell style={{ textAlign: 'center' }}>Index</CTableHeaderCell>
                         <CTableHeaderCell style={{ textAlign: 'center' }}>Image</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Name</CTableHeaderCell>
-                        <CTableHeaderCell style={{ textAlign: 'center' }}>Discription</CTableHeaderCell>
+                        {/* <CTableHeaderCell style={{ textAlign: 'center' }}>Category</CTableHeaderCell> */}
+                        <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-Category</CTableHeaderCell>
+                        <CTableHeaderCell style={{ textAlign: 'center' }}>Description</CTableHeaderCell>
                         <CTableHeaderCell style={{ textAlign: 'center' }}>Price</CTableHeaderCell>
                         <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
                     </CTableRow>
@@ -76,9 +76,10 @@ const HardwareManagement = () => {
                         <CTableRow key={index}>
                             <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
                             <CTableDataCell style={{ textAlign: 'center' }}>
-                                <img src={subcategory.image} alt="subcategory" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                                <img src={subcategory.image} alt="subcategory" width="50" />
                             </CTableDataCell>
-                            <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.productName}</CTableDataCell>
+                            {/* <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.category}</CTableDataCell> */}
+                            <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.subcategory}</CTableDataCell>
                             <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.description}</CTableDataCell>
                             <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.price}</CTableDataCell>
                             <CTableDataCell style={{ textAlign: 'center' }}>
@@ -89,12 +90,10 @@ const HardwareManagement = () => {
                                 </CButton>
                                 <CButton style={{ margin: '0 2px', padding: '4px' }}>
                                     <FontAwesomeIcon style={{ color: 'green' }}
-                                        onClick={() => handleEditClick()}
                                         icon={faEdit} />
                                 </CButton>
                                 <CButton style={{ margin: '0 2px', padding: '4px' }}>
                                     <FontAwesomeIcon style={{ color: 'red' }}
-                                        onClick={() => handleDelete()}
                                         icon={faTrash} />
                                 </CButton>
                             </CTableDataCell>
@@ -110,74 +109,59 @@ const HardwareManagement = () => {
                 </CModalHeader>
                 <CModalBody>
                     <CForm>
-                        <CRow>
-                            <CCol className='mb-2' xs={12}>
-                                <CFormLabel className='ms-2' htmlFor="name">Name</CFormLabel>
-                                <CFormInput
-                                    type="text"
-                                    id="name"
-                                    placeholder="Enter product name"
-                                />
-                            </CCol>
+                        <CRow className="align-items-center">
+                            {/* <CFormLabel className="mx-2">Category</CFormLabel>
+                            <CFormSelect className="mx-2" style={{ flex: 1 }}>
+                                <option>Select category</option>
+                                <option value="Doors">Doors</option>
+                                <option value="Windows">Windows</option>
+                            </CFormSelect> */}
 
-                            <CCol className='mb-2' xs={12}>
-                                <CFormLabel className='ms-2' htmlFor="description">Description</CFormLabel>
-                                <CFormInput
-                                    type="text"
-                                    id="description"
-                                    placeholder="Enter product description"
-                                />
-                            </CCol>
+                            <CFormLabel className="mx-2">Sub-Category</CFormLabel>
+                            <CFormSelect className="mx-2" style={{ flex: 1 }}>
+                                <option value="">Select sub-category</option>
+                                <option value="Front Door">Front Door</option>
+                                <option value="Back Door">Back Door</option>
+                                <option value="Patio Door">Patio Door</option>
+                                <option value="Sliding Window">Sliding Window</option>
+                                <option value="Casement Window">Casement Window</option>
+                                <option value="Bay Window">Bay Window</option>
+                            </CFormSelect>
 
-                            <CCol className='mb-2' xs={12}>
-                                <CFormLabel className='ms-2' htmlFor="price">Price</CFormLabel>
-                                <CFormInput
-                                    type="number"
-                                    id="price"
-                                    placeholder="Enter product price"
-                                />
-                            </CCol>
+                            <CFormLabel className="mx-2">Description</CFormLabel>
+                            <CFormInput className="mx-2" placeholder="Enter description" style={{ flex: 2 }} />
 
-                            <CCol className='mb-2' xs={12}>
-                                <CFormLabel className='ms-2' htmlFor="image">Image</CFormLabel>
-                                <CFormInput
-                                    type="file"
-                                    id="image"
-                                />
-                            </CCol>
+                            <CFormLabel className="mx-2">Price</CFormLabel>
+                            <CFormInput className="mx-2" placeholder="Enter price" type="number" style={{ flex: 1 }} />
+
+                            <CFormLabel className="mx-2">Upload Image</CFormLabel>
+                            <CFormInput className="mx-2" type="file" style={{ flex: 2 }} />
                         </CRow>
 
                     </CForm>
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="secondary" onClick={() => setVisible(false)}>
-                        Cancel
-                    </CButton>
-                    <CButton color="primary" onClick={() => setVisible(false)}>
-                        Save
-                    </CButton>
+                    <CButton color="secondary" onClick={() => setVisible(false)}>Cancel</CButton>
+                    <CButton color="primary" onClick={() => setVisible(false)}>Save</CButton>
                 </CModalFooter>
             </CModal>
 
+            {/* View Subcategory Modal */}
             <CModal size='lg' visible={viewModalVisible} onClose={() => setViewModalVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>View Product</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
                     {selectedSubcategory && (
-                        <CRow className="align-items-center">
-                            <CCol xs={12} md={6} className="mb-3 d-flex justify-content-center">
-                                <img
-                                    src={selectedSubcategory.image}
-                                    alt="subcategory"
-                                    width="100%"
-                                    style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }}
-                                />
+                        <CRow>
+                            <CCol xs={6} className="d-flex align-items-center">
+                                <img src={selectedSubcategory.image} alt="subcategory" width="100%" style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }} />
                             </CCol>
-                            <CCol xs={12} md={6}>
-                                <div className="text-md-left" style={{ textAlign: 'left' }}>
-                                    <h5 className='mb-3' style={{ fontWeight: 'bold' }}>Product Details</h5>
-                                    <p><strong>Product Name:</strong> {selectedSubcategory.productName}</p>
+                            <CCol xs={6}>
+                                <div style={{ marginLeft: '10px' }}>
+                                    <h5>Product Details</h5>
+                                    <p><strong>Category:</strong> {selectedSubcategory.category}</p>
+                                    <p><strong>Sub-Category:</strong> {selectedSubcategory.subcategory}</p>
                                     <p><strong>Description:</strong> {selectedSubcategory.description}</p>
                                     <p><strong>Price:</strong> {selectedSubcategory.price}</p>
                                 </div>
@@ -189,11 +173,8 @@ const HardwareManagement = () => {
                     <CButton color="secondary" onClick={() => setViewModalVisible(false)}>Close</CButton>
                 </CModalFooter>
             </CModal>
-
         </>
     )
 }
 
-export default HardwareManagement;
-
-
+export default WindowsManagement;
