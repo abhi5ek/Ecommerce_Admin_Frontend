@@ -76,7 +76,7 @@ const TrackingManagement = () => {
                             <CTableRow>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Order ID</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Ordered Date</CTableHeaderCell>
-                                <CTableHeaderCell style={{ textAlign: 'center' }}>Status</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center', minWidth: '150px' }}>Status</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Expected Delivery Date</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
