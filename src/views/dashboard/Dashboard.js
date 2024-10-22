@@ -4,12 +4,14 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+// Localizer for the calendar
 const localizer = momentLocalizer(moment);
 
+// Modal for displaying appointment details
 const AppointmentModal = ({ appointment, onClose }) => {
   if (!appointment) return null;
 
-  // Format the start and end date and time separately
+  // Format the start and end date and time
   const formatDateTime = (date) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = date.toLocaleDateString(undefined, options);
@@ -42,7 +44,6 @@ const AppointmentModal = ({ appointment, onClose }) => {
         width: '90%',
       }}>
         <h2 style={{ margin: 0, fontSize: '1.5rem', color: '#007bff' }}>{appointment.title}</h2>
-
         <div style={{
           margin: '20px 0',
           padding: '15px',
@@ -63,7 +64,6 @@ const AppointmentModal = ({ appointment, onClose }) => {
             <span style={{ color: '#555' }}>End Time:</span> {endTime}
           </p>
         </div>
-
         <button 
           onClick={onClose} 
           style={{
@@ -83,7 +83,7 @@ const AppointmentModal = ({ appointment, onClose }) => {
   );
 };
 
-
+// Main Dashboard component
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -117,52 +117,19 @@ const Dashboard = () => {
     setSelectedAppointment(null);
   };
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f8f9fa',
-        padding: '10px',
-        minHeight: '100vh',
-        fontFamily: 'Arial, sans-serif',
-      }}
-    >
-      <h1
-        style={{
-          fontSize: '2rem',
-          marginBottom: '10px',
-          color: '#007bff',
-        }}
-      >
-        Appointment Calendar
-      </h1>
 
-      <div
-        style={{
-          backgroundColor: '#fff',
-          padding: '20px',
-          borderRadius: '8px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-          width: '100%',
-          height: '80vh',
-          maxWidth: '1200px',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+  return (
+    <div>
+      <div className="calendar-wrapper">
         <Calendar
           localizer={localizer}
           events={appointments}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: '80vh', width: '100%' }}
           onSelectEvent={handleEventClick}
         />
       </div>
-
       {modalOpen && (
         <AppointmentModal
           appointment={selectedAppointment}

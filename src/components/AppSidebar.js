@@ -15,7 +15,7 @@ import { AppSidebarNav } from './AppSidebarNav'
 
 // import { logo } from 'src/assets/brand/logo'
 
-import huntLogo from 'src/assets/brand/door.jpg'
+import Logo from 'src/assets/brand/discount-doors-windows.png';
 
 import { sygnet } from 'src/assets/brand/sygnet'
 
@@ -41,8 +41,7 @@ const AppSidebar = () => {
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">
           
-          <img className='d-block' src={huntLogo} alt = 'Hunting Website' style={{display: 'block', marginLeft: '70px', marginRight: 'auto', width: '80px'}} />
-          {/* <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} /> */}
+          <img className='d-block' src={Logo} alt = 'Discount Doors and Windows' style={{display: 'block', marginLeft: '40px', marginRight: 'auto', width: '130px', height: '80px'}} />
           <CIcon customClassName="sidebar-brand-narrow" icon={sygnet} height={32} />
         </CSidebarBrand>
         <CCloseButton

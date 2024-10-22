@@ -158,7 +158,6 @@ const DoorManagement = () => {
                     </div>
                 </CCardHeader>
                 <CCardBody>
-
                     <CTable striped bordered hover responsive>
                         <CTableHead>
                             <CTableRow>
@@ -177,19 +176,31 @@ const DoorManagement = () => {
                                 <CTableRow key={index}>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
-                                        <img src={door.images[0]} alt="door" width="50" height="50" />
+                                        {door.images && door.images.length > 0 ? (
+                                            <img src={door.images[0]} alt="door" width="50" height="50" />
+                                        ) : 'N/A'}
                                     </CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{door.productName}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{door.subCategory}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{door.subSubCategory}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{door.description}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{door.price}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        {door.productName || 'N/A'}
+                                    </CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        {door.subCategory || 'N/A'}
+                                    </CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        {door.subSubCategory || 'N/A'}
+                                    </CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        {door.description || 'N/A'}
+                                    </CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>
+                                        {door.price ? `$${door.price}` : 'N/A'}
+                                    </CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
                                         <CButton style={{ margin: '0 2px', padding: '4px' }}>
                                             <FontAwesomeIcon style={{ color: 'blue' }} onClick={() => handleViewClick(door)} icon={faEye} />
                                         </CButton>
                                         <CButton style={{ margin: '0 2px', padding: '4px' }}>
-                                            <FontAwesomeIcon style={{ color: 'green' }} onClick={() => handleDelete(door._id)} icon={faEdit} />
+                                            <FontAwesomeIcon style={{ color: 'green' }} icon={faEdit} />
                                         </CButton>
                                         <CButton style={{ margin: '0 2px', padding: '4px' }}>
                                             <FontAwesomeIcon style={{ color: 'red' }} onClick={() => handleDelete(door._id)} icon={faTrash} />
@@ -198,6 +209,7 @@ const DoorManagement = () => {
                                 </CTableRow>
                             ))}
                         </CTableBody>
+
                     </CTable>
                 </CCardBody>
             </CCard>
@@ -286,17 +298,21 @@ const DoorManagement = () => {
                     {selecteddoor && (
                         <CRow className="align-items-center">
                             <CCol xs={12} md={6} className="mb-3 d-flex justify-content-center">
-                                <img src={selecteddoor.images[0]} alt="door" width="100%" height="400" style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }} />
+                                {selecteddoor.images && selecteddoor.images.length > 0 ? (
+                                    <img src={selecteddoor.images[0]} alt="door" width="100%" height="400" style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }} />
+                                ) : (
+                                    <div>No Image Available</div>
+                                )}
                             </CCol>
-                            <CCol xs={12} md={6} >
+                            <CCol xs={12} md={6}>
                                 <div style={{ marginLeft: '10px' }}>
                                     <h5>Product Details</h5>
-                                    <p><strong>Product Name:</strong> {selecteddoor.productName}</p>
-                                    <p><strong>Category:</strong> {selecteddoor.category}</p>
-                                    <p><strong>Sub-Category:</strong> {selecteddoor.subCategory}</p>
-                                    <p><strong>Sub-SubCategory:</strong> {selecteddoor.subSubCategory}</p>
-                                    <p><strong>Description:</strong> {selecteddoor.description}</p>
-                                    <p><strong>Price:</strong> {selecteddoor.price}</p>
+                                    <p><strong>Product Name:</strong> {selecteddoor.productName || 'N/A'}</p>
+                                    <p><strong>Category:</strong> {selecteddoor.categoryName || 'N/A'}</p>
+                                    <p><strong>Sub-Category:</strong> {selecteddoor.subCategory || 'N/A'}</p>
+                                    <p><strong>Sub-SubCategory:</strong> {selecteddoor.subSubCategory || 'N/A'}</p>
+                                    <p><strong>Description:</strong> {selecteddoor.description || 'N/A'}</p>
+                                    <p><strong>Price:</strong> {selecteddoor.price ? `$${selecteddoor.price}` : 'N/A'}</p>
                                 </div>
                             </CCol>
                         </CRow>

@@ -53,7 +53,7 @@ const OrderManagement = () => {
         {
             orderId: '12347',
             fullName: 'Alice Johnson',
-            email: 'abhishekpandey7676@gmail.com',
+            email: 'sumitksingh1166@gmail.com',
             country: 'UK',
             address: '789 Pine Rd',
             landmark: 'Behind the school',

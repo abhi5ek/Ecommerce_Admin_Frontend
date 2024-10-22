@@ -8,10 +8,16 @@ import {
     CFormInput,
     CCard,
     CCardBody,
-    CCardHeader
+    CCardHeader,
+    CDropdown,
+    CDropdownToggle,
+    CDropdownMenu,
+    CDropdownItem,
 } from '@coreui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons'; // Import trash icon from FontAwesome
+import '@coreui/coreui/dist/css/coreui.min.css'
+import { Dropdown } from 'react-bootstrap';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 const CategoryManagement = () => {
@@ -71,7 +77,7 @@ const CategoryManagement = () => {
             alert('Please fill in all fields before saving');
             return;
         }
-    
+
         try {
             // Make an API call to save the new sub-subcategory
             const response = await axios.post('http://localhost:5000/api/category/addsubsubcategory', {
@@ -79,7 +85,7 @@ const CategoryManagement = () => {
                 subcategoryName: newSubcategory,
                 subSubcategoryName: newSubSubcategory,
             });
-    
+
             if (response.status === 200) {  // Expect status 200 instead of 201
                 alert('Sub-subcategory saved successfully!');
                 setSubVisible(false); // Close the modal after saving
@@ -95,8 +101,8 @@ const CategoryManagement = () => {
             alert('An error occurred while saving the sub-subcategory');
         }
     };
-    
-    
+
+
 
     return (
         <>
@@ -104,12 +110,19 @@ const CategoryManagement = () => {
                 <CCardHeader>
                     <div className="d-flex justify-content-between align-items-center">
                         <h5>Door Management</h5>
-                        <CButton color="primary" onClick={() => setVisible(!visible)}>
-                            Add New SubCategory
-                        </CButton>
-                        <CButton color="primary" onClick={() => setSubVisible(!visible)}>
-                            Add New Sub SubCategory
-                        </CButton>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                                Add New
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => setVisible(!visible)}>
+                                    Add New SubCategory
+                                </Dropdown.Item>
+                                <Dropdown.Item onClick={() => setSubVisible(!visible)}>
+                                    Add New Sub SubCategory
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </div>
                 </CCardHeader>
                 <CCardBody>
@@ -166,7 +179,7 @@ const CategoryManagement = () => {
             </CCard>
 
 
-        
+
             <CModal size='md' visible={visible} onClose={() => setVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>Add New Subcategory</CModalTitle>
