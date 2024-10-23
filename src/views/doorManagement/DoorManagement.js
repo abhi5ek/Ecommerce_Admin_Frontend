@@ -130,7 +130,7 @@ const DoorManagement = () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://44.196.192.232:5000/api/doors/delete-doors/${id}`)
+                await axios.delete(`http://44.196.192.232:5000/api/doors/delete-door/${id}`)
                 fetchData();
             } catch (error) {
                 console.error(error);
