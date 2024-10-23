@@ -35,7 +35,7 @@ const CategoryManagement = () => {
 
     const fetchData = async (req, res) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/category/`);
+            const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
             setCategoryData(response.data);
         } catch (error) {
             console.error(error);
@@ -51,7 +51,7 @@ const CategoryManagement = () => {
 
         try {
             // Making a POST request to the backend to create a new subcategory
-            const response = await axios.post('http://localhost:5000/api/category/addsubcategory', {
+            const response = await axios.post('http://44.196.192.232:5000/api/category/addsubcategory', {
                 categoryName: newCategory,
                 subcategoryName: newSubcategory
             });
@@ -80,7 +80,7 @@ const CategoryManagement = () => {
 
         try {
             // Make an API call to save the new sub-subcategory
-            const response = await axios.post('http://localhost:5000/api/category/addsubsubcategory', {
+            const response = await axios.post('http://44.196.192.232:5000/api/category/addsubsubcategory', {
                 categoryName: newCategory,
                 subcategoryName: newSubcategory,
                 subSubcategoryName: newSubSubcategory,
