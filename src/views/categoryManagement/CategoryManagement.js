@@ -102,7 +102,7 @@ const CategoryManagement = () => {
         const confirmation = window.confirm(`${subcategory.subcategoryName} will be deleted`);
         if(confirmation){
             try{
-                await axios.delete(`http://localhost:5000/api/category/delete-subcategory/${categoryName}/${subcategory._id}`);
+                await axios.delete(`http://44.196.192.232:5000/api/category/delete-subcategory/${categoryName}/${subcategory._id}`);
             }catch(error){
                 console.error(error);
             }
@@ -113,7 +113,7 @@ const CategoryManagement = () => {
         const confirmation = window.confirm(`${subSubcategory.subSubcategoryName} will be deleted`);
         if(confirmation){
             try{
-                await axios.delete(`http://localhost:5000/api/category/delete-subsubcategory/${categoryName}/${subcategoryName}/${subSubcategory._id}`)
+                await axios.delete(`http://44.196.192.232:5000/api/category/delete-subsubcategory/${categoryName}/${subcategoryName}/${subSubcategory._id}`)
             }catch(error){
                 console.error(error);
             }
