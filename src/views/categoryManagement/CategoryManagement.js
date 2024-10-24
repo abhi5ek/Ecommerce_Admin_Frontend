@@ -43,7 +43,6 @@ const CategoryManagement = () => {
     };
 
     const handleSave = async () => {
-        // Basic validation to ensure a category and subcategory are selected
         if (!newCategory || !newSubcategory) {
             alert("Please select a category and enter a subcategory name.");
             return;
@@ -57,11 +56,10 @@ const CategoryManagement = () => {
             });
 
             if (response.status === 201) {
-                // Successfully saved, update the UI with the new category
                 alert("Subcategory added successfully!");
-                setCategoryData([...categoryData, response.data]); // Add the new data to your state
-                setVisible(false); // Close the modal
-                setNewCategory(""); // Clear inputs
+                setCategoryData([...categoryData, response.data]);
+                setVisible(false);
+                setNewCategory("");
                 setNewSubcategory("");
             } else {
                 alert("Failed to save the subcategory.");
@@ -79,20 +77,18 @@ const CategoryManagement = () => {
         }
 
         try {
-            // Make an API call to save the new sub-subcategory
             const response = await axios.post('http://44.196.192.232:5000/api/category/addsubsubcategory', {
                 categoryName: newCategory,
                 subcategoryName: newSubcategory,
                 subSubcategoryName: newSubSubcategory,
             });
 
-            if (response.status === 200) {  // Expect status 200 instead of 201
+            if (response.status === 200) {
                 alert('Sub-subcategory saved successfully!');
-                setSubVisible(false); // Close the modal after saving
-                setNewCategory(""); // Clear inputs
+                setSubVisible(false);
+                setNewCategory("");
                 setNewSubcategory("");
-                setNewSubSubcategory(''); // Clear the sub-subcategory input field
-                // Optionally, refresh the category data if needed
+                setNewSubSubcategory('');
             } else {
                 alert('Error saving sub-subcategory');
             }
@@ -102,7 +98,27 @@ const CategoryManagement = () => {
         }
     };
 
+    const handleDeleteSubcategory = async (categoryName, subcategory) => {
+        const confirmation = window.confirm(`${subcategory.subcategoryName} will be deleted`);
+        if(confirmation){
+            try{
+                await axios.delete(`http://localhost:5000/api/category/delete-subcategory/${categoryName}/${subcategory._id}`);
+            }catch(error){
+                console.error(error);
+            }
+        }
+    }
 
+    const handleDeleteSubSubCategory = async (categoryName, subcategoryName, subSubcategory) => {
+        const confirmation = window.confirm(`${subSubcategory.subSubcategoryName} will be deleted`);
+        if(confirmation){
+            try{
+                await axios.delete(`http://localhost:5000/api/category/delete-subsubcategory/${categoryName}/${subcategoryName}/${subSubcategory._id}`)
+            }catch(error){
+                console.error(error);
+            }
+        }
+    }
 
     return (
         <>
@@ -133,7 +149,6 @@ const CategoryManagement = () => {
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Category</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-Categories</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-Subcategories</CTableHeaderCell>
-                                <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
@@ -152,22 +167,25 @@ const CategoryManagement = () => {
                                         <CTableRow key={subIndex}>
                                             <CTableDataCell style={{ textAlign: 'center' }}>
                                                 <span>{subcategory.subcategoryName}</span>
+                                                <FontAwesomeIcon
+                                                    icon={faTrash}
+                                                    style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
+                                                    onClick={() => handleDeleteSubcategory(category.categoryName, subcategory)}
+                                                />
                                             </CTableDataCell>
                                             <CTableDataCell style={{ textAlign: 'center' }}>
                                                 {
                                                     subcategory.subSubcategories.map((subSubcategory, subSubIndex) => (
-                                                        <div key={subSubIndex} style={{ marginLeft: '20px' }}>
+                                                        <div key={subSubIndex} style={{ marginLeft: '10px' }}>
                                                             <span style={{ fontSize: 'smaller' }}>{subSubcategory.subSubcategoryName}</span>
+                                                            <FontAwesomeIcon
+                                                                icon={faTrash}
+                                                                style={{ cursor: 'pointer', color: 'red', marginLeft: '20px' }}
+                                                                onClick={() => handleDeleteSubSubCategory(category.categoryName, subcategory.subcategoryName, subSubcategory)}
+                                                            />
                                                         </div>
                                                     ))
                                                 }
-                                            </CTableDataCell>
-                                            <CTableDataCell style={{ textAlign: 'center' }}>
-                                                <FontAwesomeIcon
-                                                    icon={faTrash}
-                                                    style={{ cursor: 'pointer', color: 'red' }}
-                                                    onClick={() => handleDelete(category, subcategory)}
-                                                />
                                             </CTableDataCell>
                                         </CTableRow>
                                     ))}
@@ -225,7 +243,7 @@ const CategoryManagement = () => {
                                 <CFormLabel className="ms-2">Category</CFormLabel>
                                 <CFormSelect
                                     value={newCategory}
-                                    onChange={(e) => setNewCategory(e.target.value)} // Handle category selection
+                                    onChange={(e) => setNewCategory(e.target.value)}
                                 >
                                     <option value="">Select category</option>
                                     <option value="Doors">Doors</option>
@@ -239,13 +257,12 @@ const CategoryManagement = () => {
                                 <CFormLabel className="ms-2">Sub-Category</CFormLabel>
                                 <CFormSelect
                                     value={newSubcategory}
-                                    onChange={(e) => setNewSubcategory(e.target.value)} // Handle subcategory selection
+                                    onChange={(e) => setNewSubcategory(e.target.value)}
                                 >
                                     <option value="">Select subcategory</option>
-                                    {/* Filter subcategories based on the selected category */}
                                     {categoryData
-                                        .filter((category) => category.categoryName === newCategory) // Match the selected category
-                                        .flatMap((category) => category.subcategories) // Get the subcategories
+                                        .filter((category) => category.categoryName === newCategory)
+                                        .flatMap((category) => category.subcategories)
                                         .map((subcategory, index) => (
                                             <option key={index} value={subcategory.subcategoryName}>
                                                 {subcategory.subcategoryName}
