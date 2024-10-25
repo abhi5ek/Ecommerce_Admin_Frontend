@@ -21,6 +21,7 @@ import {
     CCard,
     CCardHeader,
     CCardBody,
+    CFormTextarea,
 } from '@coreui/react';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,11 +31,21 @@ const DoorManagement = () => {
     const [doorData, setDoorData] = useState([]);
     const [visible, setVisible] = useState(false);
     const [viewModalVisible, setViewModalVisible] = useState(false);
-    const [selecteddoor, setSelecteddoor] = useState(null);
+    const [selectedDoor, setselectedDoor] = useState(null);
     const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
     const [subCategoryVisible, setSubCategoryVisible] = useState(false);
+    const [editVisible, setEditVisible] = useState(false);
     const [formData, setFormData] = useState({
+        subCategory: '',
+        subSubCategory: '',
+        productName: '',
+        description: '',
+        price: '',
+        images: []
+    });
+
+    const [editFormData, setEditFormData] = useState({
         subCategory: '',
         subSubCategory: '',
         productName: '',
@@ -48,7 +59,7 @@ const DoorManagement = () => {
         fetchCategory();
     }, []);
 
-    const fetchCategory = async (req, res) => {
+    const fetchCategory = async () => {
         try {
             const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
             setCategory(response.data[0].subcategories);
@@ -57,14 +68,15 @@ const DoorManagement = () => {
         }
     }
 
-    const fetchData = async (req, res) => {
+    const fetchData = async () => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/doors/`)
+            const response = await axios.get(`http://44.196.192.232:5000/api/doors/`);
             setDoorData(response.data.data);
         } catch (error) {
             console.error(error);
         }
     }
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -72,8 +84,9 @@ const DoorManagement = () => {
 
     const handleFileChange = (e) => {
         setFormData({ ...formData, images: e.target.files });
-        console.log(formData);
+        console.log(formData.images);
     };
+
     const handleSubcategory = (e) => {
         const selectedValue = e.target.value;
         const selectedSubcategory = category.find((sub) => sub.subcategoryName === selectedValue);
@@ -81,15 +94,12 @@ const DoorManagement = () => {
         if (selectedSubcategory && Array.isArray(selectedSubcategory.subSubcategories) && selectedSubcategory.subSubcategories.length > 0) {
             setSubCategory(selectedSubcategory.subSubcategories);
             setSubCategoryVisible(true);
-            console.log(selectedSubcategory.subSubcategories);
         } else {
             setSubCategoryVisible(false);
             setSubCategory([]);
         }
         setFormData({ ...formData, subCategory: selectedValue });
     };
-
-
 
     const handleSubmit = async () => {
         try {
@@ -130,7 +140,7 @@ const DoorManagement = () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://44.196.192.232:5000/api/doors/delete-door/${id}`)
+                await axios.delete(`http://44.196.192.232:5000/api/doors/delete-door/${id}`);
                 fetchData();
             } catch (error) {
                 console.error(error);
@@ -141,11 +151,95 @@ const DoorManagement = () => {
     }
 
     const handleViewClick = (door) => {
-        setSelecteddoor(door);
+        setselectedDoor(door);
         setViewModalVisible(true);
     };
 
+    const handleEditClick = (door) => {
+        setEditVisible(true);
+        setEditFormData({
+            id: door._id,
+            productName: door.productName,
+            price: door.price,
+            description: door.description,
+            subCategory: door.subCategory,
+            subSubCategory: door.subSubCategory
+        });
+        setselectedDoor(door);
+    };
 
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        setEditFormData({...editFormData, [name]: value,});
+    }
+
+    const handleEditFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        setEditFormData((prev) => ({
+            ...prev,
+            images: files, 
+        }));
+        console.log(editFormData.images);
+    };
+
+    const handleEditSubcategory = async (e) => {
+        const selectedValue = e.target.value;
+        const selectedSubcategory = category.find((sub) => sub.subcategoryName === selectedValue);
+
+        if (selectedSubcategory && Array.isArray(selectedSubcategory.subSubcategories) && selectedSubcategory.subSubcategories.length > 0) {
+            setSubCategory(selectedSubcategory.subSubcategories);
+            setSubCategoryVisible(true);
+        } else {
+            setSubCategoryVisible(false);
+            setSubCategory([]);
+        }
+        setEditFormData({ ...editFormData, subCategory: selectedValue });
+    }
+
+    const handleEditSubmit = async (id) => {
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append('subCategory', editFormData.subCategory);
+            formDataToSend.append('productName', editFormData.productName);
+            formDataToSend.append('description', editFormData.description);
+            formDataToSend.append('subSubCategory', editFormData.subSubCategory);
+            formDataToSend.append('price', editFormData.price);
+
+            if (editFormData.images && Array.isArray(editFormData.images)) {
+                for (let i = 0; i < editFormData.images.length; i++) {
+                    formDataToSend.append('images', editFormData.images[i]);
+                }
+            } else {
+                console.error("editFormData.images is not defined or not an array", editFormData.images);
+            }
+            console.log(id);
+
+            console.log("formDataToSend",editFormData)
+
+            formDataToSend.forEach((value, key) => {
+                console.log(key, value);
+            });
+
+            const response = await axios.put(`http://localhost:5000/api/doors/update-door/${id}`, formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', 
+                },
+            });
+            console.log(response.data);
+            setEditVisible(false);
+            await fetchData();
+            setEditFormData({
+                productName: '',
+                price: '',
+                description: '',
+                subCategory: '',
+                subSubCategory: '',
+                images: [],
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
     return (
         <>
             <CCard>
@@ -193,113 +287,96 @@ const DoorManagement = () => {
                                         {door.description || 'N/A'}
                                     </CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
-                                        {door.price ? `$${door.price}` : 'N/A'}
+                                        {door.price || 'N/A'}
                                     </CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }}>
-                                            <FontAwesomeIcon style={{ color: 'blue' }} onClick={() => handleViewClick(door)} icon={faEye} />
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(door)} >
+                                            <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
                                         </CButton>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }}>
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleEditClick(door)} >
                                             <FontAwesomeIcon style={{ color: 'green' }} icon={faEdit} />
                                         </CButton>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }}>
-                                            <FontAwesomeIcon style={{ color: 'red' }} onClick={() => handleDelete(door._id)} icon={faTrash} />
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleDelete(door._id)} >
+                                            <FontAwesomeIcon style={{ color: 'red' }} icon={faTrash} />
                                         </CButton>
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}
                         </CTableBody>
-
                     </CTable>
                 </CCardBody>
             </CCard>
 
-
-            <CModal size='md' visible={visible} onClose={() => setVisible(false)}>
+            {/* Add Door Modal */}
+            <CModal visible={visible} onClose={() => setVisible(false)}>
                 <CModalHeader>
-                    <CModalTitle>Add New Product</CModalTitle>
+                    <CModalTitle>Add Door</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
                     <CForm>
-                        <CRow className="align-items-center">
-                            <CFormLabel className="mx-2">Sub-Category</CFormLabel>
-                            <CFormSelect className="mx-2 mb-2" name="subCategory"
-                                value={formData.subCategory}
-                                onChange={handleSubcategory} style={{ flex: 1 }}>
-                                <option value="">Select sub-category</option>
-                                {category.map((sub, index) => (
-                                    <option key={index} value={sub.subcategoryName}>
-                                        {sub.subcategoryName}
-                                    </option>
-                                ))}
-                            </CFormSelect>
+                        <CFormLabel className="mx-2">Sub Category</CFormLabel>
+                        <CFormSelect onChange={handleSubcategory} name="subCategory" value={formData.subCategory}>
+                            <option value="">Select Sub Category</option>
+                            {category.map((sub, index) => (
+                                <option key={index} value={sub.subcategoryName}>
+                                    {sub.subcategoryName}
+                                </option>
+                            ))}
+                        </CFormSelect>
 
-                            {subCategoryVisible && (
-                                <>
-                                    <CFormLabel className="mx-2">Sub-SubCategory</CFormLabel>
-                                    <CFormSelect
-                                        className="mx-2 mb-2"
-                                        name="subSubCategory"
-                                        value={formData.subSubCategory}
-                                        onChange={handleChange}
-                                        style={{ flex: 1 }}
-                                    >
-                                        <option value="">Select sub-subcategory</option>
-                                        {subCategory.map((subSub, index) => (
-                                            <option key={subSub._id} value={subSub.subSubcategoryName}>
-                                                {subSub.subSubcategoryName}
-                                            </option>
-                                        ))}
-                                    </CFormSelect>
-                                </>
-                            )}
+                        {subCategoryVisible && (
+                            <>
+                                <CFormLabel className="mx-2">Sub-SubCategory</CFormLabel>
+                                <CFormSelect
+                                    className="mb-2"
+                                    name="subSubCategory"
+                                    value={formData.subSubCategory}
+                                    onChange={handleChange}
+                                    style={{ flex: 1 }}
+                                >
+                                    <option value="">Select sub-subcategory</option>
+                                    {subCategory.map((subSub, index) => (
+                                        <option key={subSub._id} value={subSub.subSubcategoryName}>
+                                            {subSub.subSubcategoryName}
+                                        </option>
+                                    ))}
+                                </CFormSelect>
+                            </>
+                        )}
+                        <CFormLabel className="mx-2">Product Name</CFormLabel>
+                        <CFormInput type="text" name="productName" onChange={handleChange} value={formData.productName} />
 
-                            <CFormLabel className="mx-2">Product Name</CFormLabel>
-                            <CFormInput className="mx-2 mb-2" name="productName"
-                                value={formData.productName}
-                                onChange={handleChange}
-                                placeholder="Enter product name" style={{ flex: 1 }} />
+                        <CFormLabel className="mx-2">Description</CFormLabel>
+                        <CFormTextarea name="description" onChange={handleChange} value={formData.description} />
 
-                            <CFormLabel className="mx-2">Description</CFormLabel>
-                            <CFormInput className="mx-2 mb-2" name="description"
-                                value={formData.description}
-                                placeholder="Enter description"
-                                onChange={handleChange} style={{ flex: 2 }} />
+                        <CFormLabel className="mx-2">Price</CFormLabel>
+                        <CFormInput type="number" name="price" onChange={handleChange} value={formData.price} />
 
-                            <CFormLabel className="mx-2">Price</CFormLabel>
-                            <CFormInput className="mx-2 mb-2" name="price"
-                                value={formData.price}
-                                placeholder="Enter price"
-                                onChange={handleChange} type="number" style={{ flex: 1 }} />
-
-                            <CFormLabel className="mx-2">Upload Images</CFormLabel>
-                            <CFormInput
-                                className="mx-2 mb-2"
-                                type="file"
-                                name="images"
-                                multiple
-                                onChange={handleFileChange}
-                            />
-                        </CRow>
+                        <CFormLabel className="mx-2">Images</CFormLabel>
+                        <CFormInput type="file" multiple onChange={handleFileChange} />
                     </CForm>
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="secondary" onClick={() => setVisible(false)}>Cancel</CButton>
-                    <CButton color="primary" onClick={handleSubmit}>Save</CButton>
+                    <CButton color="secondary" onClick={() => setVisible(false)}>
+                        Cancel
+                    </CButton>
+                    <CButton color="primary" onClick={handleSubmit}>
+                        Submit
+                    </CButton>
                 </CModalFooter>
             </CModal>
 
-
+            {/* View Door Modal */}
             <CModal size='lg' visible={viewModalVisible} onClose={() => setViewModalVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>View Product</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    {selecteddoor && (
+                    {selectedDoor && (
                         <CRow className="align-items-center">
                             <CCol xs={12} md={6} className="mb-3 d-flex justify-content-center">
-                                {selecteddoor.images && selecteddoor.images.length > 0 ? (
-                                    <img src={selecteddoor.images[0]} alt="door" width="100%" height="400" style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }} />
+                                {selectedDoor.images && selectedDoor.images.length > 0 ? (
+                                    <img src={selectedDoor.images[0]} alt="door" width="100%" height="400" style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }} />
                                 ) : (
                                     <div>No Image Available</div>
                                 )}
@@ -307,12 +384,12 @@ const DoorManagement = () => {
                             <CCol xs={12} md={6}>
                                 <div style={{ marginLeft: '10px' }}>
                                     <h5>Product Details</h5>
-                                    <p><strong>Product Name:</strong> {selecteddoor.productName || 'N/A'}</p>
-                                    <p><strong>Category:</strong> {selecteddoor.categoryName || 'N/A'}</p>
-                                    <p><strong>Sub-Category:</strong> {selecteddoor.subCategory || 'N/A'}</p>
-                                    <p><strong>Sub-SubCategory:</strong> {selecteddoor.subSubCategory || 'N/A'}</p>
-                                    <p><strong>Description:</strong> {selecteddoor.description || 'N/A'}</p>
-                                    <p><strong>Price:</strong> {selecteddoor.price ? `$${selecteddoor.price}` : 'N/A'}</p>
+                                    <p><strong>Product Name:</strong> {selectedDoor.productName || 'N/A'}</p>
+                                    <p><strong>Category:</strong> {selectedDoor.categoryName || 'N/A'}</p>
+                                    <p><strong>Sub-Category:</strong> {selectedDoor.subCategory || 'N/A'}</p>
+                                    <p><strong>Sub-SubCategory:</strong> {selectedDoor.subSubCategory || 'N/A'}</p>
+                                    <p><strong>Description:</strong> {selectedDoor.description || 'N/A'}</p>
+                                    <p><strong>Price:</strong> {selectedDoor.price ? `$${selectedDoor.price}` : 'N/A'}</p>
                                 </div>
                             </CCol>
                         </CRow>
@@ -320,6 +397,66 @@ const DoorManagement = () => {
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="secondary" onClick={() => setViewModalVisible(false)}>Close</CButton>
+                </CModalFooter>
+            </CModal>
+
+            {/* Edit Door Modal */}
+            <CModal visible={editVisible} onClose={() => setEditVisible(false)}>
+                <CModalHeader>
+                    <CModalTitle>Edit Door</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <CForm>
+                        <CFormLabel className="mx-2">Sub Category</CFormLabel>
+                        <CFormSelect onChange={handleEditSubcategory} name="subCategory" value={editFormData.subCategory}>
+                            <option value="">Select Sub Category</option>
+                            {category.map((sub, index) => (
+                                <option key={index} value={sub.subcategoryName}>
+                                    {sub.subcategoryName}
+                                </option>
+                            ))}
+                        </CFormSelect>
+
+                        {subCategoryVisible && (
+                            <>
+                                <CFormLabel className="mx-2">Sub-SubCategory</CFormLabel>
+                                <CFormSelect
+                                    className="mb-2"
+                                    name="subSubCategory"
+                                    value={editFormData.subSubCategory}
+                                    onChange={handleEditChange}
+                                >
+                                    <option value="">Select sub-subcategory</option>
+                                    {subCategory.map((subSub, index) => (
+                                        <option key={subSub._id} value={subSub.subSubcategoryName}>
+                                            {subSub.subSubcategoryName}
+                                        </option>
+                                    ))}
+                                </CFormSelect>
+                            </>
+                        )}
+
+                        <CFormLabel className="mx-2">Product Name</CFormLabel>
+                        <CFormInput type="text" name="productName" onChange={handleEditChange} value={editFormData.productName} />
+
+                        <CFormLabel className="mx-2">Description</CFormLabel>
+                        <CFormTextarea name="description" onChange={handleEditChange} value={editFormData.description} />
+
+                        <CFormLabel className="mx-2">Price</CFormLabel>
+                        <CFormInput type="number" name="price" onChange={handleEditChange} value={editFormData.price} />
+
+                        <CFormLabel className="mx-2">Images</CFormLabel>
+                        <CFormInput type="file" multiple onChange={handleEditFileChange} />
+
+                    </CForm>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton color="secondary" onClick={() => setEditVisible(false)}>
+                        Cancel
+                    </CButton>
+                    <CButton color="primary" onClick={() => handleEditSubmit(editFormData.id)}>
+                        Save Changes
+                    </CButton>
                 </CModalFooter>
             </CModal>
         </>
