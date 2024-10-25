@@ -71,7 +71,6 @@ const WindowsManagement = () => {
         if (selectedSubcategory && Array.isArray(selectedSubcategory.subSubcategories) && selectedSubcategory.subSubcategories.length > 0) {
             setSubCategory(selectedSubcategory.subSubcategories);
             setSubCategoryVisible(true);
-            console.log(selectedSubcategory.subSubcategories);
         } else {
             setSubCategoryVisible(false);
             setSubCategory([]);
