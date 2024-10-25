@@ -220,7 +220,7 @@ const DoorManagement = () => {
                 console.log(key, value);
             });
 
-            const response = await axios.put(`http://localhost:5000/api/doors/update-door/${id}`, formDataToSend, {
+            const response = await axios.put(`http://44.196.192.232:5000/api/doors/update-door/${id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data', 
                 },
