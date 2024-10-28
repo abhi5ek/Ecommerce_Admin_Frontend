@@ -5,11 +5,9 @@ import {
     CForm, CFormLabel, CFormSelect, CRow, CCol, CFormInput,
     CCard,
     CCardHeader,
-    CCardBody
+    CCardBody,
+    CFormTextarea
 } from '@coreui/react'
-import image1 from '../../assets/brand/win1.jpg';
-import image2 from '../../assets/brand/win2.jpg';
-import image3 from '../../assets/brand/win3.jpg';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
@@ -22,6 +20,15 @@ const WindowsManagement = () => {
     const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
     const [subCategoryVisible, setSubCategoryVisible] = useState(false);
+    const [editVisible, setEditVisible] = useState(false);
+    const [editFormData, setEditFormData] = useState({
+        subCategory: '',
+        subSubCategory: '',
+        productName: '',
+        description: '',
+        price: '',
+        images: []
+    });
     const [formData, setFormData] = useState({
         subCategory: '',
         subSubCategory: '',
@@ -120,7 +127,7 @@ const WindowsManagement = () => {
 
     const handleDelete = async (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
-        if(confirmDelete){
+        if (confirmDelete) {
             try {
                 await axios.delete(`http://44.196.192.232:5000/api/windows/delete/${id}`);
                 fetchData();
@@ -128,10 +135,86 @@ const WindowsManagement = () => {
 
                 console.error(error);
             }
-        }else{
+        } else {
             alert("Deletion canceled.")
         }
     }
+
+    const handleEditClick = (door) => {
+        setEditVisible(true);
+        setEditFormData({
+            id: door._id,
+            productName: door.productName,
+            price: door.price,
+            description: door.description,
+            subCategory: door.subCategory,
+            subSubCategory: door.subSubCategory
+        });
+        setselectedDoor(door);
+    };
+
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        setEditFormData({ ...editFormData, [name]: value, });
+    }
+
+    const handleEditFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        setEditFormData((prev) => ({
+            ...prev,
+            images: files,
+        }));
+    };
+
+    const handleEditSubcategory = async (e) => {
+        const selectedValue = e.target.value;
+        const selectedSubcategory = category.find((sub) => sub.subcategoryName === selectedValue);
+
+        if (selectedSubcategory && Array.isArray(selectedSubcategory.subSubcategories) && selectedSubcategory.subSubcategories.length > 0) {
+            setSubCategory(selectedSubcategory.subSubcategories);
+            setSubCategoryVisible(true);
+        } else {
+            setSubCategoryVisible(false);
+            setSubCategory([]);
+        }
+        setEditFormData({ ...editFormData, subCategory: selectedValue });
+    }
+
+    const handleEditSubmit = async (id) => {
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append('subCategory', editFormData.subCategory);
+            formDataToSend.append('productName', editFormData.productName);
+            formDataToSend.append('description', editFormData.description);
+            formDataToSend.append('subSubCategory', editFormData.subSubCategory);
+            formDataToSend.append('price', editFormData.price);
+    
+            if (editFormData.images) {
+                Array.from(editFormData.images).forEach(image => {
+                    formDataToSend.append('images', image);
+                });
+            }
+    
+            const response = await axios.put(`http://44.196.192.232:5000/api/windows/update/${id}`, formDataToSend, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+    
+            console.log(response.data);
+            setEditVisible(false);
+            await fetchData();
+            setEditFormData({
+                productName: '',
+                price: '',
+                description: '',
+                subCategory: '',
+                subSubCategory: '',
+                images: [],
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
 
     return (
         <>
@@ -160,25 +243,27 @@ const WindowsManagement = () => {
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {windowsData.map((subcategory, index) => (
+                            {windowsData.map((windows, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
-                                        <img src={subcategory.images[0]} alt="subcategory" width="50" />
+                                        {windows.images && windows.images.length > 0 ? (
+                                            <img src={windows.images[0]} alt="windows" width="50" height="50" />
+                                        ) : 'N/A'}
                                     </CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.productName}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.subCategory}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.subSubCategory}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.description}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.price}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.productName}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.subCategory}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.subSubCategory}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.description}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.price}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(subcategory)}>
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(windows)}>
                                             <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
                                         </CButton>
                                         <CButton style={{ margin: '0 2px', padding: '4px' }}>
-                                            <FontAwesomeIcon style={{ color: 'green' }} icon={faEdit} />
+                                            <FontAwesomeIcon style={{ color: 'green' }} onClick={() => handleEditClick(windows)} icon={faEdit} />
                                         </CButton>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleDelete(subcategory._id)} >
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleDelete(windows._id)} >
                                             <FontAwesomeIcon style={{ color: 'red' }} icon={faTrash} />
                                         </CButton>
                                     </CTableDataCell>
@@ -291,6 +376,65 @@ const WindowsManagement = () => {
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="secondary" onClick={() => setViewModalVisible(false)}>Close</CButton>
+                </CModalFooter>
+            </CModal>
+
+            <CModal visible={editVisible} onClose={() => setEditVisible(false)}>
+                <CModalHeader>
+                    <CModalTitle>Edit Door</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <CForm>
+                        <CFormLabel className="mx-2">Sub Category</CFormLabel>
+                        <CFormSelect onChange={handleEditSubcategory} name="subCategory" value={editFormData.subCategory}>
+                            <option value="">Select Sub Category</option>
+                            {category.map((sub, index) => (
+                                <option key={index} value={sub.subcategoryName}>
+                                    {sub.subcategoryName}
+                                </option>
+                            ))}
+                        </CFormSelect>
+
+                        {subCategoryVisible && (
+                            <>
+                                <CFormLabel className="mx-2">Sub-SubCategory</CFormLabel>
+                                <CFormSelect
+                                    className="mb-2"
+                                    name="subSubCategory"
+                                    value={editFormData.subSubCategory}
+                                    onChange={handleEditChange}
+                                >
+                                    <option value="">Select sub-subcategory</option>
+                                    {subCategory.map((subSub, index) => (
+                                        <option key={subSub._id} value={subSub.subSubcategoryName}>
+                                            {subSub.subSubcategoryName}
+                                        </option>
+                                    ))}
+                                </CFormSelect>
+                            </>
+                        )}
+
+                        <CFormLabel className="mx-2">Product Name</CFormLabel>
+                        <CFormInput type="text" name="productName" onChange={handleEditChange} value={editFormData.productName} />
+
+                        <CFormLabel className="mx-2">Description</CFormLabel>
+                        <CFormTextarea name="description" onChange={handleEditChange} value={editFormData.description} />
+
+                        <CFormLabel className="mx-2">Price</CFormLabel>
+                        <CFormInput type="number" name="price" onChange={handleEditChange} value={editFormData.price} />
+
+                        <CFormLabel className="mx-2">Images</CFormLabel>
+                        <CFormInput type="file" multiple onChange={handleEditFileChange} />
+
+                    </CForm>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton color="secondary" onClick={() => setEditVisible(false)}>
+                        Cancel
+                    </CButton>
+                    <CButton color="primary" onClick={() => handleEditSubmit(editFormData.id)}>
+                        Save Changes
+                    </CButton>
                 </CModalFooter>
             </CModal>
         </>
