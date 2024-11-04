@@ -145,9 +145,7 @@ const DoorManagement = () => {
             } catch (error) {
                 console.error(error);
             }
-        } else {
-            alert("Deletion canceled.");
-        }
+        } 
     }
 
     const handleViewClick = (door) => {

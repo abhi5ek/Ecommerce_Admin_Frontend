@@ -135,8 +135,6 @@ const WindowsManagement = () => {
 
                 console.error(error);
             }
-        } else {
-            alert("Deletion canceled.")
         }
     }
 
