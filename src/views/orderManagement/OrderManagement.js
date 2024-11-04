@@ -32,7 +32,8 @@ const OrderManagement = () => {
     const orders = [
         {
             orderId: '12345',
-            fullName: 'John Doe',
+            firstName: 'John',
+            lastName:'Doe',
             email: 'abhishekpandey7676@gmail.com',
             country: 'USA',
             address: '123 Main St',
@@ -42,7 +43,8 @@ const OrderManagement = () => {
         },
         {
             orderId: '12346',
-            fullName: 'Jane Smith',
+            firstName: 'Steve',
+            lastName:'Smith',
             email: 'abhishekpandey7676@gmail.com',
             country: 'Canada',
             address: '456 Maple Ave',
@@ -52,7 +54,8 @@ const OrderManagement = () => {
         },
         {
             orderId: '12347',
-            fullName: 'Alice Johnson',
+            firstName: 'Allice',
+            lastName:'Johnson',
             email: 'sumitksingh1166@gmail.com',
             country: 'UK',
             address: '789 Pine Rd',
@@ -62,7 +65,8 @@ const OrderManagement = () => {
         },
         {
             orderId: '12348',
-            fullName: 'Michael Brown',
+            firstName: 'Mitchel',
+            lastName:'Brown',
             email: 'abhishekpandey7676@gmail.com',
             country: 'Australia',
             address: '135 Oak St',
@@ -150,7 +154,7 @@ const OrderManagement = () => {
                                 <CTableHead>
                                     <CTableRow>
                                         <CTableHeaderCell>Order ID</CTableHeaderCell>
-                                        <CTableHeaderCell>Full Name</CTableHeaderCell>
+                                        <CTableHeaderCell>Name</CTableHeaderCell>
                                         <CTableHeaderCell>Email</CTableHeaderCell>
                                         <CTableHeaderCell>Country</CTableHeaderCell>
                                         <CTableHeaderCell>Address</CTableHeaderCell>
@@ -165,7 +169,7 @@ const OrderManagement = () => {
                                     {orders.map((order, index) => (
                                         <CTableRow key={index} hover>
                                             <CTableDataCell>{order.orderId}</CTableDataCell>
-                                            <CTableDataCell>{order.fullName}</CTableDataCell>
+                                            <CTableDataCell>{order.firstName} {order.lastName}</CTableDataCell>
                                             <CTableDataCell>{order.email}</CTableDataCell>
                                             <CTableDataCell>
                                                 <CBadge color="primary">{order.country}</CBadge>
@@ -201,7 +205,8 @@ const OrderManagement = () => {
                     {selectedOrder && (
                         <div>
                             <h5>Order ID: {selectedOrder.orderId}</h5>
-                            <p><strong>Full Name:</strong> {selectedOrder.fullName}</p>
+                            <p><strong>First Name:</strong> {selectedOrder.firstName}</p>
+                            <p><strong>Last Name:</strong> {selectedOrder.lastName}</p>
                             <p><strong>Email:</strong> {selectedOrder.email}</p>
                             <p><strong>Country:</strong> {selectedOrder.country}</p>
                             <p><strong>Address:</strong> {selectedOrder.address}</p>
