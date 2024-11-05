@@ -6,9 +6,12 @@ import {
     CCard,
     CCardHeader,
     CCardBody,
-    CFormTextarea
+    CFormTextarea,
+    CListGroup,
+    CListGroupItem,
+    CBadge
 } from '@coreui/react'
-import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 
@@ -19,16 +22,11 @@ const WindowsManagement = () => {
     const [windowsData, setWindowsData] = useState([]);
     const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
+    const [windowID, setWindowID] = useState(null);
     const [subCategoryVisible, setSubCategoryVisible] = useState(false);
     const [editVisible, setEditVisible] = useState(false);
-    const [editFormData, setEditFormData] = useState({
-        subCategory: '',
-        subSubCategory: '',
-        productName: '',
-        description: '',
-        price: '',
-        images: []
-    });
+    const [dimensionVisible, setDimensionVisible] = useState(false);
+
     const [formData, setFormData] = useState({
         subCategory: '',
         subSubCategory: '',
@@ -43,6 +41,7 @@ const WindowsManagement = () => {
         fetchCategory();
     }, [])
 
+    //fetch category to use in edit window
     const fetchCategory = async (req, res) => {
         try {
             const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
@@ -52,6 +51,7 @@ const WindowsManagement = () => {
         }
     }
 
+    //fetch complete data to show in table
     const fetchData = async () => {
         try {
             const response = await axios.get(`http://44.196.192.232:5000/api/windows/`);
@@ -61,6 +61,12 @@ const WindowsManagement = () => {
         }
     }
 
+
+
+
+
+
+    //add windows
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -120,11 +126,17 @@ const WindowsManagement = () => {
         }
     };
 
+
+
+
+
+    //code to view single window data
     const handleViewClick = (subcategory) => {
         setSelectedSubcategory(subcategory);
         setViewModalVisible(true);
     };
 
+    //code to delete a window data
     const handleDelete = async (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
@@ -137,6 +149,19 @@ const WindowsManagement = () => {
             }
         }
     }
+
+
+
+
+    // edit window code
+    const [editFormData, setEditFormData] = useState({
+        subCategory: '',
+        subSubCategory: '',
+        productName: '',
+        description: '',
+        price: '',
+        images: []
+    });
 
     const handleEditClick = (door) => {
         setEditVisible(true);
@@ -186,17 +211,17 @@ const WindowsManagement = () => {
             formDataToSend.append('description', editFormData.description);
             formDataToSend.append('subSubCategory', editFormData.subSubCategory);
             formDataToSend.append('price', editFormData.price);
-    
+
             if (editFormData.images) {
                 Array.from(editFormData.images).forEach(image => {
                     formDataToSend.append('images', image);
                 });
             }
-    
+
             const response = await axios.put(`http://44.196.192.232:5000/api/windows/update/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-    
+
             console.log(response.data);
             setEditVisible(false);
             await fetchData();
@@ -212,7 +237,82 @@ const WindowsManagement = () => {
             console.error(error);
         }
     };
-    
+
+
+
+
+
+    //add dimension code
+    const [dimensionFormData, setDimensionFormData] = useState({
+        widths: [],
+        heights: [],
+        fractions: [],
+        gridOptions: [],
+        finTypes: [],
+        glassTypes: [],
+        lockTypes: [],
+        colors: [],
+        temperingOptions: [],
+        sideWindowOpens: [],
+        installationOptions: [],
+        instructionQuestions: [],
+    });
+
+    const [currentValues, setCurrentValues] = useState({
+        width: '',
+        height: '',
+        fraction: '',
+        gridOption: '',
+        finType: '',
+        glassType: '',
+        lockType: '',
+        color: '',
+        temperingOption: '',
+        sideWindowOpen: '',
+        installationOption: '',
+        instructionQuestion: '',
+    });
+
+    const addValue = (key) => {
+        const value = currentValues[key];
+        if (value) {
+            // Ensure the key exists and is an array
+            const existingValues = dimensionFormData[key] || [];
+            if (!existingValues.includes(value)) {
+                setDimensionFormData((prev) => ({
+                    ...prev,
+                    [key]: [...existingValues, value], // Safely append the value
+                }));
+                setCurrentValues((prev) => ({ ...prev, [key]: '' })); // Clear input after adding
+            }
+        }
+    };
+
+    const removeValue = (key, value) => {
+        setDimensionFormData((prev) => ({
+            ...prev,
+            [key]: prev[key].filter((v) => v !== value),
+        }));
+    };
+
+    const handleDimesionSubmit = async() => {
+        try{
+            const response = await axios.post(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, dimensionFormData, {
+                headers: { 'Content-Type': 'application/json ' },
+            });
+            console.log(response);
+            console.log('Submitting dimensions:', dimensionFormData);
+        }catch(error){
+            console.error(error);
+        }
+        setDimensionVisible(false);
+    };
+
+    const handleAddDimensions = async (window) => {
+        setWindowID(window._id)
+        setDimensionVisible(true);
+    }
+
 
     return (
         <>
@@ -235,7 +335,6 @@ const WindowsManagement = () => {
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Product Name</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-Category</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-SubCategory</CTableHeaderCell>
-                                <CTableHeaderCell style={{ textAlign: 'center' }}>Description</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Price</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
                             </CTableRow>
@@ -252,9 +351,11 @@ const WindowsManagement = () => {
                                     <CTableDataCell style={{ textAlign: 'center' }}>{windows.productName}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{windows.subCategory}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{windows.subSubCategory}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.description}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{windows.price}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleAddDimensions(windows)}>
+                                            <FontAwesomeIcon style={{ color: 'blue' }} icon={faPlus} />
+                                        </CButton>
                                         <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(windows)}>
                                             <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
                                         </CButton>
@@ -432,6 +533,93 @@ const WindowsManagement = () => {
                     </CButton>
                     <CButton color="primary" onClick={() => handleEditSubmit(editFormData.id)}>
                         Save Changes
+                    </CButton>
+                </CModalFooter>
+            </CModal>
+
+            <CModal size='lg' visible={dimensionVisible} onClose={() => setDimensionVisible(false)}>
+                <CModalHeader>
+                    <CModalTitle>Add Dimensions</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+                        <CCard>
+                            <CCardHeader>Multi-Dimension Input</CCardHeader>
+                            <CCardBody>
+                                {Object.keys(currentValues).map((key) => (
+                                    <div key={key}>
+                                        <h5>{key.charAt(0).toUpperCase() + key.slice(1)}</h5>
+                                        <div
+                                            className="input-box"
+                                            style={{
+                                                border: '1px solid #007bff',
+                                                padding: '10px',
+                                                borderRadius: '4px',
+                                                backgroundColor: '#f8f9fa',
+                                                display: 'flex',
+                                                flexWrap: 'wrap',
+                                                marginBottom: '15px',
+                                            }}
+                                        >
+                                            {(dimensionFormData[key] || []).map((value, index) => (
+                                                <CBadge
+                                                    key={index}
+                                                    color="info" // Use a color for the badges that stands out
+                                                    style={{
+                                                        margin: '5px',
+                                                        padding: '10px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        backgroundColor: '#17a2b8', // Customize badge color
+                                                        color: '#ffffff', // Badge text color
+                                                    }}
+                                                >
+                                                    {value}
+                                                    <CButton
+                                                        color="danger"
+                                                        size="sm"
+                                                        style={{ marginLeft: '8px' }}
+                                                        onClick={() => removeValue(key, value)}
+                                                    >
+                                                        &times;
+                                                    </CButton>
+                                                </CBadge>
+                                            ))}
+                                            <CFormInput
+                                                type="text"
+                                                value={currentValues[key]}
+                                                placeholder={`Add a ${key}`}
+                                                onChange={(e) => setCurrentValues((prev) => ({ ...prev, [key]: e.target.value }))}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        addValue(key);
+                                                    }
+                                                }}
+                                                style={{
+                                                    flex: 1,
+                                                    border: '1px solid #007bff',
+                                                    borderRadius: '4px',
+                                                    backgroundColor: '#ffffff',
+                                                    outline: 'none',
+                                                    padding: '10px',
+                                                }}
+                                            />
+                                            <CButton color="primary" onClick={() => addValue(key)} style={{ marginTop: '10px' }}>
+                                                Add
+                                            </CButton>
+                                        </div>
+                                    </div>
+                                ))}
+                            </CCardBody>
+                        </CCard>
+                    </div>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton color="primary" type="submit" onClick={handleDimesionSubmit}>
+                        Add Dimensions
+                    </CButton>
+                    <CButton color="secondary" onClick={() => setDimensionVisible(false)}>
+                        Cancel
                     </CButton>
                 </CModalFooter>
             </CModal>
