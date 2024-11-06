@@ -327,7 +327,7 @@ const WindowsManagement = () => {
 
     const handleDimesionSubmit = async () => {
         try {
-            const response = await axios.post(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, dimensionFormData, {
+            const response = await axios.post(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, dimensionFormData, {
                 headers: { 'Content-Type': 'application/json ' },
             });
             console.log(response);
