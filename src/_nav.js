@@ -58,8 +58,8 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Inquery Management',
-    to: '/inqueryManagement',
+    name: 'Estimate Management',
+    to: '/estimateManagement',
     icon: <CIcon icon={cilInfo} customClassName="nav-icon" style={{ color: '#4169E1' }} />,
   },
 
