@@ -22,8 +22,9 @@ import {
     CCardHeader,
     CCardBody,
     CFormTextarea,
+    CBadge,
 } from '@coreui/react';
-import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 
@@ -36,6 +37,9 @@ const DoorManagement = () => {
     const [subCategory, setSubCategory] = useState([]);
     const [subCategoryVisible, setSubCategoryVisible] = useState(false);
     const [editVisible, setEditVisible] = useState(false);
+    const [dimensionVisible, setDimensionVisible] = useState(false);
+    const [doorID, setDoorID] = useState(false);
+
     const [formData, setFormData] = useState({
         subCategory: '',
         subSubCategory: '',
@@ -145,7 +149,7 @@ const DoorManagement = () => {
             } catch (error) {
                 console.error(error);
             }
-        } 
+        }
     }
 
     const handleViewClick = (door) => {
@@ -168,14 +172,14 @@ const DoorManagement = () => {
 
     const handleEditChange = (e) => {
         const { name, value } = e.target;
-        setEditFormData({...editFormData, [name]: value,});
+        setEditFormData({ ...editFormData, [name]: value, });
     }
 
     const handleEditFileChange = (e) => {
         const files = Array.from(e.target.files);
         setEditFormData((prev) => ({
             ...prev,
-            images: files, 
+            images: files,
         }));
         console.log(editFormData.images);
     };
@@ -212,7 +216,7 @@ const DoorManagement = () => {
             }
             console.log(id);
 
-            console.log("formDataToSend",editFormData)
+            console.log("formDataToSend", editFormData)
 
             formDataToSend.forEach((value, key) => {
                 console.log(key, value);
@@ -220,7 +224,7 @@ const DoorManagement = () => {
 
             const response = await axios.put(`http://44.196.192.232:5000/api/doors/update-door/${id}`, formDataToSend, {
                 headers: {
-                    'Content-Type': 'multipart/form-data', 
+                    'Content-Type': 'multipart/form-data',
                 },
             });
             console.log(response.data);
@@ -238,6 +242,127 @@ const DoorManagement = () => {
             console.error(error);
         }
     };
+
+
+
+
+    //add dimension code
+    const fieldNames = {
+        frameWidthAndHeight: 'Frame Width and Height',
+        addPrefinish: 'Add Prefinish',
+        doorSwingDirection: 'Door Swing Direction',
+        jampSize: 'Jamb Size',
+        sill: 'Sill',
+        doorShoe: 'Door Shoe',
+        weatherstrip: 'Weatherstrip',
+        boreOptions: 'Bore Options',
+        hinges: 'Hinges',
+        preHungOptions: 'Pre-Hung Options',
+        caulkingOption: 'Caulking Option',
+        installationOption: 'Installation Option'
+    };
+
+    const [dimensionFormData, setDimensionFormData] = useState({
+        frameWidthAndHeight: [],
+        addPrefinish: [],
+        doorSwingDirection: [],
+        jampSize: [],
+        sill: [],
+        doorShoe: [],
+        weatherstrip: [],
+        boreOptions: [],
+        hinges: [],
+        preHungOptions: [],
+        caulkingOption: [],
+        installationOption: []
+    });
+
+    const [currentValues, setCurrentValues] = useState({
+        frameWidthAndHeight: '',
+        addPrefinish: '',
+        doorSwingDirection: '',
+        jampSize: '',
+        sill: '',
+        doorShoe: '',
+        weatherstrip: '',
+        boreOptions: '',
+        hinges: '',
+        preHungOptions: '',
+        caulkingOption: '',
+        installationOption: ''
+    });
+
+    const addValue = (key) => {
+        const value = currentValues[key];
+        if (value) {
+            const existingValues = dimensionFormData[key] || [];
+            if (!existingValues.includes(value)) {
+                setDimensionFormData((prev) => ({
+                    ...prev,
+                    [key]: [...existingValues, value],
+                }));
+                setCurrentValues((prev) => ({ ...prev, [key]: '' }));
+            }
+        }
+    };
+
+    const removeValue = (key, value) => {
+        setDimensionFormData((prev) => ({
+            ...prev,
+            [key]: prev[key].filter((v) => v !== value),
+        }));
+    };
+
+    const handleAddDimensions = (door) => {
+        setDoorID(door._id);
+        setDimensionVisible(true);
+
+        setDimensionFormData({
+            frameWidthAndHeight: [],
+            addPrefinish: [],
+            doorSwingDirection: [],
+            jampSize: [],
+            sill: [],
+            doorShoe: [],
+            weatherstrip: [],
+            boreOptions: [],
+            hinges: [],
+            preHungOptions: [],
+            caulkingOption: [],
+            installationOption: []
+        });
+    
+        setCurrentValues({
+            frameWidthAndHeight: '',
+            addPrefinish: '',
+            doorSwingDirection: '',
+            jampSize: '',
+            sill: '',
+            doorShoe: '',
+            weatherstrip: '',
+            boreOptions: '',
+            hinges: '',
+            preHungOptions: '',
+            caulkingOption: '',
+            installationOption: ''
+        });
+    };
+
+    const handleDimesionSubmit = async () => {
+        try {
+            const response = await axios.post(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, dimensionFormData, {
+                headers: { 'Content-Type': 'application/json ' },
+            });
+            console.log(response);
+            console.log('Submitting dimensions:', dimensionFormData);
+        } catch (error) {
+            console.error(error);
+        }
+        setDimensionVisible(false);
+    };
+
+
+
     return (
         <>
             <CCard>
@@ -288,6 +413,9 @@ const DoorManagement = () => {
                                         {door.price || 'N/A'}
                                     </CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
+                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleAddDimensions(door)}>
+                                            <FontAwesomeIcon style={{ color: 'blue' }} icon={faPlus} />
+                                        </CButton>
                                         <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(door)} >
                                             <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
                                         </CButton>
@@ -305,7 +433,6 @@ const DoorManagement = () => {
                 </CCardBody>
             </CCard>
 
-            {/* Add Door Modal */}
             <CModal visible={visible} onClose={() => setVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>Add Door</CModalTitle>
@@ -364,7 +491,6 @@ const DoorManagement = () => {
                 </CModalFooter>
             </CModal>
 
-            {/* View Door Modal */}
             <CModal size='lg' visible={viewModalVisible} onClose={() => setViewModalVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>View Product</CModalTitle>
@@ -398,7 +524,6 @@ const DoorManagement = () => {
                 </CModalFooter>
             </CModal>
 
-            {/* Edit Door Modal */}
             <CModal visible={editVisible} onClose={() => setEditVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>Edit Door</CModalTitle>
@@ -457,6 +582,83 @@ const DoorManagement = () => {
                     </CButton>
                 </CModalFooter>
             </CModal>
+
+            <CModal size='lg' visible={dimensionVisible} onClose={() => setDimensionVisible(false)}>
+                <CModalHeader>
+                    <CModalTitle><h4>Add Dimensions</h4></CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <div>
+                        {Object.keys(currentValues).map((key) => (
+                            <div key={key}>
+                                <h5 className='ms-1'>{fieldNames[key]}</h5>
+                                <div
+                                    className="input-box mb-2"
+                                    style={{
+                                        borderRadius: '4px',
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                    }}
+                                >
+                                    {(dimensionFormData[key] || []).map((value, index) => (
+                                        <CBadge
+                                            key={index}
+                                            color="info"
+                                            style={{
+                                                margin: '5px',
+                                                padding: '10px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                backgroundColor: '#17a2b8',
+                                                color: '#ffffff',
+                                            }}
+                                        >
+                                            {value}
+                                            <CButton
+                                                color="danger"
+                                                size="sm"
+                                                style={{ marginLeft: '8px' }}
+                                                onClick={() => removeValue(key, value)}
+                                            >
+                                                &times;
+                                            </CButton>
+                                        </CBadge>
+                                    ))}
+                                    <CFormInput
+                                        type="text"
+                                        value={currentValues[key]}
+                                        placeholder={`Add a ${fieldNames[key]}`}
+                                        onChange={(e) => setCurrentValues((prev) => ({ ...prev, [key]: e.target.value }))}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                addValue(key);
+                                            }
+                                        }}
+                                        style={{
+                                            flex: 1,
+                                            borderRadius: '4px',
+                                            outline: 'none',
+                                            padding: '10px',
+                                        }}
+                                    />
+                                    <CButton className='ms-1' color="primary" onClick={() => addValue(key)}>
+                                        Add
+                                    </CButton>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton color="primary" type="submit" onClick={handleDimesionSubmit}>
+                        Add Dimensions
+                    </CButton>
+                    <CButton color="secondary" onClick={() => setDimensionVisible(false)}>
+                        Cancel
+                    </CButton>
+                </CModalFooter>
+            </CModal>
+
         </>
     );
 };

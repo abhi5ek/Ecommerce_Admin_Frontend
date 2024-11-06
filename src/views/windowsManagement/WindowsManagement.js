@@ -255,7 +255,6 @@ const WindowsManagement = () => {
         temperingOptions: [],
         sideWindowOpens: [],
         installationOptions: [],
-        instructionQuestions: [],
     });
 
     const [currentValues, setCurrentValues] = useState({
@@ -270,20 +269,18 @@ const WindowsManagement = () => {
         temperingOption: '',
         sideWindowOpen: '',
         installationOption: '',
-        instructionQuestion: '',
     });
 
     const addValue = (key) => {
         const value = currentValues[key];
         if (value) {
-            // Ensure the key exists and is an array
             const existingValues = dimensionFormData[key] || [];
             if (!existingValues.includes(value)) {
                 setDimensionFormData((prev) => ({
                     ...prev,
-                    [key]: [...existingValues, value], // Safely append the value
+                    [key]: [...existingValues, value],
                 }));
-                setCurrentValues((prev) => ({ ...prev, [key]: '' })); // Clear input after adding
+                setCurrentValues((prev) => ({ ...prev, [key]: '' }));
             }
         }
     };
@@ -295,23 +292,52 @@ const WindowsManagement = () => {
         }));
     };
 
-    const handleDimesionSubmit = async() => {
-        try{
+    const handleAddDimensions = (window) => {
+        setWindowID(window._id);
+        setDimensionVisible(true);
+        
+        setDimensionFormData({
+            widths: [],
+            heights: [],
+            fractions: [],
+            gridOptions: [],
+            finTypes: [],
+            glassTypes: [],
+            lockTypes: [],
+            colors: [],
+            temperingOptions: [],
+            sideWindowOpens: [],
+            installationOptions: [],
+        });
+
+        setCurrentValues({
+            width: '',
+            height: '',
+            fraction: '',
+            gridOption: '',
+            finType: '',
+            glassType: '',
+            lockType: '',
+            color: '',
+            temperingOption: '',
+            sideWindowOpen: '',
+            installationOption: '',
+        });
+    };
+
+    const handleDimesionSubmit = async () => {
+        try {
             const response = await axios.post(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, dimensionFormData, {
                 headers: { 'Content-Type': 'application/json ' },
             });
             console.log(response);
             console.log('Submitting dimensions:', dimensionFormData);
-        }catch(error){
+        } catch (error) {
             console.error(error);
         }
         setDimensionVisible(false);
     };
 
-    const handleAddDimensions = async (window) => {
-        setWindowID(window._id)
-        setDimensionVisible(true);
-    }
 
 
     return (
@@ -373,7 +399,7 @@ const WindowsManagement = () => {
                 </CCardBody>
             </CCard>
 
-            {/* Add Subcategory Modal */}
+
             <CModal size='md' visible={visible} onClose={() => setVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>Add New Product</CModalTitle>
@@ -448,7 +474,6 @@ const WindowsManagement = () => {
                 </CModalFooter>
             </CModal>
 
-            {/* View Subcategory Modal */}
             <CModal size='lg' visible={viewModalVisible} onClose={() => setViewModalVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>View Product</CModalTitle>
@@ -539,79 +564,68 @@ const WindowsManagement = () => {
 
             <CModal size='lg' visible={dimensionVisible} onClose={() => setDimensionVisible(false)}>
                 <CModalHeader>
-                    <CModalTitle>Add Dimensions</CModalTitle>
+                    <CModalTitle><h4>Add Dimensions</h4></CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-                        <CCard>
-                            <CCardHeader>Multi-Dimension Input</CCardHeader>
-                            <CCardBody>
-                                {Object.keys(currentValues).map((key) => (
-                                    <div key={key}>
-                                        <h5>{key.charAt(0).toUpperCase() + key.slice(1)}</h5>
-                                        <div
-                                            className="input-box"
+                    <div>
+                        {Object.keys(currentValues).map((key) => (
+                            <div key={key}>
+                                <h5 className='ms-1'>{key.charAt(0).toUpperCase() + key.slice(1)}</h5>
+                                <div
+                                    className="input-box mb-2"
+                                    style={{
+                                        borderRadius: '4px',
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                    }}
+                                >
+                                    {(dimensionFormData[key] || []).map((value, index) => (
+                                        <CBadge
+                                            key={index}
+                                            color="info"
                                             style={{
-                                                border: '1px solid #007bff',
+                                                margin: '5px',
                                                 padding: '10px',
-                                                borderRadius: '4px',
-                                                backgroundColor: '#f8f9fa',
                                                 display: 'flex',
-                                                flexWrap: 'wrap',
-                                                marginBottom: '15px',
+                                                alignItems: 'center',
+                                                backgroundColor: '#17a2b8',
+                                                color: '#ffffff',
                                             }}
                                         >
-                                            {(dimensionFormData[key] || []).map((value, index) => (
-                                                <CBadge
-                                                    key={index}
-                                                    color="info" // Use a color for the badges that stands out
-                                                    style={{
-                                                        margin: '5px',
-                                                        padding: '10px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        backgroundColor: '#17a2b8', // Customize badge color
-                                                        color: '#ffffff', // Badge text color
-                                                    }}
-                                                >
-                                                    {value}
-                                                    <CButton
-                                                        color="danger"
-                                                        size="sm"
-                                                        style={{ marginLeft: '8px' }}
-                                                        onClick={() => removeValue(key, value)}
-                                                    >
-                                                        &times;
-                                                    </CButton>
-                                                </CBadge>
-                                            ))}
-                                            <CFormInput
-                                                type="text"
-                                                value={currentValues[key]}
-                                                placeholder={`Add a ${key}`}
-                                                onChange={(e) => setCurrentValues((prev) => ({ ...prev, [key]: e.target.value }))}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter') {
-                                                        addValue(key);
-                                                    }
-                                                }}
-                                                style={{
-                                                    flex: 1,
-                                                    border: '1px solid #007bff',
-                                                    borderRadius: '4px',
-                                                    backgroundColor: '#ffffff',
-                                                    outline: 'none',
-                                                    padding: '10px',
-                                                }}
-                                            />
-                                            <CButton color="primary" onClick={() => addValue(key)} style={{ marginTop: '10px' }}>
-                                                Add
+                                            {value}
+                                            <CButton
+                                                color="danger"
+                                                size="sm"
+                                                style={{ marginLeft: '8px' }}
+                                                onClick={() => removeValue(key, value)}
+                                            >
+                                                &times;
                                             </CButton>
-                                        </div>
-                                    </div>
-                                ))}
-                            </CCardBody>
-                        </CCard>
+                                        </CBadge>
+                                    ))}
+                                    <CFormInput
+                                        type="text"
+                                        value={currentValues[key]}
+                                        placeholder={`Add a ${key}`}
+                                        onChange={(e) => setCurrentValues((prev) => ({ ...prev, [key]: e.target.value }))}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                addValue(key);
+                                            }
+                                        }}
+                                        style={{
+                                            flex: 1,
+                                            borderRadius: '4px',
+                                            outline: 'none',
+                                            padding: '10px',
+                                        }}
+                                    />
+                                    <CButton className='ms-1' color="primary" onClick={() => addValue(key)} >
+                                        Add
+                                    </CButton>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </CModalBody>
                 <CModalFooter>
