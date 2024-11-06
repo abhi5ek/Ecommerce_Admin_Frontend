@@ -7,7 +7,7 @@ const CategoryManagement = React.lazy(() => import('./views/categoryManagement/C
 const DoorManagement = React.lazy(() => import('./views/doorManagement/DoorManagement'))
 const WindowsManagement = React.lazy(() => import('./views/windowsManagement/WindowsManagement'))
 const OrderManagement = React.lazy(() => import('./views/orderManagement/OrderManagement'))
-const InqueryManagement = React.lazy(() => import('./views/inqueryManagement/InqueryManagement'))
+const EstimateManagement = React.lazy(() => import('./views/estimateManagement/EstimateManagement'))
 
 
 const routes = [
@@ -19,7 +19,7 @@ const routes = [
   { path: '/doormanagement', name: 'DoorManagement', element: DoorManagement },
   { path: '/windowsmanagement', name: 'WindowsManagement', element: WindowsManagement },
   { path: '/orderManagement', name: 'OrderManagement', element: OrderManagement },
-  { path: '/inqueryManagement', name: 'InqueryManagement', element: InqueryManagement },
+  { path: '/estimateManagement', name: 'EstimateManagement', element: EstimateManagement },
 ]
 
 export default routes

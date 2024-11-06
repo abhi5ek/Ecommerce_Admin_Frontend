@@ -8,7 +8,6 @@ import {
     CTableHead,
     CTableHeaderCell,
     CTableRow,
-    CBadge,
     CButton,
     CModal,
     CModalHeader,
@@ -19,69 +18,50 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 
-const InquiryManagement = () => {
+const EstimateManagement = () => {
 
-    const [inquiries, setInquiries] = useState([
+    const [estimates, setEstimates] = useState([
         {
             id: 1,
             name: 'John Doe',
             email: 'john.doe@example.com',
             mobile: '123-456-7890',
-            subject: 'Product Inquiry',
-            message: 'Looking for product details',
-            status: 'Pending'
+            message: 'Looking for an estimate on product A'
         },
         {
             id: 2,
             name: 'Jane Smith',
             email: 'jane.smith@example.com',
             mobile: '987-654-3210',
-            subject: 'Order Issue',
-            message: 'Need support for my order',
-            status: 'Resolved'
+            message: 'Need an estimate for service B'
         },
         {
             id: 3,
             name: 'Sam Johnson',
             email: 'sam.johnson@example.com',
             mobile: '555-123-4567',
-            subject: 'Callback Request',
-            message: 'Request for a callback',
-            status: 'In Progress'
+            message: 'Requesting an estimate for custom project'
         },
     ]);
 
-    const [selectedInquiry, setSelectedInquiry] = useState(null);
+    const [selectedEstimate, setSelectedEstimate] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleView = (inquiry) => {
-        setSelectedInquiry(inquiry);
+    const handleView = (estimate) => {
+        setSelectedEstimate(estimate);
         setIsModalOpen(true);
     };
 
     const handleDelete = (id) => {
-        setInquiries(inquiries.filter(inquiry => inquiry.id !== id));
-        console.log(`Inquiry with ID ${id} deleted`);
-    };
-
-    const getStatusBadge = (status) => {
-        switch (status) {
-            case 'Pending':
-                return 'warning';
-            case 'In Progress':
-                return 'primary';
-            case 'Resolved':
-                return 'success';
-            default:
-                return 'secondary';
-        }
+        setEstimates(estimates.filter(estimate => estimate.id !== id));
+        console.log(`Estimate with ID ${id} deleted`);
     };
 
     return (
         <>
             <CCard>
                 <CCardHeader>
-                    <h5>Inquiry Management</h5>
+                    <h5>Estimate Management</h5>
                 </CCardHeader>
                 <CCardBody>
                     <CTable striped bordered hover responsive>
@@ -89,25 +69,25 @@ const InquiryManagement = () => {
                             <CTableRow>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Index</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Name</CTableHeaderCell>
-                                <CTableHeaderCell style={{ textAlign: 'center' }}>Subject</CTableHeaderCell>
-                                <CTableHeaderCell style={{ textAlign: 'center' }}>Status</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Email</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Mobile</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Message</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {inquiries.map((inquiry, index) => (
-                                <CTableRow key={inquiry.id}>
+                            {estimates.map((estimate, index) => (
+                                <CTableRow key={estimate.id}>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{inquiry.name}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{inquiry.subject}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{estimate.name}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{estimate.email}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{estimate.mobile}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{estimate.message}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
-                                        <CBadge color={getStatusBadge(inquiry.status)}>{inquiry.status}</CBadge>
-                                    </CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>
-                                        <CButton onClick={() => handleView(inquiry)}>
+                                        <CButton onClick={() => handleView(estimate)}>
                                             <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
                                         </CButton>
-                                        <CButton onClick={() => handleDelete(inquiry.id)}>
+                                        <CButton onClick={() => handleDelete(estimate.id)}>
                                             <FontAwesomeIcon style={{ color: 'red' }} icon={faTrash} />
                                         </CButton>
                                     </CTableDataCell>
@@ -119,16 +99,14 @@ const InquiryManagement = () => {
             </CCard>
 
             <CModal visible={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <CModalHeader closeButton>Inquiry Details</CModalHeader>
+                <CModalHeader closeButton>Estimate Details</CModalHeader>
                 <CModalBody>
-                    {selectedInquiry && (
+                    {selectedEstimate && (
                         <>
-                            <p><strong>Name:</strong> {selectedInquiry.name}</p>
-                            <p><strong>Email:</strong> {selectedInquiry.email}</p>
-                            <p><strong>Mobile:</strong> {selectedInquiry.mobile}</p>
-                            <p><strong>Subject:</strong> {selectedInquiry.subject}</p>
-                            <p><strong>Message:</strong> {selectedInquiry.message}</p>
-                            <p><strong>Status:</strong> {selectedInquiry.status}</p>
+                            <p><strong>Name:</strong> {selectedEstimate.name}</p>
+                            <p><strong>Email:</strong> {selectedEstimate.email}</p>
+                            <p><strong>Mobile:</strong> {selectedEstimate.mobile}</p>
+                            <p><strong>Message:</strong> {selectedEstimate.message}</p>
                         </>
                     )}
                 </CModalBody>
@@ -142,4 +120,4 @@ const InquiryManagement = () => {
     );
 };
 
-export default InquiryManagement;
+export default EstimateManagement;
