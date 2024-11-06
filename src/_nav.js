@@ -7,9 +7,8 @@ import {
   cilDoor,
   cilSettings,
   cilTruck,
-  cilBuilding,
   cilCheckCircle,
-  cilInfo
+  cilDescription
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
 
@@ -60,7 +59,7 @@ const _nav = [
     component: CNavItem,
     name: 'Estimate Management',
     to: '/estimateManagement',
-    icon: <CIcon icon={cilInfo} customClassName="nav-icon" style={{ color: '#4169E1' }} />,
+    icon: <CIcon icon={cilDescription} customClassName="nav-icon" style={{ color: '#4169E1' }} />,
   },
 
   // {
