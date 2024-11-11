@@ -12,11 +12,10 @@ import image1 from '../../assets/brand/hardware1.jpg';
 import image2 from '../../assets/brand/hardware2.jpg';
 import image3 from '../../assets/brand/hardware3.jpg';
 import image4 from '../../assets/brand/hardware4.jpg';
-import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const HardwareManagement = () => {
+const MultipleSlideManagement = () => {
     const [visible, setVisible] = useState(false);
     const [viewModalVisible, setViewModalVisible] = useState(false);
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -26,19 +25,25 @@ const HardwareManagement = () => {
             image: image1,
             productName: "Heavy-Duty Hammer",
             description: "A durable hammer for heavy tasks.",
-            price: "$16.99"
+            price: "$16.99",
+            subcategory: "Hand Tools",
+            subsubcategory: "Hammers"
         },
         {
             image: image2,
             productName: "Precision Screwdriver Set",
             description: "A set of 3 precision screwdrivers for detailed work.",
-            price: "$22.49"
+            price: "$22.49",
+            subcategory: "Hand Tools",
+            subsubcategory: "Screwdrivers"
         },
         {
             image: image3,
             productName: "Multi-Size Wrench",
             description: "A versatile wrench for various nut sizes.",
-            price: "$25.00"
+            price: "$25.00",
+            subcategory: "Hand Tools",
+            subsubcategory: "Wrenches"
         }
     ];
 
@@ -49,12 +54,11 @@ const HardwareManagement = () => {
 
     return (
         <>
-
             {/* Card for Table */}
             <CCard>
-            <CCardHeader>
+                <CCardHeader>
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5>Hardware Management</h5>
+                        <h5>Multi Slide & Bi-Fold Doors Management</h5>
                         <CButton color="primary" onClick={() => setVisible(!visible)}>
                             Add New
                         </CButton>
@@ -70,6 +74,8 @@ const HardwareManagement = () => {
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Name</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Description</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Price</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Subcategory</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-subcategory</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
@@ -83,6 +89,8 @@ const HardwareManagement = () => {
                                     <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.productName}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.description}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.price}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.subcategory}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.subsubcategory}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
                                         <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(subcategory)}>
                                             <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
@@ -137,6 +145,24 @@ const HardwareManagement = () => {
                             </CCol>
 
                             <CCol className='mb-2' xs={12}>
+                                <CFormLabel className='ms-2' htmlFor="subcategory">Subcategory</CFormLabel>
+                                <CFormInput
+                                    type="text"
+                                    id="subcategory"
+                                    placeholder="Enter subcategory"
+                                />
+                            </CCol>
+
+                            <CCol className='mb-2' xs={12}>
+                                <CFormLabel className='ms-2' htmlFor="subsubcategory">Sub-subcategory</CFormLabel>
+                                <CFormInput
+                                    type="text"
+                                    id="subsubcategory"
+                                    placeholder="Enter sub-subcategory"
+                                />
+                            </CCol>
+
+                            <CCol className='mb-2' xs={12}>
                                 <CFormLabel className='ms-2' htmlFor="image">Image</CFormLabel>
                                 <CFormInput
                                     type="file"
@@ -178,6 +204,8 @@ const HardwareManagement = () => {
                                     <p><strong>Product Name:</strong> {selectedSubcategory.productName}</p>
                                     <p><strong>Description:</strong> {selectedSubcategory.description}</p>
                                     <p><strong>Price:</strong> {selectedSubcategory.price}</p>
+                                    <p><strong>Subcategory:</strong> {selectedSubcategory.subcategory}</p>
+                                    <p><strong>Sub-subcategory:</strong> {selectedSubcategory.subsubcategory}</p>
                                 </div>
                             </CCol>
                         </CRow>
@@ -191,4 +219,4 @@ const HardwareManagement = () => {
     );
 };
 
-export default HardwareManagement;
+export default MultipleSlideManagement;
