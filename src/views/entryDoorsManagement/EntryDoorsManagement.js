@@ -16,31 +16,46 @@ import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import { faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const HardwareManagement = () => {
+const EntryDoorManagement = () => {
     const [visible, setVisible] = useState(false);
     const [viewModalVisible, setViewModalVisible] = useState(false);
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
 
-    const doorSubcategories = [
+    const entryDoorSubcategories = [
         {
             image: image1,
-            productName: "Heavy-Duty Hammer",
-            description: "A durable hammer for heavy tasks.",
-            price: "$16.99"
+            productName: "Classic Oak Entry Door",
+            description: "A sturdy oak door with a classic design, perfect for traditional homes.",
+            price: "$250.00",
+            category: "Entry Doors",
+            subcategory: "Wood Doors"
         },
         {
             image: image2,
-            productName: "Precision Screwdriver Set",
-            description: "A set of 3 precision screwdrivers for detailed work.",
-            price: "$22.49"
+            productName: "Modern Steel Entry Door",
+            description: "A sleek, modern steel door providing both security and style.",
+            price: "$350.00",
+            category: "Entry Doors",
+            subcategory: "Steel Doors"
         },
         {
             image: image3,
-            productName: "Multi-Size Wrench",
-            description: "A versatile wrench for various nut sizes.",
-            price: "$25.00"
+            productName: "Glass Panel Entry Door",
+            description: "An elegant entry door with frosted glass panels for natural light.",
+            price: "$450.00",
+            category: "Entry Doors",
+            subcategory: "Glass Doors"
+        },
+        {
+            image: image4,
+            productName: "Rustic Mahogany Entry Door",
+            description: "A beautiful mahogany door with a rustic finish, ideal for farmhouse designs.",
+            price: "$500.00",
+            category: "Entry Doors",
+            subcategory: "Wood Doors"
         }
     ];
+
 
     const handleViewClick = (subcategory) => {
         setSelectedSubcategory(subcategory);
@@ -52,9 +67,9 @@ const HardwareManagement = () => {
 
             {/* Card for Table */}
             <CCard>
-            <CCardHeader>
+                <CCardHeader>
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5>Hardware Management</h5>
+                        <h5>Entry Door Management</h5>
                         <CButton color="primary" onClick={() => setVisible(!visible)}>
                             Add New
                         </CButton>
@@ -68,20 +83,24 @@ const HardwareManagement = () => {
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Index</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Image</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Name</CTableHeaderCell>
-                                <CTableHeaderCell style={{ textAlign: 'center' }}>Description</CTableHeaderCell>
+                                {/* <CTableHeaderCell style={{ textAlign: 'center' }}>Description</CTableHeaderCell> */}
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Category</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Subcategory</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Price</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {doorSubcategories.map((subcategory, index) => (
+                            {entryDoorSubcategories.map((subcategory, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
                                         <img src={subcategory.image} alt="subcategory" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
                                     </CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.productName}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.description}</CTableDataCell>
+                                    {/* <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.description}</CTableDataCell> */}
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.category}</CTableDataCell>
+                                    <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.subcategory}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{subcategory.price}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>
                                         <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(subcategory)}>
@@ -98,6 +117,7 @@ const HardwareManagement = () => {
                             ))}
                         </CTableBody>
                     </CTable>
+
                 </CCardBody>
             </CCard>
 
@@ -124,6 +144,24 @@ const HardwareManagement = () => {
                                     type="text"
                                     id="description"
                                     placeholder="Enter product description"
+                                />
+                            </CCol>
+
+                            <CCol className='mb-2' xs={12}>
+                                <CFormLabel className='ms-2' htmlFor="category">Category</CFormLabel>
+                                <CFormInput
+                                    type="text"
+                                    id="category"
+                                    placeholder="Enter product category"
+                                />
+                            </CCol>
+
+                            <CCol className='mb-2' xs={12}>
+                                <CFormLabel className='ms-2' htmlFor="subcategory">Subcategory</CFormLabel>
+                                <CFormInput
+                                    type="text"
+                                    id="subcategory"
+                                    placeholder="Enter product subcategory"
                                 />
                             </CCol>
 
@@ -177,6 +215,8 @@ const HardwareManagement = () => {
                                     <h5 className='mb-3' style={{ fontWeight: 'bold' }}>Product Details</h5>
                                     <p><strong>Product Name:</strong> {selectedSubcategory.productName}</p>
                                     <p><strong>Description:</strong> {selectedSubcategory.description}</p>
+                                    <p><strong>Category:</strong> {selectedSubcategory.category}</p>
+                                    <p><strong>Subcategory:</strong> {selectedSubcategory.subcategory}</p>
                                     <p><strong>Price:</strong> {selectedSubcategory.price}</p>
                                 </div>
                             </CCol>
@@ -191,4 +231,4 @@ const HardwareManagement = () => {
     );
 };
 
-export default HardwareManagement;
+export default EntryDoorManagement;

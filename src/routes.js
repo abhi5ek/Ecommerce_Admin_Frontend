@@ -8,6 +8,10 @@ const DoorManagement = React.lazy(() => import('./views/doorManagement/DoorManag
 const WindowsManagement = React.lazy(() => import('./views/windowsManagement/WindowsManagement'))
 const OrderManagement = React.lazy(() => import('./views/orderManagement/OrderManagement'))
 const EstimateManagement = React.lazy(() => import('./views/estimateManagement/EstimateManagement'))
+const MultipleSlideManagement = React.lazy(() => import('./views/multipleSlideMAnagement/MultipleSlideManagement'))
+const EntryDoorsManagement = React.lazy(() => import('./views/entryDoorsManagement/EntryDoorsManagement'))
+const InteriorDoorsManagement = React.lazy(() => import('./views/interiorDoorsManagement/InteriorDoorsManagement'))
+const SlidingDoorsManagement = React.lazy(() => import('./views/slidingDoorsManagement/SlidingDoorsManagement'))
 
 
 const routes = [
@@ -20,6 +24,10 @@ const routes = [
   { path: '/windowsmanagement', name: 'WindowsManagement', element: WindowsManagement },
   { path: '/orderManagement', name: 'OrderManagement', element: OrderManagement },
   { path: '/estimateManagement', name: 'EstimateManagement', element: EstimateManagement },
+  { path: '/mutlislide', name: 'MultipleSlideManagement', element: MultipleSlideManagement },
+  { path: '/interiordoors', name: 'InteriorDoorsManagement', element: InteriorDoorsManagement },
+  { path: '/entrydoors', name: 'EntryDoorsManagement', element: EntryDoorsManagement },
+  { path: '/slidingdoorssystems', name: 'SlidingDoorsManagement', element: SlidingDoorsManagement },
 ]
 
 export default routes

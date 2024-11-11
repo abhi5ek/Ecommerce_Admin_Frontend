@@ -42,9 +42,9 @@ const WindowsManagement = () => {
     }, [])
 
     //fetch category to use in edit window
-    const fetchCategory = async (req, res) => {
+    const fetchCategory = async (id) => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
+            const response = await axios.get(`http://localhost:5000/api/category/getcategory/${id}`);
             setCategory(response.data[1].subcategories);
         } catch (error) {
             console.error(error);
@@ -295,7 +295,7 @@ const WindowsManagement = () => {
     const handleAddDimensions = (window) => {
         setWindowID(window._id);
         setDimensionVisible(true);
-        
+
         setDimensionFormData({
             widths: [],
             heights: [],
@@ -346,7 +346,7 @@ const WindowsManagement = () => {
                 <CCardHeader>
                     <div className="d-flex justify-content-between align-items-center">
                         <h5>Windows Management</h5>
-                        <CButton color="primary" onClick={() => setVisible(!visible)}>
+                        <CButton color="primary" onClick={() => { setVisible(!visible) }}>
                             Add New
                         </CButton>
                     </div>
@@ -366,35 +366,44 @@ const WindowsManagement = () => {
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {windowsData.map((windows, index) => (
-                                <CTableRow key={index}>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>
-                                        {windows.images && windows.images.length > 0 ? (
-                                            <img src={windows.images[0]} alt="windows" width="50" height="50" />
-                                        ) : 'N/A'}
-                                    </CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.productName}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.subCategory}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.subSubCategory}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>{windows.price}</CTableDataCell>
-                                    <CTableDataCell style={{ textAlign: 'center' }}>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleAddDimensions(windows)}>
-                                            <FontAwesomeIcon style={{ color: 'blue' }} icon={faPlus} />
-                                        </CButton>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(windows)}>
-                                            <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
-                                        </CButton>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }}>
-                                            <FontAwesomeIcon style={{ color: 'green' }} onClick={() => handleEditClick(windows)} icon={faEdit} />
-                                        </CButton>
-                                        <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleDelete(windows._id)} >
-                                            <FontAwesomeIcon style={{ color: 'red' }} icon={faTrash} />
-                                        </CButton>
+                            {windowsData.length === 0 ? (
+                                <CTableRow>
+                                    <CTableDataCell colSpan={7} style={{ textAlign: 'center' }}>
+                                        N/A
                                     </CTableDataCell>
                                 </CTableRow>
-                            ))}
+                            ) : (
+                                windowsData.map((windows, index) => (
+                                    <CTableRow key={index}>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>
+                                            {windows.images && windows.images.length > 0 ? (
+                                                <img src={windows.images[0]} alt="windows" width="50" height="50" />
+                                            ) : 'N/A'}
+                                        </CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.productName || 'N/A'}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.subCategory || 'N/A'}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.subSubCategory || 'N/A'}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.price || 'N/A'}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>
+                                            <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleAddDimensions(windows)}>
+                                                <FontAwesomeIcon style={{ color: 'blue' }} icon={faPlus} />
+                                            </CButton>
+                                            <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleViewClick(windows)}>
+                                                <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
+                                            </CButton>
+                                            <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleEditClick(windows)}>
+                                                <FontAwesomeIcon style={{ color: 'green' }} icon={faEdit} />
+                                            </CButton>
+                                            <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleDelete(windows._id)}>
+                                                <FontAwesomeIcon style={{ color: 'red' }} icon={faTrash} />
+                                            </CButton>
+                                        </CTableDataCell>
+                                    </CTableRow>
+                                ))
+                            )}
                         </CTableBody>
+
                     </CTable>
                 </CCardBody>
             </CCard>
@@ -487,12 +496,12 @@ const WindowsManagement = () => {
                             <CCol xs={12} md={6}>
                                 <div style={{ marginLeft: '10px' }}>
                                     <h5>Product Details</h5>
-                                    <p><strong>Category:</strong> {selectedSubcategory.categoryName}</p>
-                                    <p><strong>Product Name:</strong> {selectedSubcategory.productName}</p>
-                                    <p><strong>Sub-Category:</strong> {selectedSubcategory.subCategory}</p>
-                                    <p><strong>Sub-SubCategory:</strong> {selectedSubcategory.subSubCategory}</p>
-                                    <p><strong>Description:</strong> {selectedSubcategory.description}</p>
-                                    <p><strong>Price:</strong> {selectedSubcategory.price}</p>
+                                    <p><strong>Category:</strong> {selectedSubcategory.categoryName || 'N/A'}</p>
+                                    <p><strong>Product Name:</strong> {selectedSubcategory.productName || 'N/A'}</p>
+                                    <p><strong>Sub-Category:</strong> {selectedSubcategory.subCategory || 'N/A'}</p>
+                                    <p><strong>Sub-SubCategory:</strong> {selectedSubcategory.subSubCategory || 'N/A'}</p>
+                                    <p><strong>Description:</strong> {selectedSubcategory.description || 'N/A'}</p>
+                                    <p><strong>Price:</strong> {selectedSubcategory.price || 'N/A'}</p>
                                 </div>
                             </CCol>
                         </CRow>

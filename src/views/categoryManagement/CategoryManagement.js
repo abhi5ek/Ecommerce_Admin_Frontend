@@ -164,7 +164,7 @@ const CategoryManagement = () => {
             <CCard>
                 <CCardHeader>
                     <div className="d-flex justify-content-between align-items-center">
-                        <h5>Door Management</h5>
+                        <h5>Category Management</h5>
                         <Dropdown>
                             <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                 Add New
