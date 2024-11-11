@@ -44,7 +44,7 @@ const WindowsManagement = () => {
     //fetch category to use in edit window
     const fetchCategory = async (req, res) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/category/`);
+            const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
             setCategory(response.data[1].subcategories);
         } catch (error) {
             console.error(error);
@@ -54,7 +54,7 @@ const WindowsManagement = () => {
     //fetch complete data to show in table
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/windows/`);
+            const response = await axios.get(`http://44.196.192.232:5000/api/windows/`);
             setWindowsData(response.data.data)
         } catch (error) {
             console.error(error);
@@ -104,7 +104,7 @@ const WindowsManagement = () => {
                 formDataToSend.append('images', formData.images[i]);
             }
 
-            const response = await axios.post('http://localhost:5000/api/windows/create', formDataToSend, {
+            const response = await axios.post('http://44.196.192.232:5000/api/windows/create', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -141,7 +141,7 @@ const WindowsManagement = () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://localhost:5000/api/windows/delete/${id}`);
+                await axios.delete(`http://44.196.192.232:5000/api/windows/delete/${id}`);
                 fetchData();
             } catch (error) {
 
@@ -218,7 +218,7 @@ const WindowsManagement = () => {
                 });
             }
 
-            const response = await axios.put(`http://localhost:5000/api/windows/update/${id}`, formDataToSend, {
+            const response = await axios.put(`http://44.196.192.232:5000/api/windows/update/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -327,7 +327,7 @@ const WindowsManagement = () => {
 
     const handleDimesionSubmit = async () => {
         try {
-            const response = await axios.post(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, dimensionFormData, {
+            const response = await axios.post(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, dimensionFormData, {
                 headers: { 'Content-Type': 'application/json ' },
             });
             console.log(response);

@@ -103,7 +103,7 @@ const OrderManagement = () => {
         console.log("Sending order:", order); 
     
         try {
-            const response = await axios.post(`http://localhost:5000/api/orders/send-email`, order, {
+            const response = await axios.post(`http://44.196.192.232:5000/api/orders/send-email`, order, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
