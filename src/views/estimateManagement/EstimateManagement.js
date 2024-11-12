@@ -16,46 +16,42 @@ import {
 } from '@coreui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const EstimateManagement = () => {
 
-    const [estimates, setEstimates] = useState([
-        {
-            id: 1,
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            mobile: '123-456-7890',
-            message: 'Looking for an estimate on product A'
-        },
-        {
-            id: 2,
-            name: 'Jane Smith',
-            email: 'jane.smith@example.com',
-            mobile: '987-654-3210',
-            message: 'Need an estimate for service B'
-        },
-        {
-            id: 3,
-            name: 'Sam Johnson',
-            email: 'sam.johnson@example.com',
-            mobile: '555-123-4567',
-            message: 'Requesting an estimate for custom project'
-        },
-    ]);
-
     const [selectedEstimate, setSelectedEstimate] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [estimate, setEstimate] = useState([]);
 
+    useEffect(() => {
+        fetchData();
+    },[]);
+
+    const fetchData = async() => {
+        try{
+            const response = await axios.get(`http://44.196.192.232:5000/api/estimate/`);
+            setEstimate(response.data.data);
+        }catch(error){
+            console.error(error);
+        }
+    }
+    
     const handleView = (estimate) => {
         setSelectedEstimate(estimate);
         setIsModalOpen(true);
     };
 
-    const handleDelete = (id) => {
-        setEstimates(estimates.filter(estimate => estimate.id !== id));
-        console.log(`Estimate with ID ${id} deleted`);
-    };
+    const handleDelete = async (id)=>{
+        try{
+            const response = await axios.delete(`http://44.196.192.232:5000/api/estimate/delete/${id}`)
+            fetchData();
+        }catch(error){
+            console.error(error);
+        }
+    }
+
 
     return (
         <>
@@ -76,8 +72,8 @@ const EstimateManagement = () => {
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {estimates.map((estimate, index) => (
-                                <CTableRow key={estimate.id}>
+                            {estimate.map((estimate, index) => (
+                                <CTableRow key={estimate._id}>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{estimate.name}</CTableDataCell>
                                     <CTableDataCell style={{ textAlign: 'center' }}>{estimate.email}</CTableDataCell>
@@ -87,7 +83,7 @@ const EstimateManagement = () => {
                                         <CButton onClick={() => handleView(estimate)}>
                                             <FontAwesomeIcon style={{ color: 'blue' }} icon={faEye} />
                                         </CButton>
-                                        <CButton onClick={() => handleDelete(estimate.id)}>
+                                        <CButton onClick={() => handleDelete(estimate._id)}>
                                             <FontAwesomeIcon style={{ color: 'red' }} icon={faTrash} />
                                         </CButton>
                                     </CTableDataCell>

@@ -11,16 +11,16 @@ const localizer = momentLocalizer(moment);
 const AppointmentModal = ({ appointment, onClose }) => {
   if (!appointment) return null;
 
-  // Format the start and end date and time
+  // Format the date and time
   const formatDateTime = (date) => {
+    // Ensure date is a Date object
+    const dateObj = new Date(date);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = date.toLocaleDateString(undefined, options);
-    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const formattedDate = dateObj.toLocaleDateString(undefined, options);
+    const formattedTime = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     return { formattedDate, formattedTime };
   };
-
-  const { formattedDate: startDate, formattedTime: startTime } = formatDateTime(appointment.start);
-  const { formattedDate: endDate, formattedTime: endTime } = formatDateTime(appointment.end);
+  const { formattedDate, formattedTime } = formatDateTime(appointment.date);
 
   return (
     <div style={{
@@ -43,7 +43,7 @@ const AppointmentModal = ({ appointment, onClose }) => {
         maxWidth: '500px',
         width: '90%',
       }}>
-        <h2 style={{ margin: 0, fontSize: '1.5rem', color: '#007bff' }}>{appointment.title}</h2>
+        <h2 style={{ margin: 0, fontSize: '1.5rem', color: '#007bff' }}>{"Appointment"}</h2>
         <div style={{
           margin: '20px 0',
           padding: '15px',
@@ -51,21 +51,15 @@ const AppointmentModal = ({ appointment, onClose }) => {
           borderRadius: '5px',
           backgroundColor: '#f9f9f9',
         }}>
-          <p style={{ margin: '5px 0', fontWeight: 'bold' }}>
-            <span style={{ color: '#555' }}>Start Date:</span> {startDate}
-          </p>
-          <p style={{ margin: '5px 0', fontWeight: 'bold' }}>
-            <span style={{ color: '#555' }}>Start Time:</span> {startTime}
-          </p>
-          <p style={{ margin: '5px 0', fontWeight: 'bold' }}>
-            <span style={{ color: '#555' }}>End Date:</span> {endDate}
-          </p>
-          <p style={{ margin: '5px 0', fontWeight: 'bold' }}>
-            <span style={{ color: '#555' }}>End Time:</span> {endTime}
-          </p>
+          <p><strong>Name:</strong> {appointment.fullName}</p>
+          <p><strong>Email:</strong> {appointment.email}</p>
+          <p><strong>Mobile:</strong> {appointment.mobile}</p>
+          <p><strong>Message:</strong> {appointment.message}</p>
+          <p><strong>Date:</strong> {formattedDate}</p>
+          <p><strong>Time:</strong> {formattedTime}</p>
         </div>
-        <button 
-          onClick={onClose} 
+        <button
+          onClick={onClose}
           style={{
             backgroundColor: '#007bff',
             color: '#fff',
@@ -97,9 +91,10 @@ const Dashboard = () => {
     try {
       const response = await axios.get(`http://44.196.192.232:5000/api/appointments/`);
       const formattedAppointments = response.data.data.map(appointment => ({
-        title: appointment.event || 'Appointment',
-        start: new Date(appointment.startDate),
-        end: new Date(appointment.endDate),
+        title: "Appointment",
+        start: new Date(appointment.date),
+        end: new Date(appointment.date),
+        ...appointment
       }));
       setAppointments(formattedAppointments);
     } catch (error) {
@@ -116,7 +111,6 @@ const Dashboard = () => {
     setModalOpen(false);
     setSelectedAppointment(null);
   };
-
 
   return (
     <div>
