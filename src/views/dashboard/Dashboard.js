@@ -13,13 +13,13 @@ const AppointmentModal = ({ appointment, onClose }) => {
 
   // Format the date and time
   const formatDateTime = (date) => {
-    // Ensure date is a Date object
-    const dateObj = new Date(date);
+    if (!(date instanceof Date)) date = new Date(date); // Convert to Date if not already
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = dateObj.toLocaleDateString(undefined, options);
-    const formattedTime = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const formattedDate = date.toLocaleDateString(undefined, options);
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     return { formattedDate, formattedTime };
   };
+
   const { formattedDate, formattedTime } = formatDateTime(appointment.date);
 
   return (
@@ -56,7 +56,7 @@ const AppointmentModal = ({ appointment, onClose }) => {
           <p><strong>Mobile:</strong> {appointment.mobile}</p>
           <p><strong>Message:</strong> {appointment.message}</p>
           <p><strong>Date:</strong> {formattedDate}</p>
-          <p><strong>Time:</strong> {formattedTime}</p>
+          {/* <p><strong>Time:</strong> {formattedTime}</p> */}
         </div>
         <button
           onClick={onClose}
@@ -94,6 +94,7 @@ const Dashboard = () => {
         title: "Appointment",
         start: new Date(appointment.date),
         end: new Date(appointment.date),
+        date: new Date(appointment.date),
         ...appointment
       }));
       setAppointments(formattedAppointments);
@@ -101,7 +102,6 @@ const Dashboard = () => {
       console.error(error);
     }
   };
-
   const handleEventClick = (event) => {
     setSelectedAppointment(event);
     setModalOpen(true);
