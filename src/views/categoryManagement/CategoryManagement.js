@@ -171,9 +171,9 @@ const CategoryManagement = () => {
                                 Add New
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => setCategoryVisible(!categoryVisible)}>
+                                {/* <Dropdown.Item onClick={() => setCategoryVisible(!categoryVisible)}>
                                     Add New Category
-                                </Dropdown.Item>
+                                </Dropdown.Item> */}
                                 <Dropdown.Item onClick={() => setVisible(!visible)}>
                                     Add New SubCategory
                                 </Dropdown.Item>
@@ -203,11 +203,11 @@ const CategoryManagement = () => {
                                         </CTableDataCell>
                                         <CTableDataCell style={{ textAlign: 'center', fontWeight: 'bold' }} rowSpan={category.subcategories?.length + 1 || 1}>
                                             {category.categoryName}
-                                            <FontAwesomeIcon
+                                            {/* <FontAwesomeIcon
                                                 icon={faTrash}
                                                 style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
                                                 onClick={() => handleDeleteCategory(category)}
-                                            />
+                                            /> */}
                                         </CTableDataCell>
                                     </CTableRow>
 
