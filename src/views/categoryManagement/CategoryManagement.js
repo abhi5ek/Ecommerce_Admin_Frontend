@@ -33,8 +33,9 @@ const CategoryManagement = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
-            setCategoryData(response.data);
+            const response = await axios.get('http://44.196.192.232:5000/api/category/');
+            console.log(response.data.data)
+            setCategoryData(response.data.data || []);  
         } catch (error) {
             console.error(error);
         }
