@@ -52,7 +52,7 @@ const HardwareManagement = () => {
 
             {/* Card for Table */}
             <CCard>
-            <CCardHeader>
+                <CCardHeader>
                     <div className="d-flex justify-content-between align-items-center">
                         <h5>Hardware Management</h5>
                         <CButton color="primary" onClick={() => setVisible(!visible)}>
