@@ -45,7 +45,7 @@ const WindowsManagement = () => {
     //fetch category to use in edit window
     const fetchCategory = async (id) => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/category/getcategory/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/category/getcategory/${id}`);
             setCategory(response.data[1].subcategories);
         } catch (error) {
             console.error(error);
@@ -55,7 +55,7 @@ const WindowsManagement = () => {
     //fetch complete data to show in table
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/windows/`);
+            const response = await axios.get(`http://localhost:5000/api/windows/`);
             setWindowsData(response.data.data)
         } catch (error) {
             console.error(error);
@@ -105,7 +105,7 @@ const WindowsManagement = () => {
                 formDataToSend.append('images', formData.images[i]);
             }
 
-            const response = await axios.post('http://44.196.192.232:5000/api/windows/create', formDataToSend, {
+            const response = await axios.post('http://localhost:5000/api/windows/create', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -142,7 +142,7 @@ const WindowsManagement = () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://44.196.192.232:5000/api/windows/delete/${id}`);
+                await axios.delete(`http://localhost:5000/api/windows/delete/${id}`);
                 fetchData();
             } catch (error) {
 
@@ -219,7 +219,7 @@ const WindowsManagement = () => {
                 });
             }
 
-            const response = await axios.put(`http://44.196.192.232:5000/api/windows/update/${id}`, formDataToSend, {
+            const response = await axios.put(`http://localhost:5000/api/windows/update/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -293,7 +293,7 @@ const WindowsManagement = () => {
     const handleDimensionSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, dimensions);
+            const response = await axios.put(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, dimensions);
             alert(response.data.message);
             setDimensions({
                 width: [{ width: null, price: null }],
@@ -334,8 +334,8 @@ const WindowsManagement = () => {
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Index</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Image</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Product Name</CTableHeaderCell>
-                                <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-Category</CTableHeaderCell>
-                                <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-SubCategory</CTableHeaderCell>
+                                {/* <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-Category</CTableHeaderCell>
+                                <CTableHeaderCell style={{ textAlign: 'center' }}>Sub-SubCategory</CTableHeaderCell> */}
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Price</CTableHeaderCell>
                                 <CTableHeaderCell style={{ textAlign: 'center' }}>Actions</CTableHeaderCell>
                             </CTableRow>
@@ -357,8 +357,8 @@ const WindowsManagement = () => {
                                             ) : 'N/A'}
                                         </CTableDataCell>
                                         <CTableDataCell style={{ textAlign: 'center' }}>{windows.productName || 'N/A'}</CTableDataCell>
-                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.subCategory || 'N/A'}</CTableDataCell>
-                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.subSubCategory || 'N/A'}</CTableDataCell>
+                                        {/* <CTableDataCell style={{ textAlign: 'center' }}>{windows.subCategory || 'N/A'}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.subSubCategory || 'N/A'}</CTableDataCell> */}
                                         <CTableDataCell style={{ textAlign: 'center' }}>{windows.price || 'N/A'}</CTableDataCell>
                                         <CTableDataCell style={{ textAlign: 'center' }}>
                                             <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleAddDimensions(windows)}>
@@ -391,7 +391,7 @@ const WindowsManagement = () => {
                 <CModalBody>
                     <CForm>
                         <CRow className="align-items-center">
-                            <CFormLabel className="mx-2">Sub-Category</CFormLabel>
+                            {/* <CFormLabel className="mx-2">Sub-Category</CFormLabel>
                             <CFormSelect className="mx-2 mb-2" name="subCategory"
                                 value={formData.subCategory}
                                 onChange={handleSubcategory} style={{ flex: 1 }}>
@@ -401,9 +401,9 @@ const WindowsManagement = () => {
                                         {sub.subcategoryName}
                                     </option>
                                 ))}
-                            </CFormSelect>
+                            </CFormSelect> */}
 
-                            {subCategoryVisible && (
+                            {/* {subCategoryVisible && (
                                 <>
                                     <CFormLabel className="mx-2">Sub-SubCategory</CFormLabel>
                                     <CFormSelect
@@ -421,7 +421,7 @@ const WindowsManagement = () => {
                                         ))}
                                     </CFormSelect>
                                 </>
-                            )}
+                            )} */}
 
                             <CFormLabel className="mx-2">Product Name</CFormLabel>
                             <CFormInput className="mx-2 mb-2" name="productName"
@@ -483,8 +483,8 @@ const WindowsManagement = () => {
                                         <h5>Product Details</h5>
                                         <p><strong>Category:</strong> {selectedSubcategory.categoryName || 'N/A'}</p>
                                         <p><strong>Product Name:</strong> {selectedSubcategory.productName || 'N/A'}</p>
-                                        <p><strong>Sub-Category:</strong> {selectedSubcategory.subCategory || 'N/A'}</p>
-                                        <p><strong>Sub-SubCategory:</strong> {selectedSubcategory.subSubCategory || 'N/A'}</p>
+                                        {/* <p><strong>Sub-Category:</strong> {selectedSubcategory.subCategory || 'N/A'}</p>
+                                        <p><strong>Sub-SubCategory:</strong> {selectedSubcategory.subSubCategory || 'N/A'}</p> */}
                                         <p><strong>Description:</strong> {selectedSubcategory.description || 'N/A'}</p>
                                         <p><strong>Price:</strong> {selectedSubcategory.price || 'N/A'}</p>
                                     </div>
