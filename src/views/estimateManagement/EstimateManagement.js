@@ -27,27 +27,27 @@ const EstimateManagement = () => {
 
     useEffect(() => {
         fetchData();
-    },[]);
+    }, []);
 
-    const fetchData = async() => {
-        try{
+    const fetchData = async () => {
+        try {
             const response = await axios.get(`http://44.196.192.232:5000/api/estimate/`);
             setEstimate(response.data.data);
-        }catch(error){
+        } catch (error) {
             console.error(error);
         }
     }
-    
+
     const handleView = (estimate) => {
         setSelectedEstimate(estimate);
         setIsModalOpen(true);
     };
 
-    const handleDelete = async (id)=>{
-        try{
+    const handleDelete = async (id) => {
+        try {
             const response = await axios.delete(`http://44.196.192.232:5000/api/estimate/delete/${id}`)
             fetchData();
-        }catch(error){
+        } catch (error) {
             console.error(error);
         }
     }

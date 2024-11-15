@@ -331,7 +331,7 @@ const DoorManagement = () => {
             caulkingOption: [],
             installationOption: []
         });
-    
+
         setCurrentValues({
             frameWidthAndHeight: '',
             addPrefinish: '',

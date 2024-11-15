@@ -33,7 +33,7 @@ const OrderManagement = () => {
         {
             orderId: '12345',
             firstName: 'John',
-            lastName:'Doe',
+            lastName: 'Doe',
             email: 'abhishekpandey7676@gmail.com',
             country: 'USA',
             address: '123 Main St',
@@ -44,7 +44,7 @@ const OrderManagement = () => {
         {
             orderId: '12346',
             firstName: 'Steve',
-            lastName:'Smith',
+            lastName: 'Smith',
             email: 'abhishekpandey7676@gmail.com',
             country: 'Canada',
             address: '456 Maple Ave',
@@ -55,7 +55,7 @@ const OrderManagement = () => {
         {
             orderId: '12347',
             firstName: 'Allice',
-            lastName:'Johnson',
+            lastName: 'Johnson',
             email: 'sumitksingh1166@gmail.com',
             country: 'UK',
             address: '789 Pine Rd',
@@ -66,7 +66,7 @@ const OrderManagement = () => {
         {
             orderId: '12348',
             firstName: 'Mitchel',
-            lastName:'Brown',
+            lastName: 'Brown',
             email: 'abhishekpandey7676@gmail.com',
             country: 'Australia',
             address: '135 Oak St',
@@ -87,30 +87,30 @@ const OrderManagement = () => {
 
         if (confirmation) {
             toast.info("Email getting sent...", {
-                autoClose: 2000, 
+                autoClose: 2000,
                 position: "top-right",
             });
             sendEmailToServer(order);
         } else {
             toast.error("Email not sent.", {
-                autoClose: 2000, 
+                autoClose: 2000,
                 position: "top-right",
             });
         }
     };
 
     const sendEmailToServer = async (order) => {
-        console.log("Sending order:", order); 
-    
+        console.log("Sending order:", order);
+
         try {
             const response = await axios.post(`http://44.196.192.232:5000/api/orders/send-email`, order, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-    
+
             console.log("Response:", response); // Log the response from the server
-    
+
             if (response.status === 200) {
                 toast.success("Email sent successfully!", {
                     position: "top-right",
@@ -133,7 +133,7 @@ const OrderManagement = () => {
             });
         }
     };
-    
+
 
     const handleCloseModal = () => {
         setModalVisible(false);

@@ -9,7 +9,8 @@ import {
     CFormTextarea,
     CListGroup,
     CListGroupItem,
-    CBadge
+    CBadge,
+    CInputGroup
 } from '@coreui/react'
 import { faEdit, faEye, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -241,103 +242,77 @@ const WindowsManagement = () => {
 
 
 
-
     //add dimension code
-    const [dimensionFormData, setDimensionFormData] = useState({
-        widths: [],
-        heights: [],
-        fractions: [],
-        gridOptions: [],
-        finTypes: [],
-        glassTypes: [],
-        lockTypes: [],
-        colors: [],
-        temperingOptions: [],
-        sideWindowOpens: [],
-        installationOptions: [],
-    });
-
-    const [currentValues, setCurrentValues] = useState({
-        width: '',
-        height: '',
-        fraction: '',
-        gridOption: '',
-        finType: '',
-        glassType: '',
-        lockType: '',
-        color: '',
-        temperingOption: '',
-        sideWindowOpen: '',
-        installationOption: '',
-    });
-
-    const addValue = (key) => {
-        const value = currentValues[key];
-        if (value) {
-            const existingValues = dimensionFormData[key] || [];
-            if (!existingValues.includes(value)) {
-                setDimensionFormData((prev) => ({
-                    ...prev,
-                    [key]: [...existingValues, value],
-                }));
-                setCurrentValues((prev) => ({ ...prev, [key]: '' }));
-            }
-        }
-    };
-
-    const removeValue = (key, value) => {
-        setDimensionFormData((prev) => ({
-            ...prev,
-            [key]: prev[key].filter((v) => v !== value),
-        }));
-    };
-
     const handleAddDimensions = (window) => {
         setWindowID(window._id);
         setDimensionVisible(true);
+    }
 
-        setDimensionFormData({
-            widths: [],
-            heights: [],
-            fractions: [],
-            gridOptions: [],
-            finTypes: [],
-            glassTypes: [],
-            lockTypes: [],
-            colors: [],
-            temperingOptions: [],
-            sideWindowOpens: [],
-            installationOptions: [],
-        });
+    const [dimensions, setDimensions] = useState({
+        width: [{ width: '', price: '' }],
+        height: [{ height: '', price: '' }],
+        fraction: [{ fraction: '', price: '' }],
+        gridOptions: [{ gridOptions: '', price: '' }],
+        finType: [{ finType: '', price: '' }],
+        glassType: [{ glassType: '', price: '' }],
+        lockType: [{ lockType: '', price: '' }],
+        color: [{ color: '', price: '' }],
+        temperingOptions: [{ temperingOptions: '', price: '' }],
+        sideWindowOpens: [{ sideWindowOpens: '', price: '' }],
+        installationOption: [{ installationOption: '', price: '' }],
+    });
 
-        setCurrentValues({
-            width: '',
-            height: '',
-            fraction: '',
-            gridOption: '',
-            finType: '',
-            glassType: '',
-            lockType: '',
-            color: '',
-            temperingOption: '',
-            sideWindowOpen: '',
-            installationOption: '',
+    const updateFieldValue = (field, index, key, value) => {
+        const updatedField = [...dimensions[field]];
+        updatedField[index][key] = value;
+        setDimensions({ ...dimensions, [field]: updatedField });
+    };
+
+    const handleAddRow = (field) => {
+        setDimensions({
+            ...dimensions,
+            [field]: [...dimensions[field], { [field]: '', price: '' }]
         });
     };
 
-    const handleDimesionSubmit = async () => {
+    const DimensionNull = () => {
+        setDimensions({
+            width: [{ width: null, price: null }],
+            height: [{ height: null, price: null }],
+            gridOptions: [{ gridOptions: null, price: null }],
+            finType: [{ finType: null, price: null }],
+            glassType: [{ glassType: null, price: null }],
+            lockType: [{ lockType: null, price: null }],
+            color: [{ color: null, price: null }],
+            temperingOptions: [{ temperingOptions: null, price: null }],
+            sideWindowOpens: [{ sideWindowOpens: null, price: null }],
+            installationOption: [{ installationOption: null, price: null }],
+        });
+    }
+
+    const handleDimensionSubmit = async (e) => {
+        e.preventDefault();
         try {
-            const response = await axios.post(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, dimensionFormData, {
-                headers: { 'Content-Type': 'application/json ' },
+            const response = await axios.put(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, dimensions);
+            alert(response.data.message);
+            setDimensions({
+                width: [{ width: null, price: null }],
+                height: [{ height: null, price: null }],
+                gridOptions: [{ gridOptions: null, price: null }],
+                finType: [{ finType: null, price: null }],
+                glassType: [{ glassType: null, price: null }],
+                lockType: [{ lockType: null, price: null }],
+                color: [{ color: null, price: null }],
+                temperingOptions: [{ temperingOptions: null, price: null }],
+                sideWindowOpens: [{ sideWindowOpens: null, price: null }],
+                installationOption: [{ installationOption: null, price: null }],
             });
-            console.log(response);
-            console.log('Submitting dimensions:', dimensionFormData);
+            setDimensionVisible(false);
         } catch (error) {
             console.error(error);
+            alert("Failed to add dimensions");
         }
-        setDimensionVisible(false);
     };
-
 
 
     return (
@@ -489,23 +464,59 @@ const WindowsManagement = () => {
                 </CModalHeader>
                 <CModalBody>
                     {selectedSubcategory && (
-                        <CRow className="align-items-center">
-                            <CCol xs={12} md={6} className="mb-3 d-flex justify-content-center">
-                                <img src={selectedSubcategory.images[0]} alt="subcategory" width="100%" style={{ borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }} />
-                            </CCol>
-                            <CCol xs={12} md={6}>
-                                <div style={{ marginLeft: '10px' }}>
-                                    <h5>Product Details</h5>
-                                    <p><strong>Category:</strong> {selectedSubcategory.categoryName || 'N/A'}</p>
-                                    <p><strong>Product Name:</strong> {selectedSubcategory.productName || 'N/A'}</p>
-                                    <p><strong>Sub-Category:</strong> {selectedSubcategory.subCategory || 'N/A'}</p>
-                                    <p><strong>Sub-SubCategory:</strong> {selectedSubcategory.subSubCategory || 'N/A'}</p>
-                                    <p><strong>Description:</strong> {selectedSubcategory.description || 'N/A'}</p>
-                                    <p><strong>Price:</strong> {selectedSubcategory.price || 'N/A'}</p>
-                                </div>
-                            </CCol>
-                        </CRow>
+                        <>
+                            {/* Product Details Row */}
+                            <CRow className="align-items-center mb-4">
+                                <CCol xs={12} md={6} className="mb-3 d-flex justify-content-center">
+                                    <img
+                                        src={selectedSubcategory.images[0]}
+                                        alt="subcategory"
+                                        width="100%"
+                                        style={{
+                                            borderRadius: '8px',
+                                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+                                        }}
+                                    />
+                                </CCol>
+                                <CCol xs={12} md={6}>
+                                    <div style={{ marginLeft: '10px' }}>
+                                        <h5>Product Details</h5>
+                                        <p><strong>Category:</strong> {selectedSubcategory.categoryName || 'N/A'}</p>
+                                        <p><strong>Product Name:</strong> {selectedSubcategory.productName || 'N/A'}</p>
+                                        <p><strong>Sub-Category:</strong> {selectedSubcategory.subCategory || 'N/A'}</p>
+                                        <p><strong>Sub-SubCategory:</strong> {selectedSubcategory.subSubCategory || 'N/A'}</p>
+                                        <p><strong>Description:</strong> {selectedSubcategory.description || 'N/A'}</p>
+                                        <p><strong>Price:</strong> {selectedSubcategory.price || 'N/A'}</p>
+                                    </div>
+                                </CCol>
+                            </CRow>
+
+                            {/* Dimensions Row */}
+                            <CRow className="mb-4">
+                                <CCol xs={12}>
+                                    <div className="card" style={{ padding: '20px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
+                                        <div className="card-body">
+                                            <h5 className="card-title">Dimensions</h5>
+                                            {["width", "height", "fraction", "gridOptions", "finType", "glassType", "lockType", "color", "temperingOptions", "sideWindowOpens", "installationOption"].map((dimension) => (
+                                                selectedSubcategory[dimension] && selectedSubcategory[dimension].length > 0 && (
+                                                    <div key={dimension} className="mb-3">
+                                                        <h6>{dimension.charAt(0).toUpperCase() + dimension.slice(1)}</h6>
+                                                        {selectedSubcategory[dimension].map((item, idx) => (
+                                                            <div key={idx} style={{ paddingLeft: '10px' }}>
+                                                                <p><strong>Value:</strong> {item[dimension] || 'N/A'}</p>
+                                                                <p><strong>Price:</strong> {item.price != null ? `$${item.price}` : 'N/A'}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )
+                                            ))}
+                                        </div>
+                                    </div>
+                                </CCol>
+                            </CRow>
+                        </>
                     )}
+
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="secondary" onClick={() => setViewModalVisible(false)}>Close</CButton>
@@ -514,7 +525,7 @@ const WindowsManagement = () => {
 
             <CModal visible={editVisible} onClose={() => setEditVisible(false)}>
                 <CModalHeader>
-                    <CModalTitle>Edit Door</CModalTitle>
+                    <CModalTitle>Edit Product</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
                     <CForm>
@@ -571,77 +582,75 @@ const WindowsManagement = () => {
                 </CModalFooter>
             </CModal>
 
-            <CModal size='lg' visible={dimensionVisible} onClose={() => setDimensionVisible(false)}>
-                <CModalHeader>
-                    <CModalTitle><h4>Add Dimensions</h4></CModalTitle>
+            <CModal visible={dimensionVisible} onClose={() => { DimensionNull(), setDimensionVisible(false) }} size="lg">
+                <CModalHeader closeButton>
+                    <CModalTitle>Add Dimensions</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    <div>
-                        {Object.keys(currentValues).map((key) => (
-                            <div key={key}>
-                                <h5 className='ms-1'>{key.charAt(0).toUpperCase() + key.slice(1)}</h5>
-                                <div
-                                    className="input-box mb-2"
-                                    style={{
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        flexWrap: 'wrap',
-                                    }}
-                                >
-                                    {(dimensionFormData[key] || []).map((value, index) => (
-                                        <CBadge
-                                            key={index}
-                                            color="info"
-                                            style={{
-                                                margin: '5px',
-                                                padding: '10px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                backgroundColor: '#17a2b8',
-                                                color: '#ffffff',
-                                            }}
-                                        >
-                                            {value}
-                                            <CButton
-                                                color="danger"
-                                                size="sm"
-                                                style={{ marginLeft: '8px' }}
-                                                onClick={() => removeValue(key, value)}
-                                            >
-                                                &times;
-                                            </CButton>
-                                        </CBadge>
-                                    ))}
-                                    <CFormInput
-                                        type="text"
-                                        value={currentValues[key]}
-                                        placeholder={`Add a ${key}`}
-                                        onChange={(e) => setCurrentValues((prev) => ({ ...prev, [key]: e.target.value }))}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                addValue(key);
-                                            }
-                                        }}
-                                        style={{
-                                            flex: 1,
-                                            borderRadius: '4px',
-                                            outline: 'none',
-                                            padding: '10px',
-                                        }}
-                                    />
-                                    <CButton className='ms-1' color="primary" onClick={() => addValue(key)} >
-                                        Add
-                                    </CButton>
-                                </div>
+                    <CForm onSubmit={handleSubmit}>
+                        {Object.keys(dimensions).map((field) => (
+                            <div key={field} className="mb-4">
+                                <h5 className="mb-3">{field.charAt(0).toUpperCase() + field.slice(1)}</h5>
+                                {dimensions[field].map((entry, index) => (
+                                    <div key={index} className="mb-3">
+                                        <div className="row">
+                                            {/* Value Input (Column 1) */}
+                                            <div className="col-md-6">
+                                                <CInputGroup className="mb-2">
+                                                    {/* <label htmlFor={`${field}-${index}`} className="form-label">{field}</label> */}
+                                                    <input
+                                                        id={`${field}-${index}`}
+                                                        type="text"
+                                                        className="form-control"
+                                                        placeholder="Value"
+                                                        value={entry[field] || ''}
+                                                        onChange={(e) => updateFieldValue(field, index, field, e.target.value)}
+                                                    />
+                                                </CInputGroup>
+                                            </div>
+
+                                            {/* Price Input (Column 2) */}
+                                            <div className="col-md-6">
+                                                <CInputGroup className="mb-2">
+                                                    <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        placeholder="Price"
+                                                        value={entry.price || ''}
+                                                        onChange={(e) => updateFieldValue(field, index, 'price', e.target.value)}
+                                                    />
+                                                </CInputGroup>
+                                            </div>
+                                        </div>
+
+                                        {/* Fraction Input (if applicable) */}
+                                        {/* {entry.hasOwnProperty('fraction') && (
+                                            <CInputGroup className="mb-2">
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    placeholder="Fraction"
+                                                    value={entry.fraction || ''}
+                                                    onChange={(e) => updateFieldValue(field, index, 'fraction', e.target.value)}
+                                                />
+                                            </CInputGroup>
+                                        )} */}
+                                    </div>
+                                ))}
+
+                                {/* Add Row Button */}
+                                <CButton color="secondary" onClick={() => handleAddRow(field)}>
+                                    Add {field}
+                                </CButton>
                             </div>
                         ))}
-                    </div>
+                    </CForm>
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="primary" type="submit" onClick={handleDimesionSubmit}>
-                        Add Dimensions
+                    <CButton color="primary" onClick={handleDimensionSubmit}>
+                        Save Dimensions
                     </CButton>
-                    <CButton color="secondary" onClick={() => setDimensionVisible(false)}>
+                    <CButton color="secondary" onClick={() => { DimensionNull(), setDimensionVisible(false) }}>
                         Cancel
                     </CButton>
                 </CModalFooter>
