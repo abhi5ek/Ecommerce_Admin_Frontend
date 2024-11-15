@@ -35,7 +35,7 @@ const CategoryManagement = () => {
         try {
             const response = await axios.get('http://44.196.192.232:5000/api/category/');
             console.log(response.data.data)
-            setCategoryData(response.data.data || []);
+            setCategoryData(response.data.data || []);  
         } catch (error) {
             console.error(error);
         }
@@ -82,10 +82,10 @@ const CategoryManagement = () => {
 
             if (response.status === 201 && response.data) {
                 alert("Subcategory added successfully!");
-                fetchData();
-                setVisible(false);
-                setNewCategory("");
-                setNewSubcategory("");
+                fetchData();  
+                setVisible(false);  
+                setNewCategory(""); 
+                setNewSubcategory(""); 
             } else {
                 alert("Failed to save the subcategory.");
             }
