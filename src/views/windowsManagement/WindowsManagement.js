@@ -221,7 +221,7 @@ const WindowsManagement = () => {
                 });
             }
 
-            const response = await axios.put(`http://localhost:5000/api/windows/update/${id}`, formDataToSend, {
+            const response = await axios.put(`http://44.196.192.232:5000/api/windows/update/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
