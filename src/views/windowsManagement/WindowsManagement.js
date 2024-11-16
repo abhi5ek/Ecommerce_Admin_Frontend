@@ -27,6 +27,7 @@ const WindowsManagement = () => {
     const [subCategoryVisible, setSubCategoryVisible] = useState(false);
     const [editVisible, setEditVisible] = useState(false);
     const [dimensionVisible, setDimensionVisible] = useState(false);
+    const [dimensionValue, setDimensionValue] = useState([]);
 
     const [formData, setFormData] = useState({
         subCategory: '',
@@ -45,7 +46,7 @@ const WindowsManagement = () => {
     //fetch category to use in edit window
     const fetchCategory = async (id) => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/category/getcategory/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/category/getcategory/${id}`);
             setCategory(response.data[1].subcategories);
         } catch (error) {
             console.error(error);
@@ -55,16 +56,13 @@ const WindowsManagement = () => {
     //fetch complete data to show in table
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/windows/`);
+            const response = await axios.get(`http://localhost:5000/api/windows/`);
             setWindowsData(response.data.data)
+            console.log(response.data.data)
         } catch (error) {
             console.error(error);
         }
     }
-
-
-
-
 
 
     //add windows
@@ -105,7 +103,7 @@ const WindowsManagement = () => {
                 formDataToSend.append('images', formData.images[i]);
             }
 
-            const response = await axios.post('http://44.196.192.232:5000/api/windows/create', formDataToSend, {
+            const response = await axios.post('http://localhost:5000/api/windows/create', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -132,9 +130,15 @@ const WindowsManagement = () => {
 
 
     //code to view single window data
-    const handleViewClick = (subcategory) => {
-        setSelectedSubcategory(subcategory);
-        setViewModalVisible(true);
+    const handleViewClick = async (window) => {
+        try {
+            setSelectedSubcategory(window);
+            const response = await axios.get(`http://localhost:5000/api/windows/getdimensions/${window._id}`)
+            setDimensionValue(response.data.data);
+            setViewModalVisible(true);
+        } catch (error) {
+
+        }
     };
 
     //code to delete a window data
@@ -142,7 +146,7 @@ const WindowsManagement = () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://44.196.192.232:5000/api/windows/delete/${id}`);
+                await axios.delete(`http://localhost:5000/api/windows/delete/${id}`);
                 fetchData();
             } catch (error) {
 
@@ -164,17 +168,17 @@ const WindowsManagement = () => {
         images: []
     });
 
-    const handleEditClick = (door) => {
+    const handleEditClick = (window) => {
         setEditVisible(true);
         setEditFormData({
-            id: door._id,
-            productName: door.productName,
-            price: door.price,
-            description: door.description,
-            subCategory: door.subCategory,
-            subSubCategory: door.subSubCategory
+            id: window._id,
+            productName: window.productName,
+            price: window.price,
+            description: window.description,
+            subCategory: window.subCategory,
+            subSubCategory: window.subSubCategory
         });
-        setselectedDoor(door);
+        setselectedDoor(window);
     };
 
     const handleEditChange = (e) => {
@@ -190,27 +194,27 @@ const WindowsManagement = () => {
         }));
     };
 
-    const handleEditSubcategory = async (e) => {
-        const selectedValue = e.target.value;
-        const selectedSubcategory = category.find((sub) => sub.subcategoryName === selectedValue);
+    // const handleEditSubcategory = async (e) => {
+    //     const selectedValue = e.target.value;
+    //     const selectedSubcategory = category.find((sub) => sub.subcategoryName === selectedValue);
 
-        if (selectedSubcategory && Array.isArray(selectedSubcategory.subSubcategories) && selectedSubcategory.subSubcategories.length > 0) {
-            setSubCategory(selectedSubcategory.subSubcategories);
-            setSubCategoryVisible(true);
-        } else {
-            setSubCategoryVisible(false);
-            setSubCategory([]);
-        }
-        setEditFormData({ ...editFormData, subCategory: selectedValue });
-    }
+    //     if (selectedSubcategory && Array.isArray(selectedSubcategory.subSubcategories) && selectedSubcategory.subSubcategories.length > 0) {
+    //         setSubCategory(selectedSubcategory.subSubcategories);
+    //         setSubCategoryVisible(true);
+    //     } else {
+    //         setSubCategoryVisible(false);
+    //         setSubCategory([]);
+    //     }
+    //     setEditFormData({ ...editFormData, subCategory: selectedValue });
+    // }
 
     const handleEditSubmit = async (id) => {
         try {
             const formDataToSend = new FormData();
-            formDataToSend.append('subCategory', editFormData.subCategory);
+            // formDataToSend.append('subCategory', editFormData.subCategory);
             formDataToSend.append('productName', editFormData.productName);
             formDataToSend.append('description', editFormData.description);
-            formDataToSend.append('subSubCategory', editFormData.subSubCategory);
+            // formDataToSend.append('subSubCategory', editFormData.subSubCategory);
             formDataToSend.append('price', editFormData.price);
 
             if (editFormData.images) {
@@ -219,7 +223,7 @@ const WindowsManagement = () => {
                 });
             }
 
-            const response = await axios.put(`http://44.196.192.232:5000/api/windows/update/${id}`, formDataToSend, {
+            const response = await axios.put(`http://localhost:5000/api/windows/update/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -293,7 +297,7 @@ const WindowsManagement = () => {
     const handleDimensionSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, dimensions);
+            const response = await axios.put(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, dimensions);
             alert(response.data.message);
             setDimensions({
                 width: [{ width: null, price: null }],
@@ -352,14 +356,14 @@ const WindowsManagement = () => {
                                     <CTableRow key={index}>
                                         <CTableDataCell style={{ textAlign: 'center' }}>{index + 1}</CTableDataCell>
                                         <CTableDataCell style={{ textAlign: 'center' }}>
-                                            {windows.images && windows.images.length > 0 ? (
-                                                <img src={windows.images[0]} alt="windows" width="50" height="50" />
+                                            {windows.productDetails.images && windows.productDetails.images.length > 0 ? (
+                                                <img src={windows.productDetails.images[0]} alt="windows" width="50" height="50" />
                                             ) : 'N/A'}
                                         </CTableDataCell>
-                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.productName || 'N/A'}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.productDetails.productName || 'N/A'}</CTableDataCell>
                                         {/* <CTableDataCell style={{ textAlign: 'center' }}>{windows.subCategory || 'N/A'}</CTableDataCell>
                                         <CTableDataCell style={{ textAlign: 'center' }}>{windows.subSubCategory || 'N/A'}</CTableDataCell> */}
-                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.price || 'N/A'}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.productDetails.price || 'N/A'}</CTableDataCell>
                                         <CTableDataCell style={{ textAlign: 'center' }}>
                                             <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleAddDimensions(windows)}>
                                                 <FontAwesomeIcon style={{ color: 'blue' }} icon={faPlus} />
@@ -469,7 +473,7 @@ const WindowsManagement = () => {
                             <CRow className="align-items-center mb-4">
                                 <CCol xs={12} md={6} className="mb-3 d-flex justify-content-center">
                                     <img
-                                        src={selectedSubcategory.images[0]}
+                                        src={selectedSubcategory.productDetails.images[0]}
                                         alt="subcategory"
                                         width="100%"
                                         style={{
@@ -481,35 +485,47 @@ const WindowsManagement = () => {
                                 <CCol xs={12} md={6}>
                                     <div style={{ marginLeft: '10px' }}>
                                         <h5>Product Details</h5>
-                                        <p><strong>Category:</strong> {selectedSubcategory.categoryName || 'N/A'}</p>
-                                        <p><strong>Product Name:</strong> {selectedSubcategory.productName || 'N/A'}</p>
+                                        <p><strong>Category:</strong> {selectedSubcategory.productDetails.categoryName || 'N/A'}</p>
+                                        <p><strong>Product Name:</strong> {selectedSubcategory.productDetails.productName || 'N/A'}</p>
                                         {/* <p><strong>Sub-Category:</strong> {selectedSubcategory.subCategory || 'N/A'}</p>
                                         <p><strong>Sub-SubCategory:</strong> {selectedSubcategory.subSubCategory || 'N/A'}</p> */}
-                                        <p><strong>Description:</strong> {selectedSubcategory.description || 'N/A'}</p>
-                                        <p><strong>Price:</strong> {selectedSubcategory.price || 'N/A'}</p>
+                                        <p><strong>Description:</strong> {selectedSubcategory.productDetails.description || 'N/A'}</p>
+                                        <p><strong>Price:</strong> {selectedSubcategory.productDetails.price || 'N/A'}</p>
                                     </div>
                                 </CCol>
                             </CRow>
-
                             {/* Dimensions Row */}
                             <CRow className="mb-4">
                                 <CCol xs={12}>
-                                    <div className="card" style={{ padding: '20px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
+                                    <div
+                                        className="card"
+                                        style={{
+                                            padding: '20px',
+                                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                                            borderRadius: '8px',
+                                        }}
+                                    >
                                         <div className="card-body">
                                             <h5 className="card-title">Dimensions</h5>
-                                            {["width", "height", "fraction", "gridOptions", "finType", "glassType", "lockType", "color", "temperingOptions", "sideWindowOpens", "installationOption"].map((dimension) => (
-                                                selectedSubcategory[dimension] && selectedSubcategory[dimension].length > 0 && (
-                                                    <div key={dimension} className="mb-3">
-                                                        <h6>{dimension.charAt(0).toUpperCase() + dimension.slice(1)}</h6>
-                                                        {selectedSubcategory[dimension].map((item, idx) => (
-                                                            <div key={idx} style={{ paddingLeft: '10px' }}>
-                                                                <p><strong>Value:</strong> {item[dimension] || 'N/A'}</p>
-                                                                <p><strong>Price:</strong> {item.price != null ? `$${item.price}` : 'N/A'}</p>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )
-                                            ))}
+                                            {dimensionValue && Object.keys(dimensionValue).length > 0 ? (
+                                                <CRow>
+                                                    {Object.entries(dimensionValue).map(([key, values]) => (
+                                                        Array.isArray(values) && values.length > 0 ? (
+                                                            <CCol xs={12} key={key} className="mb-4">
+                                                                <h5 style={{ textTransform: 'capitalize' }}>{key}</h5>
+                                                                {values.map((item, idx) => (
+                                                                    <div key={item._id} style={{ padding: '5px 10px', borderBottom: '1px solid #ddd' }}>
+                                                                        <p><strong>Value:</strong> {item[key] || 'N/A'}</p>
+                                                                        <p><strong>Price:</strong> ${item.price || 'N/A'}</p>
+                                                                    </div>
+                                                                ))}
+                                                            </CCol>
+                                                        ) : null
+                                                    ))}
+                                                </CRow>
+                                            ) : (
+                                                <p>No dimensions available.</p>
+                                            )}
                                         </div>
                                     </div>
                                 </CCol>
@@ -529,16 +545,16 @@ const WindowsManagement = () => {
                 </CModalHeader>
                 <CModalBody>
                     <CForm>
-                        <CFormLabel className="mx-2">Sub Category</CFormLabel>
-                        <CFormSelect onChange={handleEditSubcategory} name="subCategory" value={editFormData.subCategory}>
+                        {/* <CFormLabel className="mx-2">Sub Category</CFormLabel> */}
+                        {/* <CFormSelect onChange={handleEditSubcategory} name="subCategory" value={editFormData.subCategory}>
                             <option value="">Select Sub Category</option>
                             {category.map((sub, index) => (
                                 <option key={index} value={sub.subcategoryName}>
                                     {sub.subcategoryName}
                                 </option>
                             ))}
-                        </CFormSelect>
-
+                        </CFormSelect> */}
+                        {/* 
                         {subCategoryVisible && (
                             <>
                                 <CFormLabel className="mx-2">Sub-SubCategory</CFormLabel>
@@ -556,7 +572,7 @@ const WindowsManagement = () => {
                                     ))}
                                 </CFormSelect>
                             </>
-                        )}
+                        )} */}
 
                         <CFormLabel className="mx-2">Product Name</CFormLabel>
                         <CFormInput type="text" name="productName" onChange={handleEditChange} value={editFormData.productName} />
