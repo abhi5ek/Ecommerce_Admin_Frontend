@@ -160,8 +160,8 @@ const WindowsManagement = () => {
 
     // edit window code
     const [editFormData, setEditFormData] = useState({
-        subCategory: '',
-        subSubCategory: '',
+        // subCategory: '',
+        // subSubCategory: '',
         productName: '',
         description: '',
         price: '',
@@ -172,11 +172,11 @@ const WindowsManagement = () => {
         setEditVisible(true);
         setEditFormData({
             id: window._id,
-            productName: window.productName,
-            price: window.price,
-            description: window.description,
-            subCategory: window.subCategory,
-            subSubCategory: window.subSubCategory
+            productName: window.productDetails.productName,
+            price: window.productDetails.price,
+            description: window.productDetails.description,
+            // subCategory: window.subCategory,
+            // subSubCategory: window.subSubCategory
         });
         setselectedDoor(window);
     };
@@ -211,10 +211,8 @@ const WindowsManagement = () => {
     const handleEditSubmit = async (id) => {
         try {
             const formDataToSend = new FormData();
-            // formDataToSend.append('subCategory', editFormData.subCategory);
             formDataToSend.append('productName', editFormData.productName);
             formDataToSend.append('description', editFormData.description);
-            // formDataToSend.append('subSubCategory', editFormData.subSubCategory);
             formDataToSend.append('price', editFormData.price);
 
             if (editFormData.images) {
@@ -223,7 +221,7 @@ const WindowsManagement = () => {
                 });
             }
 
-            const response = await axios.put(`http://44.196.192.232:5000/api/windows/update/${id}`, formDataToSend, {
+            const response = await axios.put(`http://localhost:5000/api/windows/update/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -234,14 +232,13 @@ const WindowsManagement = () => {
                 productName: '',
                 price: '',
                 description: '',
-                subCategory: '',
-                subSubCategory: '',
                 images: [],
             });
         } catch (error) {
             console.error(error);
         }
     };
+
 
 
 
@@ -545,47 +542,35 @@ const WindowsManagement = () => {
                 </CModalHeader>
                 <CModalBody>
                     <CForm>
-                        {/* <CFormLabel className="mx-2">Sub Category</CFormLabel> */}
-                        {/* <CFormSelect onChange={handleEditSubcategory} name="subCategory" value={editFormData.subCategory}>
-                            <option value="">Select Sub Category</option>
-                            {category.map((sub, index) => (
-                                <option key={index} value={sub.subcategoryName}>
-                                    {sub.subcategoryName}
-                                </option>
-                            ))}
-                        </CFormSelect> */}
-                        {/* 
-                        {subCategoryVisible && (
-                            <>
-                                <CFormLabel className="mx-2">Sub-SubCategory</CFormLabel>
-                                <CFormSelect
-                                    className="mb-2"
-                                    name="subSubCategory"
-                                    value={editFormData.subSubCategory}
-                                    onChange={handleEditChange}
-                                >
-                                    <option value="">Select sub-subcategory</option>
-                                    {subCategory.map((subSub, index) => (
-                                        <option key={subSub._id} value={subSub.subSubcategoryName}>
-                                            {subSub.subSubcategoryName}
-                                        </option>
-                                    ))}
-                                </CFormSelect>
-                            </>
-                        )} */}
-
                         <CFormLabel className="mx-2">Product Name</CFormLabel>
-                        <CFormInput type="text" name="productName" onChange={handleEditChange} value={editFormData.productName} />
+                        <CFormInput
+                            type="text"
+                            name="productName"
+                            onChange={handleEditChange}
+                            value={editFormData.productName || ''}
+                        />
 
                         <CFormLabel className="mx-2">Description</CFormLabel>
-                        <CFormTextarea name="description" onChange={handleEditChange} value={editFormData.description} />
+                        <CFormTextarea
+                            name="description"
+                            onChange={handleEditChange}
+                            value={editFormData.description || ''}
+                        />
 
                         <CFormLabel className="mx-2">Price</CFormLabel>
-                        <CFormInput type="number" name="price" onChange={handleEditChange} value={editFormData.price} />
+                        <CFormInput
+                            type="number"
+                            name="price"
+                            onChange={handleEditChange}
+                            value={editFormData.price || ''}
+                        />
 
                         <CFormLabel className="mx-2">Images</CFormLabel>
-                        <CFormInput type="file" multiple onChange={handleEditFileChange} />
-
+                        <CFormInput
+                            type="file"
+                            multiple
+                            onChange={handleEditFileChange}
+                        />
                     </CForm>
                 </CModalBody>
                 <CModalFooter>
@@ -597,6 +582,7 @@ const WindowsManagement = () => {
                     </CButton>
                 </CModalFooter>
             </CModal>
+
 
             <CModal visible={dimensionVisible} onClose={() => { DimensionNull(), setDimensionVisible(false) }} size="lg">
                 <CModalHeader closeButton>
