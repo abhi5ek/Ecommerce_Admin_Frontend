@@ -25,13 +25,15 @@ const WindowsManagement = () => {
     const [subCategory, setSubCategory] = useState([]);
     const [windowID, setWindowID] = useState(null);
     const [subCategoryVisible, setSubCategoryVisible] = useState(false);
+    const [selectedProductType, setSelectedProductType] = useState('');
     const [editVisible, setEditVisible] = useState(false);
     const [dimensionVisible, setDimensionVisible] = useState(false);
     const [dimensionValue, setDimensionValue] = useState([]);
 
     const [formData, setFormData] = useState({
-        subCategory: '',
-        subSubCategory: '',
+        // subCategory: '',
+        // subSubCategory: '',
+        categoryName: 'Windows',
         productName: '',
         description: '',
         price: '',
@@ -76,23 +78,28 @@ const WindowsManagement = () => {
         console.log(formData);
     };
 
-    const handleSubcategory = (e) => {
-        const selectedValue = e.target.value;
-        const selectedSubcategory = category.find((sub) => sub.subcategoryName === selectedValue);
-
-        if (selectedSubcategory && Array.isArray(selectedSubcategory.subSubcategories) && selectedSubcategory.subSubcategories.length > 0) {
-            setSubCategory(selectedSubcategory.subSubcategories);
-            setSubCategoryVisible(true);
-        } else {
-            setSubCategoryVisible(false);
-            setSubCategory([]);
-        }
-        setFormData({ ...formData, subCategory: selectedValue });
+    const handleProductTypeChange = (e) => {
+        setFormData({ ...formData, productName: e.target.value });
     };
+
+    // const handleSubcategory = (e) => {
+    //     const selectedValue = e.target.value;
+    //     const selectedSubcategory = category.find((sub) => sub.subcategoryName === selectedValue);
+
+    //     if (selectedSubcategory && Array.isArray(selectedSubcategory.subSubcategories) && selectedSubcategory.subSubcategories.length > 0) {
+    //         setSubCategory(selectedSubcategory.subSubcategories);
+    //         setSubCategoryVisible(true);
+    //     } else {
+    //         setSubCategoryVisible(false);
+    //         setSubCategory([]);
+    //     }
+    //     setFormData({ ...formData, subCategory: selectedValue });
+    // };
 
     const handleSubmit = async () => {
         try {
             const formDataToSend = new FormData();
+            formDataToSend.append('categoryName', formData.categoryName);
             formDataToSend.append('subCategory', formData.subCategory);
             formDataToSend.append('productName', formData.productName);
             formDataToSend.append('description', formData.description);
@@ -154,8 +161,6 @@ const WindowsManagement = () => {
             }
         }
     }
-
-
 
 
     // edit window code
@@ -241,73 +246,91 @@ const WindowsManagement = () => {
 
 
 
-
-
     //add dimension code
-    const handleAddDimensions = (window) => {
-        setWindowID(window._id);
-        setDimensionVisible(true);
-    }
 
     const [dimensions, setDimensions] = useState({
-        width: [{ width: '', price: '' }],
-        height: [{ height: '', price: '' }],
-        fraction: [{ fraction: '', price: '' }],
-        gridOptions: [{ gridOptions: '', price: '' }],
-        finType: [{ finType: '', price: '' }],
-        glassType: [{ glassType: '', price: '' }],
-        lockType: [{ lockType: '', price: '' }],
-        color: [{ color: '', price: '' }],
-        temperingOptions: [{ temperingOptions: '', price: '' }],
-        sideWindowOpens: [{ sideWindowOpens: '', price: '' }],
-        installationOption: [{ installationOption: '', price: '' }],
+        Width_Inches_Fraction: { label: "Width (Inches and Fraction)", data: [{ name: "", cost: "" }] },
+        Height_Inches_Fraction: { label: "Height (Inches and Fraction)", data: [{ name: "", cost: "" }] },
+        fraction: { label: "Fraction", data: [{ name: "", cost: "" }] },
+        Select_Grid_Options: { label: "Grid Options", data: [{ name: "", cost: "" }] },
+        Fin_Type: { label: "Fin Type", data: [{ name: "", cost: "" }] },
+        Glass_Type: { label: "Glass Type", data: [{ name: "", cost: "" }] },
+        Lock_Option: { label: "Lock Option", data: [{ name: "", cost: "" }] },
+        color: { label: "Color", data: [{ name: "", cost: "" }] },
+        Tempering_Option: { label: "Tempering Option", data: [{ name: "", cost: "" }] },
+        Side_Window_Opens: { label: "Side Window Opens", data: [{ name: "", cost: "" }] },
+        Installation_Option: { label: "Installation Option", data: [{ name: "", cost: "" }] },
     });
 
+    const [windowType, setWindowType] = useState("");
+
+    const dimensionFieldsByType = {
+        XO_Slider: ['Width_Inches_Fraction', 'Height_Inches_Fraction', 'fraction', 'Select_Grid_Options', 'Fin_Type', 'Glass_Type', 'color', 'Tempering_Option', 'Side_Window_Opens', 'Installation_Option'],
+        XOX_Slider: ['Width_Inches_Fraction', 'Height_Inches_Fraction', 'fraction', 'Select_Grid_Options', 'Fin_Type', 'Glass_Type', 'color', 'Tempering_Option', 'Lock_Option', 'Installation_Option'],
+        Casement_Awning_Window: ['Width_Inches_Fraction', 'Height_Inches_Fraction', 'fraction', 'Select_Grid_Options', 'Fin_Type', 'Glass_Type', 'color', 'Tempering_Option', 'Side_Window_Opens', 'Installation_Option'],
+        Picture_Window: ['Width_Inches_Fraction', 'Height_Inches_Fraction', 'fraction', 'Select_Grid_Options', 'Fin_Type', 'color', 'Tempering_Option', 'Installation_Option'],
+        Single_Double_Hung_Windows: ['Width_Inches_Fraction', 'Height_Inches_Fraction', 'fraction', 'Select_Grid_Options', 'Fin_Type', 'color', 'Tempering_Option', 'Installation_Option'],
+        Garden_Window: ['Width_Inches_Fraction', 'Height_Inches_Fraction', 'color'],
+    };
+
+
+    const handleAddDimensions = (window) => {
+        setWindowID(window._id);
+        setWindowType(window.productDetails.productName);
+        setDimensionVisible(true);
+    };
+
     const updateFieldValue = (field, index, key, value) => {
-        const updatedField = [...dimensions[field]];
-        updatedField[index][key] = value;
-        setDimensions({ ...dimensions, [field]: updatedField });
+        const updatedData = [...dimensions[field].data];
+        updatedData[index][key] = value;
+        setDimensions({ ...dimensions, [field]: { ...dimensions[field], data: updatedData } });
     };
 
     const handleAddRow = (field) => {
         setDimensions({
             ...dimensions,
-            [field]: [...dimensions[field], { [field]: '', price: '' }]
+            [field]: {
+                ...dimensions[field],
+                data: [...dimensions[field].data, { name: "", cost: "" }],
+            },
         });
     };
 
     const DimensionNull = () => {
         setDimensions({
-            width: [{ width: null, price: null }],
-            height: [{ height: null, price: null }],
-            gridOptions: [{ gridOptions: null, price: null }],
-            finType: [{ finType: null, price: null }],
-            glassType: [{ glassType: null, price: null }],
-            lockType: [{ lockType: null, price: null }],
-            color: [{ color: null, price: null }],
-            temperingOptions: [{ temperingOptions: null, price: null }],
-            sideWindowOpens: [{ sideWindowOpens: null, price: null }],
-            installationOption: [{ installationOption: null, price: null }],
+            Width_Inches_Fraction: { label: "Width (Inches and Fraction)", data: [{ name: "", cost: "" }] },
+            Height_Inches_Fraction: { label: "Height (Inches and Fraction)", data: [{ name: "", cost: "" }] },
+            fraction: { label: "Fraction", data: [{ name: "", cost: "" }] },
+            Select_Grid_Options: { label: "Grid Options", data: [{ name: "", cost: "" }] },
+            Fin_Type: { label: "Fin Type", data: [{ name: "", cost: "" }] },
+            Glass_Type: { label: "Glass Type", data: [{ name: "", cost: "" }] },
+            Lock_Option: { label: "Lock Option", data: [{ name: "", cost: "" }] },
+            color: { label: "Color", data: [{ name: "", cost: "" }] },
+            Tempering_Option: { label: "Tempering Option", data: [{ name: "", cost: "" }] },
+            Side_Window_Opens: { label: "Side Window Opens", data: [{ name: "", cost: "" }] },
+            Installation_Option: { label: "Installation Option", data: [{ name: "", cost: "" }] },
         });
-    }
+    };
+
 
     const handleDimensionSubmit = async (e) => {
         e.preventDefault();
+        const filteredDimensions = {};
+
+        for (const field in dimensions) {
+            const dimension = dimensions[field];
+
+            if (dimension.data && dimension.data.some(item => item.name || item.cost)) {
+                filteredDimensions[field] = {
+                    label: dimension.label,
+                    data: dimension.data.filter(item => item.name || item.cost),
+                };
+            }
+        }
         try {
-            const response = await axios.put(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, dimensions);
+            const response = await axios.put(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, filteredDimensions);
             alert(response.data.message);
-            setDimensions({
-                width: [{ width: null, price: null }],
-                height: [{ height: null, price: null }],
-                gridOptions: [{ gridOptions: null, price: null }],
-                finType: [{ finType: null, price: null }],
-                glassType: [{ glassType: null, price: null }],
-                lockType: [{ lockType: null, price: null }],
-                color: [{ color: null, price: null }],
-                temperingOptions: [{ temperingOptions: null, price: null }],
-                sideWindowOpens: [{ sideWindowOpens: null, price: null }],
-                installationOption: [{ installationOption: null, price: null }],
-            });
+            DimensionNull();
             setDimensionVisible(false);
         } catch (error) {
             console.error(error);
@@ -316,6 +339,41 @@ const WindowsManagement = () => {
     };
 
 
+    const renderFields = () => {
+        const fieldsToRender = dimensionFieldsByType[windowType] || [];
+        return fieldsToRender.map((field) => (
+            <div key={field} className="mb-4">
+                <h5 className="mb-3">{dimensions[field]?.label}</h5>
+                {dimensions[field]?.data.map((entry, index) => (
+                    <div key={index} className="mb-3">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    placeholder="Name"
+                                    value={entry.name || ""}
+                                    onChange={(e) => updateFieldValue(field, index, "name", e.target.value)}
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <input
+                                    type="number"
+                                    className="form-control mb-2"
+                                    placeholder="Cost"
+                                    value={entry.cost || ""}
+                                    onChange={(e) => updateFieldValue(field, index, "cost", e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                <CButton color="secondary" onClick={() => handleAddRow(field)}>
+                    Add Row
+                </CButton>
+            </div>
+        ));
+    };
     return (
         <>
             <CCard>
@@ -384,7 +442,6 @@ const WindowsManagement = () => {
                 </CCardBody>
             </CCard>
 
-
             <CModal size='md' visible={visible} onClose={() => setVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>Add New Product</CModalTitle>
@@ -424,17 +481,33 @@ const WindowsManagement = () => {
                                 </>
                             )} */}
 
-                            <CFormLabel className="mx-2">Product Name</CFormLabel>
-                            <CFormInput className="mx-2 mb-2" name="productName"
+                            <CFormLabel className="mx-2">Select Product Name</CFormLabel>
+                            <CFormSelect
+                                className="mx-2 mb-2"
+                                name="productType"
+                                value={selectedProductType}
+                                onChange={handleProductTypeChange}
+                                style={{ flex: 1 }}
+                            >
+                                <option value="">Select Product Name</option>
+                                {Object.keys(dimensionFieldsByType).map((type, index) => (
+                                    <option key={index} value={type}>
+                                        {type.replace('_', ' ').toUpperCase()}
+                                    </option>
+                                ))}
+                            </CFormSelect>
+                            {/* <CFormLabel className="mx-2">Product Name</CFormLabel> */}
+                            {/* <CFormInput className="mx-2 mb-2" name="productName"
                                 value={formData.productName}
                                 onChange={handleChange}
-                                placeholder="Enter product name" style={{ flex: 1 }} />
+                                placeholder="Enter product name" style={{ flex: 1 }} /> */}
 
                             <CFormLabel className="mx-2">Description</CFormLabel>
                             <CFormInput className="mx-2 mb-2" name="description"
                                 value={formData.description}
                                 placeholder="Enter description"
                                 onChange={handleChange} style={{ flex: 2 }} />
+
 
                             <CFormLabel className="mx-2">Price</CFormLabel>
                             <CFormInput className="mx-2 mb-2" name="price"
@@ -583,76 +656,20 @@ const WindowsManagement = () => {
                 </CModalFooter>
             </CModal>
 
-
-            <CModal visible={dimensionVisible} onClose={() => { DimensionNull(), setDimensionVisible(false) }} size="lg">
+            <CModal visible={dimensionVisible} onClose={() => { DimensionNull(), setDimensionVisible(false); }} size="lg">
                 <CModalHeader closeButton>
                     <CModalTitle>Add Dimensions</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    <CForm onSubmit={handleSubmit}>
-                        {Object.keys(dimensions).map((field) => (
-                            <div key={field} className="mb-4">
-                                <h5 className="mb-3">{field.charAt(0).toUpperCase() + field.slice(1)}</h5>
-                                {dimensions[field].map((entry, index) => (
-                                    <div key={index} className="mb-3">
-                                        <div className="row">
-                                            {/* Value Input (Column 1) */}
-                                            <div className="col-md-6">
-                                                <CInputGroup className="mb-2">
-                                                    {/* <label htmlFor={`${field}-${index}`} className="form-label">{field}</label> */}
-                                                    <input
-                                                        id={`${field}-${index}`}
-                                                        type="text"
-                                                        className="form-control"
-                                                        placeholder="Value"
-                                                        value={entry[field] || ''}
-                                                        onChange={(e) => updateFieldValue(field, index, field, e.target.value)}
-                                                    />
-                                                </CInputGroup>
-                                            </div>
-
-                                            {/* Price Input (Column 2) */}
-                                            <div className="col-md-6">
-                                                <CInputGroup className="mb-2">
-                                                    <input
-                                                        type="number"
-                                                        className="form-control"
-                                                        placeholder="Price"
-                                                        value={entry.price || ''}
-                                                        onChange={(e) => updateFieldValue(field, index, 'price', e.target.value)}
-                                                    />
-                                                </CInputGroup>
-                                            </div>
-                                        </div>
-
-                                        {/* Fraction Input (if applicable) */}
-                                        {/* {entry.hasOwnProperty('fraction') && (
-                                            <CInputGroup className="mb-2">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    placeholder="Fraction"
-                                                    value={entry.fraction || ''}
-                                                    onChange={(e) => updateFieldValue(field, index, 'fraction', e.target.value)}
-                                                />
-                                            </CInputGroup>
-                                        )} */}
-                                    </div>
-                                ))}
-
-                                {/* Add Row Button */}
-                                <CButton color="secondary" onClick={() => handleAddRow(field)}>
-                                    Add {field}
-                                </CButton>
-                            </div>
-                        ))}
+                    <CForm onSubmit={handleDimensionSubmit}>
+                        {renderFields()}
                     </CForm>
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="primary" onClick={handleDimensionSubmit}>
                         Save Dimensions
                     </CButton>
-                    <CButton color="secondary" onClick={() => { DimensionNull(), setDimensionVisible(false) }}>
+                    <CButton color="secondary" onClick={() => { DimensionNull(), setDimensionVisible(false); }}>
                         Cancel
                     </CButton>
                 </CModalFooter>
