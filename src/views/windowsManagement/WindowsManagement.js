@@ -60,7 +60,6 @@ const WindowsManagement = () => {
         try {
             const response = await axios.get(`http://44.196.192.232:5000/api/windows/`);
             setWindowsData(response.data.data)
-            console.log(response.data.data)
         } catch (error) {
             console.error(error);
         }
@@ -418,7 +417,7 @@ const WindowsManagement = () => {
                                         <CTableDataCell style={{ textAlign: 'center' }}>{windows.productDetails.productName || 'N/A'}</CTableDataCell>
                                         {/* <CTableDataCell style={{ textAlign: 'center' }}>{windows.subCategory || 'N/A'}</CTableDataCell>
                                         <CTableDataCell style={{ textAlign: 'center' }}>{windows.subSubCategory || 'N/A'}</CTableDataCell> */}
-                                        <CTableDataCell style={{ textAlign: 'center' }}>{windows.productDetails.price || 'N/A'}</CTableDataCell>
+                                        <CTableDataCell style={{ textAlign: 'center' }}>${windows.productDetails.price || 'N/A'}</CTableDataCell>
                                         <CTableDataCell style={{ textAlign: 'center' }}>
                                             <CButton style={{ margin: '0 2px', padding: '4px' }} onClick={() => handleAddDimensions(windows)}>
                                                 <FontAwesomeIcon style={{ color: 'blue' }} icon={faPlus} />
@@ -560,11 +559,10 @@ const WindowsManagement = () => {
                                         {/* <p><strong>Sub-Category:</strong> {selectedSubcategory.subCategory || 'N/A'}</p>
                                         <p><strong>Sub-SubCategory:</strong> {selectedSubcategory.subSubCategory || 'N/A'}</p> */}
                                         <p><strong>Description:</strong> {selectedSubcategory.productDetails.description || 'N/A'}</p>
-                                        <p><strong>Price:</strong> {selectedSubcategory.productDetails.price || 'N/A'}</p>
+                                        <p><strong>Price:</strong> ${selectedSubcategory.productDetails.price || 'N/A'}</p>
                                     </div>
                                 </CCol>
                             </CRow>
-                            {/* Dimensions Row */}
                             <CRow className="mb-4">
                                 <CCol xs={12}>
                                     <div
@@ -579,18 +577,33 @@ const WindowsManagement = () => {
                                             <h5 className="card-title">Dimensions</h5>
                                             {dimensionValue && Object.keys(dimensionValue).length > 0 ? (
                                                 <CRow>
-                                                    {Object.entries(dimensionValue).map(([key, values]) => (
-                                                        Array.isArray(values) && values.length > 0 ? (
-                                                            <CCol xs={12} key={key} className="mb-4">
-                                                                <h5 style={{ textTransform: 'capitalize' }}>{key}</h5>
-                                                                {values.map((item, idx) => (
-                                                                    <div key={item._id} style={{ padding: '5px 10px', borderBottom: '1px solid #ddd' }}>
-                                                                        <p><strong>Value:</strong> {item[key] || 'N/A'}</p>
-                                                                        <p><strong>Price:</strong> ${item.price || 'N/A'}</p>
-                                                                    </div>
-                                                                ))}
-                                                            </CCol>
-                                                        ) : null
+                                                    {Object.entries(dimensionValue).map(([key, value]) => (
+                                                        <CCol xs={12} key={key} className="mb-4">
+                                                            {/* Display the label */}
+                                                            <h5 style={{ textTransform: 'capitalize', marginBottom: '10px' }}>
+                                                                {value.label || key}
+                                                            </h5>
+                                                            {/* Display each item in the data array */}
+                                                            {value.data.map((item, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    style={{
+                                                                        padding: '10px',
+                                                                        border: '1px solid #ddd',
+                                                                        borderRadius: '5px',
+                                                                        marginBottom: '10px',
+                                                                        backgroundColor: '#f9f9f9',
+                                                                    }}
+                                                                >
+                                                                    <p>
+                                                                        <strong>Name:</strong> {item.name || 'N/A'}
+                                                                    </p>
+                                                                    <p>
+                                                                        <strong>Cost:</strong> ${item.cost || 'N/A'}
+                                                                    </p>
+                                                                </div>
+                                                            ))}
+                                                        </CCol>
                                                     ))}
                                                 </CRow>
                                             ) : (
@@ -619,7 +632,7 @@ const WindowsManagement = () => {
                         <CFormInput
                             type="text"
                             name="productName"
-                            onChange={handleEditChange}
+                            // onChange={handleEditChange}
                             value={editFormData.productName || ''}
                         />
 
