@@ -577,41 +577,43 @@ const WindowsManagement = () => {
                                             <h5 className="card-title">Dimensions</h5>
                                             {dimensionValue && Object.keys(dimensionValue).length > 0 ? (
                                                 <CRow>
-                                                    {Object.entries(dimensionValue).map(([key, value]) => (
-                                                        <CCol xs={12} key={key} className="mb-4">
-                                                            <h5
-                                                                style={{
-                                                                    textTransform: 'capitalize',
-                                                                    marginBottom: '10px',
-                                                                }}
-                                                            >
-                                                                {value.label || key}
-                                                            </h5>
-                                                            {Array.isArray(value.data) ? (
-                                                                value.data.map((item, idx) => (
-                                                                    <div
-                                                                        key={idx}
-                                                                        style={{
-                                                                            padding: '10px',
-                                                                            border: '1px solid #ddd',
-                                                                            borderRadius: '5px',
-                                                                            marginBottom: '10px',
-                                                                            backgroundColor: '#f9f9f9',
-                                                                        }}
-                                                                    >
-                                                                        <p>
-                                                                            <strong>Name:</strong> {item.name || 'N/A'}
-                                                                        </p>
-                                                                        <p>
-                                                                            <strong>Cost:</strong> ${item.cost || 'N/A'}
-                                                                        </p>
-                                                                    </div>
-                                                                ))
-                                                            ) : (
-                                                                <p>No data available for {value.label || key}.</p>
-                                                            )}
-                                                        </CCol>
-                                                    ))}
+                                                    {Object.entries(dimensionValue)
+                                                        .filter(([key]) => key !== 'createdAt') // Exclude 'createdAt' or any unwanted keys
+                                                        .map(([key, value]) => (
+                                                            <CCol xs={12} key={key} className="mb-4">
+                                                                <h5
+                                                                    style={{
+                                                                        textTransform: 'capitalize',
+                                                                        marginBottom: '10px',
+                                                                    }}
+                                                                >
+                                                                    {value.label || key}
+                                                                </h5>
+                                                                {Array.isArray(value.data) ? (
+                                                                    value.data.map((item, idx) => (
+                                                                        <div
+                                                                            key={idx}
+                                                                            style={{
+                                                                                padding: '10px',
+                                                                                border: '1px solid #ddd',
+                                                                                borderRadius: '5px',
+                                                                                marginBottom: '10px',
+                                                                                backgroundColor: '#f9f9f9',
+                                                                            }}
+                                                                        >
+                                                                            <p>
+                                                                                <strong>Name:</strong> {item.name || 'N/A'}
+                                                                            </p>
+                                                                            <p>
+                                                                                <strong>Cost:</strong> ${item.cost || 'N/A'}
+                                                                            </p>
+                                                                        </div>
+                                                                    ))
+                                                                ) : (
+                                                                    <p>No data available for {value.label || key}.</p>
+                                                                )}
+                                                            </CCol>
+                                                        ))}
                                                 </CRow>
                                             ) : (
                                                 <p>No dimensions available.</p>
