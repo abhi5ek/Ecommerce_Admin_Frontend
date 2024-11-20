@@ -579,30 +579,37 @@ const WindowsManagement = () => {
                                                 <CRow>
                                                     {Object.entries(dimensionValue).map(([key, value]) => (
                                                         <CCol xs={12} key={key} className="mb-4">
-                                                            {/* Display the label */}
-                                                            <h5 style={{ textTransform: 'capitalize', marginBottom: '10px' }}>
+                                                            <h5
+                                                                style={{
+                                                                    textTransform: 'capitalize',
+                                                                    marginBottom: '10px',
+                                                                }}
+                                                            >
                                                                 {value.label || key}
                                                             </h5>
-                                                            {/* Display each item in the data array */}
-                                                            {value.data.map((item, idx) => (
-                                                                <div
-                                                                    key={idx}
-                                                                    style={{
-                                                                        padding: '10px',
-                                                                        border: '1px solid #ddd',
-                                                                        borderRadius: '5px',
-                                                                        marginBottom: '10px',
-                                                                        backgroundColor: '#f9f9f9',
-                                                                    }}
-                                                                >
-                                                                    <p>
-                                                                        <strong>Name:</strong> {item.name || 'N/A'}
-                                                                    </p>
-                                                                    <p>
-                                                                        <strong>Cost:</strong> ${item.cost || 'N/A'}
-                                                                    </p>
-                                                                </div>
-                                                            ))}
+                                                            {Array.isArray(value.data) ? (
+                                                                value.data.map((item, idx) => (
+                                                                    <div
+                                                                        key={idx}
+                                                                        style={{
+                                                                            padding: '10px',
+                                                                            border: '1px solid #ddd',
+                                                                            borderRadius: '5px',
+                                                                            marginBottom: '10px',
+                                                                            backgroundColor: '#f9f9f9',
+                                                                        }}
+                                                                    >
+                                                                        <p>
+                                                                            <strong>Name:</strong> {item.name || 'N/A'}
+                                                                        </p>
+                                                                        <p>
+                                                                            <strong>Cost:</strong> ${item.cost || 'N/A'}
+                                                                        </p>
+                                                                    </div>
+                                                                ))
+                                                            ) : (
+                                                                <p>No data available for {value.label || key}.</p>
+                                                            )}
                                                         </CCol>
                                                     ))}
                                                 </CRow>
