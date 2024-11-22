@@ -49,7 +49,7 @@ const HardwareManagement = () => {
 
     const fetchCategory = async () => {
         const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
-        const allSubcategory = response.data.data.filter((category) => category.categoryName === 'hardware');
+        const allSubcategory = response.data.data.filter((category) => category.categoryName === 'Hardware');
         setSubCategory(allSubcategory[0].subcategories);
     };
 
