@@ -83,6 +83,19 @@ const HardwareManagement = () => {
     };
 
     const handleSubmit = async () => {
+        const requiredFields = ['categoryName', 'subCategory', 'description', 'productName', 'price'];
+        const emptyFields = requiredFields.filter((field) => !formData[field] || formData[field].trim() === '');
+
+        if (emptyFields.length > 0) {
+            alert(`Please fill in the following fields: ${emptyFields.join(', ')}`);
+            return;
+        }
+
+        if (formData.images.length === 0) {
+            alert('Please upload at least one image.');
+            return;
+        }
+
         const data = new FormData();
         Object.keys(formData).forEach((key) => {
             if (key === 'images') {
@@ -178,11 +191,11 @@ const HardwareManagement = () => {
 
     const [dimensions, setDimensions] = useState({
         phgHandlesets: { label: "PHG Handlesets", data: [] },
-        selectLeverOptions: { label: "Select Lever Options", data: [] },
-        selectKnobOptions: { label: "Select Knob Options", data: [] },
-        selectTypeOfHandleset: { label: "Select Type of Handleset", data: [] },
-        selectDeadboltStyle: { label: "Select Deadbolt Style", data: [] },
-        selectHardwareFinish: { label: "Select Hardware Finish", data: [] },
+        selectLeverOptions: { label: "Lever Options", data: [] },
+        selectKnobOptions: { label: "Knob Options", data: [] },
+        selectTypeOfHandleset: { label: "Type of Handleset", data: [] },
+        selectDeadboltStyle: { label: "Deadbolt Style", data: [] },
+        selectHardwareFinish: { label: "Hardware Finish", data: [] },
     });
 
     const setDimensionsNull = () => {
