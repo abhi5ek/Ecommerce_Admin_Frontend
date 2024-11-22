@@ -48,7 +48,7 @@ const WindowsManagement = () => {
     //fetch category to use in edit window
     const fetchCategory = async (id) => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/category/getcategory/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/category/getcategory/${id}`);
             setCategory(response.data[1].subcategories);
         } catch (error) {
             console.error(error);
@@ -58,7 +58,7 @@ const WindowsManagement = () => {
     //fetch complete data to show in table
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/windows/`);
+            const response = await axios.get(`http://localhost:5000/api/windows/`);
             setWindowsData(response.data.data)
         } catch (error) {
             console.error(error);
@@ -109,7 +109,7 @@ const WindowsManagement = () => {
                 formDataToSend.append('images', formData.images[i]);
             }
 
-            const response = await axios.post('http://44.196.192.232:5000/api/windows/create', formDataToSend, {
+            const response = await axios.post('http://localhost:5000/api/windows/create', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -139,7 +139,7 @@ const WindowsManagement = () => {
     const handleViewClick = async (window) => {
         try {
             setSelectedSubcategory(window);
-            const response = await axios.get(`http://44.196.192.232:5000/api/windows/getdimensions/${window._id}`)
+            const response = await axios.get(`http://localhost:5000/api/windows/getdimensions/${window._id}`)
             setDimensionValue(response.data.data);
             setViewModalVisible(true);
         } catch (error) {
@@ -152,7 +152,7 @@ const WindowsManagement = () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://44.196.192.232:5000/api/windows/delete/${id}`);
+                await axios.delete(`http://localhost:5000/api/windows/delete/${id}`);
                 fetchData();
             } catch (error) {
 
@@ -225,7 +225,7 @@ const WindowsManagement = () => {
                 });
             }
 
-            const response = await axios.put(`http://44.196.192.232:5000/api/windows/update/${id}`, formDataToSend, {
+            const response = await axios.put(`http://localhost:5000/api/windows/update/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -327,7 +327,7 @@ const WindowsManagement = () => {
             }
         }
         try {
-            const response = await axios.put(`http://44.196.192.232:5000/api/windows/add-dimensions/${windowID}`, filteredDimensions);
+            const response = await axios.put(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, filteredDimensions);
             alert(response.data.message);
             DimensionNull();
             setDimensionVisible(false);
@@ -574,37 +574,46 @@ const WindowsManagement = () => {
                                         }}
                                     >
                                         <div className="card-body">
-                                            <h5 className="card-title">Dimensions</h5>
+                                            <h3 className="card-title mb-4">Dimensions</h3>
                                             {dimensionValue && Object.keys(dimensionValue).length > 0 ? (
                                                 <CRow>
-                                                    {Object.entries(dimensionValue).map(([key, value]) => (
-                                                        <CCol xs={12} key={key} className="mb-4">
-                                                            {/* Display the label */}
-                                                            <h5 style={{ textTransform: 'capitalize', marginBottom: '10px' }}>
-                                                                {value.label || key}
-                                                            </h5>
-                                                            {/* Display each item in the data array */}
-                                                            {value.data.map((item, idx) => (
-                                                                <div
-                                                                    key={idx}
+                                                    {Object.entries(dimensionValue)
+                                                        .filter(([key]) => key !== 'createdAt') // Exclude 'createdAt' or any unwanted keys
+                                                        .map(([key, value]) => (
+                                                            <CCol xs={12} key={key} className="mb-4">
+                                                                <h5
                                                                     style={{
-                                                                        padding: '10px',
-                                                                        border: '1px solid #ddd',
-                                                                        borderRadius: '5px',
+                                                                        textTransform: 'capitalize',
                                                                         marginBottom: '10px',
-                                                                        backgroundColor: '#f9f9f9',
                                                                     }}
                                                                 >
-                                                                    <p>
-                                                                        <strong>Name:</strong> {item.name || 'N/A'}
-                                                                    </p>
-                                                                    <p>
-                                                                        <strong>Cost:</strong> ${item.cost || 'N/A'}
-                                                                    </p>
-                                                                </div>
-                                                            ))}
-                                                        </CCol>
-                                                    ))}
+                                                                    {value.label || key}
+                                                                </h5>
+                                                                {Array.isArray(value.data) ? (
+                                                                    value.data.map((item, idx) => (
+                                                                        <div
+                                                                            key={idx}
+                                                                            style={{
+                                                                                padding: '10px',
+                                                                                border: '1px solid #ddd',
+                                                                                borderRadius: '5px',
+                                                                                marginBottom: '10px',
+                                                                                backgroundColor: '#f9f9f9',
+                                                                            }}
+                                                                        >
+                                                                            <p>
+                                                                                <strong>Name:</strong> {item.name || 'N/A'}
+                                                                            </p>
+                                                                            <p>
+                                                                                <strong>Cost:</strong> ${item.cost || 'N/A'}
+                                                                            </p>
+                                                                        </div>
+                                                                    ))
+                                                                ) : (
+                                                                    <p>No data available for {value.label || key}.</p>
+                                                                )}
+                                                            </CCol>
+                                                        ))}
                                                 </CRow>
                                             ) : (
                                                 <p>No dimensions available.</p>
