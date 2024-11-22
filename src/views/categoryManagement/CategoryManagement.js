@@ -54,10 +54,9 @@ const CategoryManagement = () => {
 
             if (response.status === 201 && response.data) {
                 alert("Category added successfully!");
-                // Refetch category data after a successful save to get the most up-to-date list
                 fetchData();
-                setCategoryVisible(false);  // Close the modal
-                setNewCategoryName("");     // Clear the input field
+                setCategoryVisible(false); 
+                setNewCategoryName("");   
             } else {
                 alert("Failed to save the category.");
             }
@@ -124,17 +123,17 @@ const CategoryManagement = () => {
         }
     };
 
-    const handleDeleteCategory = async (category) => {
-        const confirmation = window.confirm(`${category.categoryName} will be deleted`);
-        if (confirmation) {
-            try {
-                await axios.delete(`http://44.196.192.232:5000/api/category/delete-category/${category._id}`);
-                fetchData();
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    }
+    // const handleDeleteCategory = async (category) => {
+    //     const confirmation = window.confirm(`${category.categoryName} will be deleted`);
+    //     if (confirmation) {
+    //         try {
+    //             await axios.delete(`http://44.196.192.232:5000/api/category/delete-category/${category._id}`);
+    //             fetchData();
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     }
+    // }
 
     const handleDeleteSubcategory = async (categoryName, subcategory) => {
         const confirmation = window.confirm(`${subcategory.subcategoryName} will be deleted`);
