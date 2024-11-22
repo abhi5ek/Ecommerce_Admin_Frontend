@@ -89,7 +89,7 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/appointments/`);
+      const response = await axios.get(`http://44.196.192.232:5000/api/appointments/`);
       const formattedAppointments = response.data.data.map(appointment => ({
         title: "Appointment",
         start: new Date(appointment.date),
