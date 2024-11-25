@@ -51,7 +51,6 @@ const EntryDoorsManagement = () => {
         const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
         const allSubcategory = response.data.data.filter((category) => category.categoryName === 'Entry Doors');
         setSubCategory(allSubcategory[0].subcategories);
-        console.log(allSubcategory[0].subcategories);
     };
 
     const handleViewClick = async (id) => {
@@ -305,8 +304,6 @@ const EntryDoorsManagement = () => {
             return acc;
         }, {});
 
-        console.log("Filtered Dimensions:", filteredDimensions);
-
         try {
             const response = await axios.put(
                 `http://44.196.192.232:5000/api/entryDoor/add-dimensions/${dimensionId}`,
@@ -317,8 +314,7 @@ const EntryDoorsManagement = () => {
                     },
                 }
             );
-            console.log("API Response Status:", response.status);
-            console.log("API Response Data:", response.data);
+
 
             if (response.data.success) {
                 alert("Dimensions added successfully");
