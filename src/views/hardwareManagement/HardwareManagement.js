@@ -28,7 +28,7 @@ const HardwareManagement = () => {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
-        categoryName: 'hardware',
+        categoryName: 'Hardware',
         subCategory: '',
         subSubCategory: '',
         description: '',
@@ -51,6 +51,7 @@ const HardwareManagement = () => {
         const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
         const allSubcategory = response.data.data.filter((category) => category.categoryName === 'Hardware');
         setSubCategory(allSubcategory[0].subcategories);
+        console.log(allSubcategory[0].subcategories);
     };
 
     const handleViewClick = async (id) => {
