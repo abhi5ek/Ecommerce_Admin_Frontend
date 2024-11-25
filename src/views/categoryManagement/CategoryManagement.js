@@ -55,8 +55,8 @@ const CategoryManagement = () => {
             if (response.status === 201 && response.data) {
                 alert("Category added successfully!");
                 fetchData();
-                setCategoryVisible(false); 
-                setNewCategoryName("");   
+                setCategoryVisible(false);
+                setNewCategoryName("");
             } else {
                 alert("Failed to save the category.");
             }
