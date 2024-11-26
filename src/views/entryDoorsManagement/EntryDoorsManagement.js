@@ -43,19 +43,19 @@ const EntryDoorsManagement = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await axios.get(`http://44.196.192.232:5000/api/entryDoor/`);
+        const response = await axios.get(`http://18.209.197.35:5000/api/entryDoor/`);
         setEntryDoorsDetails(response.data.data);
     };
 
     const fetchCategory = async () => {
-        const response = await axios.get(`http://44.196.192.232:5000/api/category/`);
+        const response = await axios.get(`http://18.209.197.35:5000/api/category/`);
         const allSubcategory = response.data.data.filter((category) => category.categoryName === 'Entry Doors');
         setSubCategory(allSubcategory[0].subcategories);
     };
 
     const handleViewClick = async (id) => {
         try {
-            const response = await axios.get(`http://44.196.192.232:5000/api/entryDoor/getProductById/${id}`);
+            const response = await axios.get(`http://18.209.197.35:5000/api/entryDoor/getProductById/${id}`);
             setEntryDoorsProduct(response.data.data);
         } catch (error) {
             console.error(error.message);
@@ -106,7 +106,7 @@ const EntryDoorsManagement = () => {
         });
 
         try {
-            const response = await axios.post("http://44.196.192.232:5000/api/entryDoor/create", data, {
+            const response = await axios.post("http://18.209.197.35:5000/api/entryDoor/create", data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             await fetchData();
@@ -133,7 +133,7 @@ const EntryDoorsManagement = () => {
         const isConfirmed = window.confirm("Are you sure you want to delete this product?");
         if (isConfirmed) {
             try {
-                await axios.delete(`http://44.196.192.232:5000/api/entryDoor/delete/${id}`);
+                await axios.delete(`http://18.209.197.35:5000/api/entryDoor/delete/${id}`);
                 // alert("Product deleted successfully!");
                 await fetchData();
             } catch (error) {
@@ -169,7 +169,7 @@ const EntryDoorsManagement = () => {
         });
 
         try {
-            await axios.put(`http://44.196.192.232:5000/api/entryDoor/update/${selectedProduct._id}`, data, {
+            await axios.put(`http://18.209.197.35:5000/api/entryDoor/update/${selectedProduct._id}`, data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Product updated successfully!");
@@ -306,7 +306,7 @@ const EntryDoorsManagement = () => {
 
         try {
             const response = await axios.put(
-                `http://44.196.192.232:5000/api/entryDoor/add-dimensions/${dimensionId}`,
+                `http://18.209.197.35:5000/api/entryDoor/add-dimensions/${dimensionId}`,
                 { dimensions: filteredDimensions },
                 {
                     headers: {
