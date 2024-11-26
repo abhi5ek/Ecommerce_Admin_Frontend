@@ -33,7 +33,7 @@ const CategoryManagement = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/category/');
+            const response = await axios.get('http://44.196.192.232:5000/api/category/');
             console.log(response.data.data)
             setCategoryData(response.data.data || []);
         } catch (error) {
@@ -48,7 +48,7 @@ const CategoryManagement = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/category/addcategory', {
+            const response = await axios.post('http://44.196.192.232:5000/api/category/addcategory', {
                 categoryName: newCategoryName,
             });
 
@@ -74,7 +74,7 @@ const CategoryManagement = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/category/addsubcategory', {
+            const response = await axios.post('http://44.196.192.232:5000/api/category/addsubcategory', {
                 categoryName: newCategory,
                 subcategoryName: newSubcategory,
             });
@@ -101,7 +101,7 @@ const CategoryManagement = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/category/addsubsubcategory', {
+            const response = await axios.post('http://44.196.192.232:5000/api/category/addsubsubcategory', {
                 categoryName: newCategory,
                 subcategoryName: newSubcategory,
                 subSubcategoryName: newSubSubcategory,
@@ -127,7 +127,7 @@ const CategoryManagement = () => {
     //     const confirmation = window.confirm(`${category.categoryName} will be deleted`);
     //     if (confirmation) {
     //         try {
-    //             await axios.delete(`http://localhost:5000/api/category/delete-category/${category._id}`);
+    //             await axios.delete(`http://44.196.192.232:5000/api/category/delete-category/${category._id}`);
     //             fetchData();
     //         } catch (error) {
     //             console.error(error);
@@ -139,7 +139,7 @@ const CategoryManagement = () => {
         const confirmation = window.confirm(`${subcategory.subcategoryName} will be deleted`);
         if (confirmation) {
             try {
-                await axios.delete(`http://localhost:5000/api/category/delete-subcategory/${categoryName}/${subcategory._id}`);
+                await axios.delete(`http://44.196.192.232:5000/api/category/delete-subcategory/${categoryName}/${subcategory._id}`);
                 fetchData();
             } catch (error) {
                 console.error(error);
@@ -151,7 +151,7 @@ const CategoryManagement = () => {
         const confirmation = window.confirm(`${subSubcategory.subSubcategoryName} will be deleted`);
         if (confirmation) {
             try {
-                await axios.delete(`http://localhost:5000/api/category/delete-subsubcategory/${categoryName}/${subcategoryName}/${subSubcategory._id}`);
+                await axios.delete(`http://44.196.192.232:5000/api/category/delete-subsubcategory/${categoryName}/${subcategoryName}/${subSubcategory._id}`);
                 fetchData();
             } catch (error) {
                 console.error(error);
