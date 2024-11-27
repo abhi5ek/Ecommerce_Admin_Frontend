@@ -31,7 +31,7 @@ const EstimateManagement = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://18.209.197.35:5000/api/estimate/`);
+            const response = await axios.get(`http://44.196.64.110:5000/api/estimate/`);
             setEstimate(response.data.data);
         } catch (error) {
             console.error(error);
@@ -45,7 +45,7 @@ const EstimateManagement = () => {
 
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://18.209.197.35:5000/api/estimate/delete/${id}`)
+            const response = await axios.delete(`http://44.196.64.110:5000/api/estimate/delete/${id}`)
             fetchData();
         } catch (error) {
             console.error(error);
