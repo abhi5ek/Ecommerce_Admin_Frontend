@@ -29,7 +29,9 @@ const EntryDoorsManagement = () => {
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
         categoryName: 'Entry Doors',
+        subCategoryId: '',
         subCategory: '',
+        subSubCategoryId: '',
         subSubCategory: '',
         description: '',
         productName: '',
@@ -67,14 +69,22 @@ const EntryDoorsManagement = () => {
     const handleSubcategoryChange = (e) => {
         const selectedId = e.target.value;
         const subcategory = subCategory.find((sub) => sub._id === selectedId);
-        setFormData({ ...formData, subCategory: subcategory.subcategoryName });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            subCategoryId: selectedId,
+            subCategory: subCategory ? subcategory.subcategoryName : ""
+        }));
         setSelectedSubSubcategory(subcategory.subSubcategories || []);
     };
 
     const handleSubSubCategoryChange = (e) => {
         const selectedId = e.target.value;
         const subsubCategory = selectedSubSubcategory.find((subsub) => subsub._id === selectedId);
-        setFormData({ ...formData, subSubCategory: subsubCategory.subSubcategoryName });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            subSubCategoryId: selectedId,
+            subSubCategory: subsubCategory ? subsubCategory.subSubcategoryName : ""
+        }));
     };
 
     const handleImageChange = (e) => {
@@ -114,7 +124,9 @@ const EntryDoorsManagement = () => {
             setSelectedSubSubcategory('');
             setFormData({
                 categoryName: 'Entry Doors',
+                subCategoryId: '',
                 subCategory: '',
+                subSubCategoryId: '',
                 subSubCategory: '',
                 description: '',
                 productName: '',
@@ -192,13 +204,13 @@ const EntryDoorsManagement = () => {
     const [dimensions, setDimensions] = useState({
         frameWidthAndHeight: { label: "Frame Width and Height", data: [] },
         addPrefinish: { label: "Add Prefinish", data: [] },
-        doorSwingDirection: { label: "Door Swing Direction", data: [] },
-        boreOptions: { label: "Bore Options", data: [] },
-        jambSize: { label: "Jamb Size", data: [] },
+        doorSwingDirection: { label: "Select Door Swing Direction", data: [] },
+        boreOptions: { label: "Select Bore Options", data: [] },
+        jambSize: { label: "Select the Jamb Size", data: [] },
         doorShoe: { label: "Door Shoe", data: [] },
         weatherStrip: { label: "Weatherstrip", data: [] },
         hinges: { label: "Hinges", data: [] },
-        preHungOptions: { label: "Pre Hung Options", data: [] },
+        preHungOptions: { label: "Select Pre Hung Options", data: [] },
         sill: { label: "Sill", data: [] },
         installationOption: { label: "Installation Option", data: [] },
     });
@@ -207,13 +219,13 @@ const EntryDoorsManagement = () => {
         setDimensions({
             frameWidthAndHeight: { label: "Frame Width and Height", data: [] },
             addPrefinish: { label: "Add Prefinish", data: [] },
-            doorSwingDirection: { label: "Door Swing Direction", data: [] },
-            boreOptions: { label: "Bore Options", data: [] },
-            jambSize: { label: "Jamb Size", data: [] },
+            doorSwingDirection: { label: "Select Door Swing Direction", data: [] },
+            boreOptions: { label: "Select Bore Options", data: [] },
+            jambSize: { label: "Select the Jamb Size", data: [] },
             doorShoe: { label: "Door Shoe", data: [] },
             weatherStrip: { label: "Weatherstrip", data: [] },
             hinges: { label: "Hinges", data: [] },
-            preHungOptions: { label: "Pre Hung Options", data: [] },
+            preHungOptions: { label: "Select Pre Hung Options", data: [] },
             sill: { label: "Sill", data: [] },
             installationOption: { label: "Installation Option", data: [] },
         });

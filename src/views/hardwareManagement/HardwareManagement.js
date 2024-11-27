@@ -29,7 +29,9 @@ const HardwareManagement = () => {
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
         categoryName: 'Hardware',
+        subCategoryId: '',
         subCategory: '',
+        subSubCategoryId: '',
         subSubCategory: '',
         description: '',
         productName: '',
@@ -68,14 +70,22 @@ const HardwareManagement = () => {
     const handleSubcategoryChange = (e) => {
         const selectedId = e.target.value;
         const subcategory = subCategory.find((sub) => sub._id === selectedId);
-        setFormData({ ...formData, subCategory: subcategory.subcategoryName });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            subCategoryId: selectedId,
+            subCategory: subCategory ? subcategory.subcategoryName : ""
+        }));
         setSelectedSubSubcategory(subcategory.subSubcategories || []);
     };
 
     const handleSubSubCategoryChange = (e) => {
         const selectedId = e.target.value;
         const subsubCategory = selectedSubSubcategory.find((subsub) => subsub._id === selectedId);
-        setFormData({ ...formData, subSubCategory: subsubCategory.subSubcategoryName });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            subSubCategoryId: selectedId,
+            subSubCategory: subsubCategory ? subsubCategory.subSubcategoryName : ""
+        }));
     };
 
     const handleImageChange = (e) => {
@@ -115,7 +125,9 @@ const HardwareManagement = () => {
             setSelectedSubSubcategory('');
             setFormData({
                 categoryName: 'hardware',
+                subCategoryId: '',
                 subCategory: '',
+                subSubCategoryId: '',
                 subSubCategory: '',
                 description: '',
                 productName: '',
@@ -192,11 +204,11 @@ const HardwareManagement = () => {
 
     const [dimensions, setDimensions] = useState({
         phgHandlesets: { label: "PHG Handlesets", data: [] },
-        selectLeverOptions: { label: "Lever Options", data: [] },
-        selectKnobOptions: { label: "Knob Options", data: [] },
-        selectTypeOfHandleset: { label: "Type of Handleset", data: [] },
-        selectDeadboltStyle: { label: "Deadbolt Style", data: [] },
-        selectHardwareFinish: { label: "Hardware Finish", data: [] },
+        selectLeverOptions: { label: "Select Lever Options", data: [] },
+        selectKnobOptions: { label: "Select Knob Options", data: [] },
+        selectTypeOfHandleset: { label: "Select Type of Handleset", data: [] },
+        selectDeadboltStyle: { label: "Select Deadbolt Style", data: [] },
+        selectHardwareFinish: { label: "Select Hardware Finish", data: [] },
     });
 
     const setDimensionsNull = () => {
@@ -295,8 +307,6 @@ const HardwareManagement = () => {
             return acc;
         }, {});
 
-        console.log("Filtered Dimensions:", filteredDimensions);
-
         try {
             const response = await axios.put(
                 `http://18.209.197.35:5000/api/hardware/addDimensions/${dimensionId}`,
@@ -307,8 +317,6 @@ const HardwareManagement = () => {
                     },
                 }
             );
-            console.log("API Response Status:", response.status);
-            console.log("API Response Data:", response.data);
 
             if (response.data.success) {
                 alert("Dimensions added successfully");
