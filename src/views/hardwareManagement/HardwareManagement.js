@@ -45,12 +45,12 @@ const HardwareManagement = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await axios.get(`http://localhost:5000/api/hardware/`);
+        const response = await axios.get(`http://18.209.197.35:5000/api/hardware/`);
         setHardwareDetails(response.data.data);
     };
 
     const fetchCategory = async () => {
-        const response = await axios.get(`http://localhost:5000/api/category/`);
+        const response = await axios.get(`http://18.209.197.35:5000/api/category/`);
         const allSubcategory = response.data.data.filter((category) => category.categoryName === 'Hardware');
         setSubCategory(allSubcategory[0].subcategories);
         console.log(allSubcategory[0].subcategories);
@@ -58,7 +58,7 @@ const HardwareManagement = () => {
 
     const handleViewClick = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/hardware/getbyid/${id}`);
+            const response = await axios.get(`http://18.209.197.35:5000/api/hardware/getbyid/${id}`);
             setHardwareProduct(response.data.data);
         } catch (error) {
             console.error(error.message);
@@ -106,7 +106,7 @@ const HardwareManagement = () => {
             alert('Please upload at least one image.');
             return;
         }
-        
+
         const data = new FormData();
         Object.keys(formData).forEach((key) => {
             if (key === 'images') {
@@ -117,7 +117,7 @@ const HardwareManagement = () => {
         });
 
         try {
-            const response = await axios.post("http://localhost:5000/api/hardware/create", data, {
+            const response = await axios.post("http://18.209.197.35:5000/api/hardware/create", data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             await fetchData();
@@ -146,7 +146,7 @@ const HardwareManagement = () => {
         const isConfirmed = window.confirm("Are you sure you want to delete this product?");
         if (isConfirmed) {
             try {
-                await axios.delete(`http://localhost:5000/api/hardware/delete/${id}`);
+                await axios.delete(`http://18.209.197.35:5000/api/hardware/delete/${id}`);
                 // alert("Product deleted successfully!");
                 await fetchData();
             } catch (error) {
@@ -182,7 +182,7 @@ const HardwareManagement = () => {
         });
 
         try {
-            await axios.put(`http://localhost:5000/api/hardware/update/${selectedProduct._id}`, data, {
+            await axios.put(`http://18.209.197.35:5000/api/hardware/update/${selectedProduct._id}`, data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Product updated successfully!");
@@ -309,7 +309,7 @@ const HardwareManagement = () => {
 
         try {
             const response = await axios.put(
-                `http://localhost:5000/api/hardware/addDimensions/${dimensionId}`,
+                `http://18.209.197.35:5000/api/hardware/addDimensions/${dimensionId}`,
                 { dimensions: filteredDimensions },
                 {
                     headers: {
