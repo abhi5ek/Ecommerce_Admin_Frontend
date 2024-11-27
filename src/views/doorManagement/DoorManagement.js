@@ -65,7 +65,7 @@ const DoorManagement = () => {
 
     const fetchCategory = async () => {
         try {
-            const response = await axios.get(`http://18.209.197.35:5000/api/category/`);
+            const response = await axios.get(`http://localhost:5000/api/category/`);
             setCategory(response.data[0].subcategories);
         } catch (error) {
             console.error(error);
@@ -74,7 +74,7 @@ const DoorManagement = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://18.209.197.35:5000/api/doors/`);
+            const response = await axios.get(`http://localhost:5000/api/doors/`);
             setDoorData(response.data.data);
         } catch (error) {
             console.error(error);
@@ -118,7 +118,7 @@ const DoorManagement = () => {
                 formDataToSend.append('images', formData.images[i]);
             }
 
-            const response = await axios.post('http://18.209.197.35:5000/api/doors/add-doors', formDataToSend, {
+            const response = await axios.post('http://localhost:5000/api/doors/add-doors', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -144,7 +144,7 @@ const DoorManagement = () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://18.209.197.35:5000/api/doors/delete-door/${id}`);
+                await axios.delete(`http://localhost:5000/api/doors/delete-door/${id}`);
                 fetchData();
             } catch (error) {
                 console.error(error);
@@ -222,7 +222,7 @@ const DoorManagement = () => {
                 console.log(key, value);
             });
 
-            const response = await axios.put(`http://18.209.197.35:5000/api/doors/update-door/${id}`, formDataToSend, {
+            const response = await axios.put(`http://localhost:5000/api/doors/update-door/${id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -350,7 +350,7 @@ const DoorManagement = () => {
 
     const handleDimesionSubmit = async () => {
         try {
-            const response = await axios.post(`http://18.209.197.35:5000/api/doors/add-dimensions/${doorID}`, dimensionFormData, {
+            const response = await axios.post(`http://localhost:5000/api/doors/add-dimensions/${doorID}`, dimensionFormData, {
                 headers: { 'Content-Type': 'application/json ' },
             });
             console.log(response);

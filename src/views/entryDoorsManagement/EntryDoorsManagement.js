@@ -29,7 +29,9 @@ const EntryDoorsManagement = () => {
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
         categoryName: 'Entry Doors',
+        subCategoryId: '',
         subCategory: '',
+        subSubCategoryId: '',
         subSubCategory: '',
         description: '',
         productName: '',
@@ -43,19 +45,19 @@ const EntryDoorsManagement = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await axios.get(`http://18.209.197.35:5000/api/entryDoor/`);
+        const response = await axios.get(`http://localhost:5000/api/entryDoor/`);
         setEntryDoorsDetails(response.data.data);
     };
 
     const fetchCategory = async () => {
-        const response = await axios.get(`http://18.209.197.35:5000/api/category/`);
+        const response = await axios.get(`http://localhost:5000/api/category/`);
         const allSubcategory = response.data.data.filter((category) => category.categoryName === 'Entry Doors');
         setSubCategory(allSubcategory[0].subcategories);
     };
 
     const handleViewClick = async (id) => {
         try {
-            const response = await axios.get(`http://18.209.197.35:5000/api/entryDoor/getProductById/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/entryDoor/getProductById/${id}`);
             setEntryDoorsProduct(response.data.data);
         } catch (error) {
             console.error(error.message);
@@ -67,14 +69,22 @@ const EntryDoorsManagement = () => {
     const handleSubcategoryChange = (e) => {
         const selectedId = e.target.value;
         const subcategory = subCategory.find((sub) => sub._id === selectedId);
-        setFormData({ ...formData, subCategory: subcategory.subcategoryName });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            subCategoryId: selectedId,
+            subCategory: subCategory ? subcategory.subcategoryName : ""
+        }));
         setSelectedSubSubcategory(subcategory.subSubcategories || []);
     };
 
     const handleSubSubCategoryChange = (e) => {
         const selectedId = e.target.value;
         const subsubCategory = selectedSubSubcategory.find((subsub) => subsub._id === selectedId);
-        setFormData({ ...formData, subSubCategory: subsubCategory.subSubcategoryName });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            subSubCategoryId: selectedId,
+            subSubCategory: subsubCategory ? subsubCategory.subSubcategoryName : ""
+        }));
     };
 
     const handleImageChange = (e) => {
@@ -106,7 +116,7 @@ const EntryDoorsManagement = () => {
         });
 
         try {
-            const response = await axios.post("http://18.209.197.35:5000/api/entryDoor/create", data, {
+            const response = await axios.post("http://localhost:5000/api/entryDoor/create", data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             await fetchData();
@@ -114,7 +124,9 @@ const EntryDoorsManagement = () => {
             setSelectedSubSubcategory('');
             setFormData({
                 categoryName: 'Entry Doors',
+                subCategoryId: '',
                 subCategory: '',
+                subSubCategoryId: '',
                 subSubCategory: '',
                 description: '',
                 productName: '',
@@ -133,7 +145,7 @@ const EntryDoorsManagement = () => {
         const isConfirmed = window.confirm("Are you sure you want to delete this product?");
         if (isConfirmed) {
             try {
-                await axios.delete(`http://18.209.197.35:5000/api/entryDoor/delete/${id}`);
+                await axios.delete(`http://localhost:5000/api/entryDoor/delete/${id}`);
                 // alert("Product deleted successfully!");
                 await fetchData();
             } catch (error) {
@@ -169,7 +181,7 @@ const EntryDoorsManagement = () => {
         });
 
         try {
-            await axios.put(`http://18.209.197.35:5000/api/entryDoor/update/${selectedProduct._id}`, data, {
+            await axios.put(`http://localhost:5000/api/entryDoor/update/${selectedProduct._id}`, data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Product updated successfully!");
@@ -192,13 +204,13 @@ const EntryDoorsManagement = () => {
     const [dimensions, setDimensions] = useState({
         frameWidthAndHeight: { label: "Frame Width and Height", data: [] },
         addPrefinish: { label: "Add Prefinish", data: [] },
-        doorSwingDirection: { label: "Door Swing Direction", data: [] },
-        boreOptions: { label: "Bore Options", data: [] },
-        jambSize: { label: "Jamb Size", data: [] },
+        doorSwingDirection: { label: "Select Door Swing Direction", data: [] },
+        boreOptions: { label: "Select Bore Options", data: [] },
+        jambSize: { label: "Select the Jamb Size", data: [] },
         doorShoe: { label: "Door Shoe", data: [] },
         weatherStrip: { label: "Weatherstrip", data: [] },
         hinges: { label: "Hinges", data: [] },
-        preHungOptions: { label: "Pre Hung Options", data: [] },
+        preHungOptions: { label: "Select Pre Hung Options", data: [] },
         sill: { label: "Sill", data: [] },
         installationOption: { label: "Installation Option", data: [] },
     });
@@ -207,13 +219,13 @@ const EntryDoorsManagement = () => {
         setDimensions({
             frameWidthAndHeight: { label: "Frame Width and Height", data: [] },
             addPrefinish: { label: "Add Prefinish", data: [] },
-            doorSwingDirection: { label: "Door Swing Direction", data: [] },
-            boreOptions: { label: "Bore Options", data: [] },
-            jambSize: { label: "Jamb Size", data: [] },
+            doorSwingDirection: { label: "Select Door Swing Direction", data: [] },
+            boreOptions: { label: "Select Bore Options", data: [] },
+            jambSize: { label: "Select the Jamb Size", data: [] },
             doorShoe: { label: "Door Shoe", data: [] },
             weatherStrip: { label: "Weatherstrip", data: [] },
             hinges: { label: "Hinges", data: [] },
-            preHungOptions: { label: "Pre Hung Options", data: [] },
+            preHungOptions: { label: "Select Pre Hung Options", data: [] },
             sill: { label: "Sill", data: [] },
             installationOption: { label: "Installation Option", data: [] },
         });
@@ -306,7 +318,7 @@ const EntryDoorsManagement = () => {
 
         try {
             const response = await axios.put(
-                `http://18.209.197.35:5000/api/entryDoor/add-dimensions/${dimensionId}`,
+                `http://localhost:5000/api/entryDoor/add-dimensions/${dimensionId}`,
                 { dimensions: filteredDimensions },
                 {
                     headers: {

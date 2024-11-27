@@ -27,7 +27,7 @@ const UserManagement = () => {
 
       console.log(token)
 
-      const response = await axios.get(`http://18.209.197.35:3000/api/user/`, {
+      const response = await axios.get(`http://localhost:3000/api/user/`, {
         headers: {
           Authorization: `Bearer ${token}`, // Send the token in the Authorization header
         },
