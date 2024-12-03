@@ -28,6 +28,7 @@ const WindowsManagement = () => {
     const [selectedProductType, setSelectedProductType] = useState('');
     const [editVisible, setEditVisible] = useState(false);
     const [dimensionVisible, setDimensionVisible] = useState(false);
+    const [widthCost, setwidthCost] = useState('')
     const [dimensionValue, setDimensionValue] = useState([]);
 
     const [formData, setFormData] = useState({
@@ -48,7 +49,7 @@ const WindowsManagement = () => {
     //fetch category to use in edit window
     const fetchCategory = async (id) => {
         try {
-            const response = await axios.get(`http://44.196.64.110:5000/api/category/getcategory/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/category/getcategory/${id}`);
             setCategory(response.data[1].subcategories);
         } catch (error) {
             console.error(error);
@@ -58,7 +59,7 @@ const WindowsManagement = () => {
     //fetch complete data to show in table
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://44.196.64.110:5000/api/windows/`);
+            const response = await axios.get(`http://localhost:5000/api/windows/`);
             setWindowsData(response.data.data)
         } catch (error) {
             console.error(error);
@@ -79,6 +80,7 @@ const WindowsManagement = () => {
 
     const handleProductTypeChange = (e) => {
         setFormData({ ...formData, productName: e.target.value });
+        setSelectedProductType(e.target.value);
     };
 
     // const handleSubcategory = (e) => {
@@ -109,7 +111,7 @@ const WindowsManagement = () => {
                 formDataToSend.append('images', formData.images[i]);
             }
 
-            const response = await axios.post('http://44.196.64.110:5000/api/windows/create', formDataToSend, {
+            const response = await axios.post('http://localhost:5000/api/windows/create', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -139,7 +141,7 @@ const WindowsManagement = () => {
     const handleViewClick = async (window) => {
         try {
             setSelectedSubcategory(window);
-            const response = await axios.get(`http://44.196.64.110:5000/api/windows/getdimensions/${window._id}`)
+            const response = await axios.get(`http://localhost:5000/api/windows/getdimensions/${window._id}`)
             setDimensionValue(response.data.data);
             setViewModalVisible(true);
         } catch (error) {
@@ -152,7 +154,7 @@ const WindowsManagement = () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this door?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://44.196.64.110:5000/api/windows/delete/${id}`);
+                await axios.delete(`http://localhost:5000/api/windows/delete/${id}`);
                 fetchData();
             } catch (error) {
 
@@ -225,7 +227,7 @@ const WindowsManagement = () => {
                 });
             }
 
-            const response = await axios.put(`http://44.196.64.110:5000/api/windows/update/${id}`, formDataToSend, {
+            const response = await axios.put(`http://localhost:5000/api/windows/update/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -276,23 +278,37 @@ const WindowsManagement = () => {
     const handleAddDimensions = (window) => {
         setWindowID(window._id);
         setWindowType(window.productDetails.productName);
+        console.log(window.productDetails.productName);
         setDimensionVisible(true);
     };
 
     const updateFieldValue = (field, index, key, value) => {
-        const updatedData = [...dimensions[field].data];
-        updatedData[index][key] = value;
-        setDimensions({ ...dimensions, [field]: { ...dimensions[field], data: updatedData } });
+        setDimensions((prev) => {
+            const updatedData = [...(prev[field]?.data || [])];
+            updatedData[index] = { ...updatedData[index], [key]: value };
+            console.log("Updated dimensions:", dimensions);
+            return {
+                ...prev,
+                [field]: {
+                    ...prev[field],
+                    data: updatedData,
+                },
+            };
+        });
     };
 
+
     const handleAddRow = (field) => {
-        setDimensions({
-            ...dimensions,
+        setDimensions((prev) => ({
+            ...prev,
             [field]: {
-                ...dimensions[field],
-                data: [...dimensions[field].data, { name: "", cost: "" }],
+                ...prev[field],
+                data: [
+                    ...(prev[field]?.data || []),
+                    { width: 0, widthCost: 0, totalCost: 0, productName: "" }, // Add default values
+                ],
             },
-        });
+        }));
     };
 
     const DimensionNull = () => {
@@ -326,9 +342,11 @@ const WindowsManagement = () => {
                 };
             }
         }
+        console.log("Filtered dimensions:", filteredDimensions);
         try {
-            const response = await axios.put(`http://44.196.64.110:5000/api/windows/add-dimensions/${windowID}`, filteredDimensions);
+            const response = await axios.put(`http://localhost:5000/api/windows/add-dimensions/${windowID}`, filteredDimensions);
             alert(response.data.message);
+            console.log("API Response:", response.data);
             DimensionNull();
             setDimensionVisible(false);
         } catch (error) {
@@ -338,41 +356,105 @@ const WindowsManagement = () => {
     };
 
 
+
     const renderFields = () => {
-        const fieldsToRender = dimensionFieldsByType[windowType] || [];
+        const fieldsToRender = dimensionFieldsByType[windowType] || []; // Get fields to render based on window type
+
+        // Define product names that use the formula for price calculation
+        const formulaBasedProducts = ["Single_Double_Hung_Windows", "XOX_Slider", "XO_Slider", "Picture_Window"]; // Add product names
+
+        // Cost calculation logic
+        const calculateWidthCost = (field, width) => {
+            if (!width) return 0; // Handle undefined or null width
+
+            switch (field) {
+                case "Tempering_Option":
+                    return (width * 2) + 50;
+
+                case "Select_Grid_Options":
+                    return (width * 1.5) + 30;
+
+                default:
+                    switch (windowType) {
+                        case "Single_Double_Hung_Windows":
+                            return (width * 3.694) + 50;
+
+                        case "XOX_Slider":
+                            return (width * 4.639) - 108;
+
+                        case "XO_Slider":
+                            return (width * 3.694) + 38;
+
+                        case "Picture_Window":
+                            return (width * 3.696) - 50;
+
+                        default:
+                            return 0; // Default cost if no match
+                    }
+            }
+        };
+
         return fieldsToRender.map((field) => (
             <div key={field} className="mb-4">
-                <h5 className="mb-3">{dimensions[field]?.label}</h5>
-                {dimensions[field]?.data.map((entry, index) => (
-                    <div key={index} className="mb-3">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <input
-                                    type="text"
-                                    className="form-control mb-2"
-                                    placeholder="Name"
-                                    value={entry.name || ""}
-                                    onChange={(e) => updateFieldValue(field, index, "name", e.target.value)}
-                                />
-                            </div>
-                            <div className="col-md-6">
-                                <input
-                                    type="number"
-                                    className="form-control mb-2"
-                                    placeholder="Cost"
-                                    value={entry.cost || ""}
-                                    onChange={(e) => updateFieldValue(field, index, "cost", e.target.value)}
-                                />
+                <h5 className="mb-3">{field.replace(/_/g, " ")}</h5>
+
+                {dimensions[field]?.data && dimensions[field].data.map((entry, index) => {
+                    const isFormulaBased =
+                        formulaBasedProducts.includes(windowType) &&
+                        (field === "Height_Inches_Fraction" || field === "Width_Inches_Fraction") ||
+                        (field === "Select_Grid_Options" || field === "Tempering_Option");
+
+                    return (
+                        <div key={index} className="mb-3">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <input
+                                        type="text"
+                                        className="form-control mb-2"
+                                        placeholder={field.replace(/_/g, " ")}
+                                        value={entry.name || ""}
+                                        onChange={(e) => {
+                                            const width = (e.target.value);
+                                            let widthCost = 0;
+
+                                            if (isFormulaBased) {
+                                                widthCost = calculateWidthCost(field, width);
+                                            }
+
+                                            updateFieldValue(field, index, "name", e.target.value);
+                                            updateFieldValue(field, index, "cost", widthCost);
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="col-md-6">
+                                    <input
+                                        type="number"
+                                        className="form-control mb-2"
+                                        placeholder="Cost"
+                                        value={entry.cost || ""}
+                                        disabled={isFormulaBased}
+                                        onChange={(e) => {
+                                            if (!isFormulaBased) {
+                                                const totalCost = parseFloat(e.target.value) || 0;
+                                                updateFieldValue(field, index, "cost", totalCost);
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
                 <CButton color="secondary" onClick={() => handleAddRow(field)}>
                     Add Row
                 </CButton>
             </div>
         ));
     };
+
+
+
     return (
         <>
             <CCard>

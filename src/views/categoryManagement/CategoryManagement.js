@@ -22,9 +22,10 @@ const CategoryManagement = () => {
     }, []);
 
     const [visible, setVisible] = useState(false);
+    const [subCategoryImage, setSubCategoryImage] = useState(false);
     const [subVisible, setSubVisible] = useState(false);
+    const [subSubCategoryImage, setSubSubCategoryImage] = useState(false);
     const [categoryVisible, setCategoryVisible] = useState(false);
-
     const [newCategoryName, setNewCategoryName] = useState('');
     const [newCategory, setNewCategory] = useState('');
     const [newSubcategory, setNewSubcategory] = useState('');
@@ -33,7 +34,7 @@ const CategoryManagement = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://44.196.64.110:5000/api/category/');
+            const response = await axios.get('http://localhost:5000/api/category/');
             console.log(response.data.data)
             setCategoryData(response.data.data || []);
         } catch (error) {
@@ -48,7 +49,7 @@ const CategoryManagement = () => {
         }
 
         try {
-            const response = await axios.post('http://44.196.64.110:5000/api/category/addcategory', {
+            const response = await axios.post('http://localhost:5000/api/category/addcategory', {
                 categoryName: newCategoryName,
             });
 
@@ -74,9 +75,17 @@ const CategoryManagement = () => {
         }
 
         try {
-            const response = await axios.post('http://44.196.64.110:5000/api/category/addsubcategory', {
-                categoryName: newCategory,
-                subcategoryName: newSubcategory,
+            const formData = new FormData();
+            formData.append("categoryName", newCategory);
+            formData.append("subcategoryName", newSubcategory);
+            if (subCategoryImage && subCategoryImage[0]) {
+                formData.append("image", subCategoryImage[0]);
+            }
+
+            const response = await axios.post('http://localhost:5000/api/category/addsubcategory', formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
 
             if (response.status === 200 && response.data) {
@@ -85,12 +94,13 @@ const CategoryManagement = () => {
                 setVisible(false);
                 setNewCategory("");
                 setNewSubcategory("");
+                setSubCategoryImage(null); // Reset file input
             } else {
                 alert("Failed to save the subcategory.");
             }
         } catch (error) {
             console.error("Error saving subcategory:", error);
-            alert("An error occurred while saving the subcategory.");
+            alert(error.response?.data?.message || "An error occurred while saving the subcategory.");
         }
     };
 
@@ -101,33 +111,43 @@ const CategoryManagement = () => {
         }
 
         try {
-            const response = await axios.post('http://44.196.64.110:5000/api/category/addsubsubcategory', {
-                categoryName: newCategory,
-                subcategoryName: newSubcategory,
-                subSubcategoryName: newSubSubcategory,
+            const formData = new FormData();
+            formData.append("categoryName", newCategory);
+            formData.append("subcategoryName", newSubcategory);
+            formData.append("subSubcategoryName", newSubSubcategory);
+            if (subSubCategoryImage && subSubCategoryImage[0]) {
+                formData.append("image", subSubCategoryImage[0]);
+            }
+
+            const response = await axios.post('http://localhost:5000/api/category/addsubsubcategory', formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
 
             if (response.status === 200) {
                 alert("Sub-subcategory saved successfully!");
-                fetchData();
-                setSubVisible(false);
+                fetchData(); // Refresh data
+                setSubVisible(false); // Close modal
                 setNewCategory("");
                 setNewSubcategory("");
                 setNewSubSubcategory("");
+                setSubSubCategoryImage(null); // Reset file input
             } else {
                 alert("Error saving sub-subcategory.");
             }
         } catch (error) {
             console.error("Error saving sub-subcategory:", error);
-            alert("An error occurred while saving the sub-subcategory.");
+            alert(error.response?.data?.message || "An error occurred while saving the sub-subcategory.");
         }
     };
+
 
     // const handleDeleteCategory = async (category) => {
     //     const confirmation = window.confirm(`${category.categoryName} will be deleted`);
     //     if (confirmation) {
     //         try {
-    //             await axios.delete(`http://44.196.64.110:5000/api/category/delete-category/${category._id}`);
+    //             await axios.delete(`http://localhost:5000/api/category/delete-category/${category._id}`);
     //             fetchData();
     //         } catch (error) {
     //             console.error(error);
@@ -139,7 +159,7 @@ const CategoryManagement = () => {
         const confirmation = window.confirm(`${subcategory.subcategoryName} will be deleted`);
         if (confirmation) {
             try {
-                await axios.delete(`http://44.196.64.110:5000/api/category/delete-subcategory/${categoryName}/${subcategory._id}`);
+                await axios.delete(`http://localhost:5000/api/category/delete-subcategory/${categoryName}/${subcategory._id}`);
                 fetchData();
             } catch (error) {
                 console.error(error);
@@ -151,7 +171,7 @@ const CategoryManagement = () => {
         const confirmation = window.confirm(`${subSubcategory.subSubcategoryName} will be deleted`);
         if (confirmation) {
             try {
-                await axios.delete(`http://44.196.64.110:5000/api/category/delete-subsubcategory/${categoryName}/${subcategoryName}/${subSubcategory._id}`);
+                await axios.delete(`http://localhost:5000/api/category/delete-subsubcategory/${categoryName}/${subcategoryName}/${subSubcategory._id}`);
                 fetchData();
             } catch (error) {
                 console.error(error);
@@ -217,7 +237,7 @@ const CategoryManagement = () => {
                                                 <FontAwesomeIcon
                                                     icon={faTrash}
                                                     style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
-                                                    onClick={() => handleDeleteSubcategory(category.categoryName, subcategory)}
+                                                    onClick={() => handleDeleteSubcategory(category.categoryName, subcategory, subcategory._id)}
                                                 />
                                             </CTableDataCell>
                                             <CTableDataCell style={{ textAlign: 'center' }}>
@@ -245,7 +265,6 @@ const CategoryManagement = () => {
             </CCard>
 
 
-            {/* Add Category Modal */}
             <CModal size="md" visible={categoryVisible} onClose={() => setCategoryVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>Add New Category</CModalTitle>
@@ -270,7 +289,7 @@ const CategoryManagement = () => {
                 </CModalFooter>
             </CModal>
 
-            {/* Add Subcategory Modal */}
+
             <CModal size="md" visible={visible} onClose={() => setVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>Add New Subcategory</CModalTitle>
@@ -300,6 +319,16 @@ const CategoryManagement = () => {
                                 />
                             </CCol>
                         </CRow>
+                        <CRow className="mb-3">
+                            <CCol>
+                                <CFormLabel className="ms-2">Choose Image</CFormLabel>
+                                <CFormInput
+                                    id='subImage'
+                                    type='file'
+                                    onChange={(e) => setSubCategoryImage(e.target.files)}
+                                />
+                            </CCol>
+                        </CRow>
                     </CForm>
                 </CModalBody>
                 <CModalFooter>
@@ -308,7 +337,7 @@ const CategoryManagement = () => {
                 </CModalFooter>
             </CModal>
 
-            {/* Add Sub-Subcategory Modal */}
+
             <CModal size="md" visible={subVisible} onClose={() => setSubVisible(false)}>
                 <CModalHeader>
                     <CModalTitle>Add New Sub-Subcategory</CModalTitle>
@@ -348,6 +377,16 @@ const CategoryManagement = () => {
                                     value={newSubSubcategory}
                                     placeholder="Enter sub-subcategory name"
                                     onChange={(e) => setNewSubSubcategory(e.target.value)}
+                                />
+                            </CCol>
+                        </CRow>
+                        <CRow className="mb-3">
+                            <CCol>
+                                <CFormLabel className="ms-2">Choose Image</CFormLabel>
+                                <CFormInput
+                                    id='image'
+                                    type='file'
+                                    onChange={(e) => setSubSubCategoryImage(e.target.files)}
                                 />
                             </CCol>
                         </CRow>
