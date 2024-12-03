@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
-const EntryDoorsManagement = () => {
+const BiFoldDoorsManagement = () => {
     const [visible, setVisible] = useState(false);
     const [viewModalVisible, setViewModalVisible] = useState(false);
     const [updateModalVisible, setUpdateModalVisible] = useState(false);
@@ -45,19 +45,19 @@ const EntryDoorsManagement = () => {
     }, []);
 
     const fetchData = async () => {
-        const response = await axios.get(`http://44.196.64.110:5000/api/biFoldDoors/`);
+        const response = await axios.get(`http://localhost:5000/api/biFoldDoors/`);
         setBiFoldDoorsDetails(response.data.data);
     };
 
     const fetchCategory = async () => {
-        const response = await axios.get(`http://44.196.64.110:5000/api/category/`);
+        const response = await axios.get(`http://localhost:5000/api/category/`);
         const allSubcategory = response.data.data.filter((category) => category.categoryName === 'Multiple Slide & BiFold Doors');
         setSubCategory(allSubcategory[0].subcategories);
     };
 
     const handleViewClick = async (id) => {
         try {
-            const response = await axios.get(`http://44.196.64.110:5000/api/biFoldDoors/getbyid/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/biFoldDoors/getbyid/${id}`);
             setBiFoldDoorsProduct(response.data.data);
         } catch (error) {
             console.error(error.message);
@@ -116,7 +116,7 @@ const EntryDoorsManagement = () => {
         });
 
         try {
-            const response = await axios.post("http://44.196.64.110:5000/api/biFoldDoors/create/", data, {
+            const response = await axios.post("http://localhost:5000/api/biFoldDoors/create/", data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             await fetchData();
@@ -145,7 +145,7 @@ const EntryDoorsManagement = () => {
         const isConfirmed = window.confirm("Are you sure you want to delete this product?");
         if (isConfirmed) {
             try {
-                await axios.delete(`http://44.196.64.110:5000/api/biFoldDoors/delete/${id}`);
+                await axios.delete(`http://localhost:5000/api/biFoldDoors/delete/${id}`);
                 // alert("Product deleted successfully!");
                 await fetchData();
             } catch (error) {
@@ -171,6 +171,7 @@ const EntryDoorsManagement = () => {
     };
 
     const handleUpdate = async () => {
+        console.log(formData);
         const data = new FormData();
         Object.keys(formData).forEach((key) => {
             if (key === 'images') {
@@ -181,7 +182,7 @@ const EntryDoorsManagement = () => {
         });
 
         try {
-            await axios.put(`http://44.196.64.110:5000/api/biFoldDoors/update/${selectedProduct._id}`, data, {
+            await axios.put(`http://localhost:5000/api/biFoldDoors/update/${selectedProduct._id}`, data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Product updated successfully!");
@@ -295,7 +296,7 @@ const EntryDoorsManagement = () => {
 
         for (const category in dimensions) {
             const invalidData = dimensions[category].data.some(
-                (item) => !item.name || !item.cost
+                (item) => !item.name
             );
             if (invalidData) {
                 alert(`Please fill in all required fields for ${dimensions[category].label}.`);
@@ -313,7 +314,7 @@ const EntryDoorsManagement = () => {
 
         try {
             const response = await axios.put(
-                `http://44.196.64.110:5000/api/biFoldDoors/add-dimensions/${dimensionId}`,
+                `http://localhost:5000/api/biFoldDoors/add-dimensions/${dimensionId}`,
                 { dimensions: filteredDimensions },
                 {
                     headers: {
@@ -814,4 +815,4 @@ const EntryDoorsManagement = () => {
     );
 };
 
-export default EntryDoorsManagement;
+export default BiFoldDoorsManagement;

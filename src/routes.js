@@ -8,7 +8,7 @@ const DoorManagement = React.lazy(() => import('./views/doorManagement/DoorManag
 const WindowsManagement = React.lazy(() => import('./views/windowsManagement/WindowsManagement'))
 const OrderManagement = React.lazy(() => import('./views/orderManagement/OrderManagement'))
 const EstimateManagement = React.lazy(() => import('./views/estimateManagement/EstimateManagement'))
-const MultipleSlideManagement = React.lazy(() => import('./views/multipleSlideMAnagement/MultipleSlideManagement'))
+const MultipleSlideManagement = React.lazy(() => import('./views/BiFoldDoorsManagement/BiFoldDoorsManagement'))
 const EntryDoorsManagement = React.lazy(() => import('./views/entryDoorsManagement/EntryDoorsManagement'))
 const InteriorDoorsManagement = React.lazy(() => import('./views/interiorDoorsManagement/InteriorDoorsManagement'))
 const SlidingDoorsManagement = React.lazy(() => import('./views/slidingDoorsManagement/SlidingDoorsManagement'))

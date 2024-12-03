@@ -4,16 +4,13 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-// Localizer for the calendar
 const localizer = momentLocalizer(moment);
 
-// Modal for displaying appointment details
 const AppointmentModal = ({ appointment, onClose }) => {
   if (!appointment) return null;
 
-  // Format the date and time
   const formatDateTime = (date) => {
-    if (!(date instanceof Date)) date = new Date(date); // Convert to Date if not already
+    if (!(date instanceof Date)) date = new Date(date);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = date.toLocaleDateString(undefined, options);
     const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -56,7 +53,6 @@ const AppointmentModal = ({ appointment, onClose }) => {
           <p><strong>Mobile:</strong> {appointment.mobile}</p>
           <p><strong>Message:</strong> {appointment.message}</p>
           <p><strong>Date:</strong> {formattedDate}</p>
-          {/* <p><strong>Time:</strong> {formattedTime}</p> */}
         </div>
         <button
           onClick={onClose}
@@ -77,7 +73,7 @@ const AppointmentModal = ({ appointment, onClose }) => {
   );
 };
 
-// Main Dashboard component
+
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -89,7 +85,7 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://44.196.64.110:5000/api/appointments/`);
+      const response = await axios.get(`http://localhost:5000/api/appointments/`);
       const formattedAppointments = response.data.data.map(appointment => ({
         title: "Appointment",
         start: new Date(appointment.date),
